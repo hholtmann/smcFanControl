@@ -1,0 +1,610 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		89033CA70B80E1EB00FDAF43 /* F.A.Q.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 89033CA60B80E1EB00FDAF43 /* F.A.Q.rtf */; };
+		89148EA315E2543D00A073EE /* NSFileManager+DirectoryLocations.m in Sources */ = {isa = PBXBuildFile; fileRef = 89148EA115E2543D00A073EE /* NSFileManager+DirectoryLocations.m */; };
+		8916827A0AEBB14F00888535 /* StatusItemWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 891682790AEBB14F00888535 /* StatusItemWindow.m */; };
+		891683E90AEBD95B00888535 /* smcWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 891683E80AEBD95B00888535 /* smcWrapper.m */; };
+		8917FB860ADEECAD00443DA1 /* paypal.gif in Resources */ = {isa = PBXBuildFile; fileRef = 8917FB850ADEECAD00443DA1 /* paypal.gif */; };
+		891DEF110B40736D001A7C32 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 891DEF100B40736D001A7C32 /* WebKit.framework */; };
+		8924ECFD15AC98380031730C /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8924ECFC15AC98380031730C /* IOKit.framework */; };
+		8924ECFE15AC98880031730C /* smc.c in Sources */ = {isa = PBXBuildFile; fileRef = 89C053BC0ADAB7630037CA16 /* smc.c */; };
+		892A7F450B10B7700041B493 /* MachineDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 892A7F440B10B7700041B493 /* MachineDefaults.m */; };
+		8932CF2413D08551008BC447 /* SystemVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 8932CF2313D08551008BC447 /* SystemVersion.m */; };
+		893506180B440255001BFBA5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 893506170B440255001BFBA5 /* Localizable.strings */; };
+		894A46610ADBD6CF008785F3 /* FanControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 894A46600ADBD6CF008785F3 /* FanControl.m */; };
+		894A494B0ADBEEF4008785F3 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 894A494A0ADBEEF4008785F3 /* IOKit.framework */; };
+		89559A840BAC338500DBA37E /* smcover.png in Resources */ = {isa = PBXBuildFile; fileRef = 89559A830BAC338400DBA37E /* smcover.png */; };
+		895BDA3A0B8F8F42003CD894 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 895BDA390B8F8F42003CD894 /* Sparkle.framework */; };
+		8985F1590ADD0B5500F9EC46 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8985F1580ADD0B5500F9EC46 /* Security.framework */; };
+		8987FBD20B878B3900A5ED8E /* smc.png in Resources */ = {isa = PBXBuildFile; fileRef = 8987FBD00B878B3900A5ED8E /* smc.png */; };
+		89949E8D0AEEA37700077E93 /* Power.m in Sources */ = {isa = PBXBuildFile; fileRef = 89949E8C0AEEA37700077E93 /* Power.m */; };
+		899D59DC15E1CF60003E322D /* smc in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8924ECEE15AC96E70031730C /* smc */; };
+		899D59DD15E1CFFF003E322D /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 895BDA390B8F8F42003CD894 /* Sparkle.framework */; };
+		899D59E315E228DF003E322D /* tsensors.plist in Resources */ = {isa = PBXBuildFile; fileRef = 899D59E215E228DF003E322D /* tsensors.plist */; };
+		89B243200B7E351000CAD103 /* smcfancontrol_v2.icns in Resources */ = {isa = PBXBuildFile; fileRef = 89B2431F0B7E351000CAD103 /* smcfancontrol_v2.icns */; };
+		89C053BE0ADAB7630037CA16 /* smc.c in Sources */ = {isa = PBXBuildFile; fileRef = 89C053BC0ADAB7630037CA16 /* smc.c */; };
+		89E7D3650ADE819B000F67AB /* Machines.plist in Resources */ = {isa = PBXBuildFile; fileRef = 89E7D3640ADE819B000F67AB /* Machines.plist */; };
+		89FE24230B7F4CD300D2713C /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 89FE24210B7F4CD300D2713C /* MainMenu.nib */; };
+		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
+		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8924ECEC15AC96E70031730C /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		895BDA550B8F90D3003CD894 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				899D59DC15E1CF60003E322D /* smc in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		89B156840BA411BF002A258A /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				899D59DD15E1CFFF003E322D /* Sparkle.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		89033CA10B80E1DF00FDAF43 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/F.A.Q.rtf; sourceTree = "<group>"; };
+		89033D900B80F61E00FDAF43 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = German; path = German.lproj/F.A.Q.rtf; sourceTree = "<group>"; };
+		89148EA115E2543D00A073EE /* NSFileManager+DirectoryLocations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+DirectoryLocations.m"; sourceTree = "<group>"; };
+		89148EA215E2543D00A073EE /* NSFileManager+DirectoryLocations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileManager+DirectoryLocations.h"; sourceTree = "<group>"; };
+		891682780AEBB14F00888535 /* StatusItemWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusItemWindow.h; sourceTree = "<group>"; };
+		891682790AEBB14F00888535 /* StatusItemWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusItemWindow.m; sourceTree = "<group>"; };
+		891683E70AEBD95B00888535 /* smcWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = smcWrapper.h; sourceTree = "<group>"; };
+		891683E80AEBD95B00888535 /* smcWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = smcWrapper.m; sourceTree = "<group>"; };
+		8917FB850ADEECAD00443DA1 /* paypal.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = paypal.gif; sourceTree = "<group>"; };
+		891DEF100B40736D001A7C32 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
+		8924ECEE15AC96E70031730C /* smc */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = smc; sourceTree = BUILT_PRODUCTS_DIR; };
+		8924ECFC15AC98380031730C /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
+		892A7F430B10B7700041B493 /* MachineDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MachineDefaults.h; sourceTree = "<group>"; };
+		892A7F440B10B7700041B493 /* MachineDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MachineDefaults.m; sourceTree = "<group>"; };
+		8932CF2213D0850F008BC447 /* SystemVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemVersion.h; sourceTree = "<group>"; };
+		8932CF2313D08551008BC447 /* SystemVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SystemVersion.m; sourceTree = "<group>"; };
+		8932CFF813D08DC4008BC447 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Dutch; path = Dutch.lproj/F.A.Q.rtf; sourceTree = "<group>"; };
+		8932CFF913D08DD7008BC447 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Dutch; path = Dutch.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8932CFFA13D08DDF008BC447 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		893506130B440249001BFBA5 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8935061B0B440264001BFBA5 /* German */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/Localizable.strings; sourceTree = "<group>"; };
+		894A465F0ADBD6CF008785F3 /* FanControl.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FanControl.h; sourceTree = "<group>"; };
+		894A46600ADBD6CF008785F3 /* FanControl.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FanControl.m; sourceTree = "<group>"; };
+		894A494A0ADBEEF4008785F3 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
+		894DC9E20F8AA367006A046F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		894DC9E30F8AA36F006A046F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Spanish; path = Spanish.lproj/F.A.Q.rtf; sourceTree = "<group>"; };
+		894DC9E40F8AA37C006A046F /* Spanish */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Spanish; path = Spanish.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		894DC9E60F8AA399006A046F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Spanish; path = Spanish.lproj/Localizable.strings; sourceTree = "<group>"; };
+		89559A830BAC338400DBA37E /* smcover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = smcover.png; sourceTree = "<group>"; };
+		895BDA390B8F8F42003CD894 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
+		8985F1580ADD0B5500F9EC46 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
+		8987FBD00B878B3900A5ED8E /* smc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = smc.png; sourceTree = "<group>"; };
+		89949E8B0AEEA37700077E93 /* Power.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Power.h; sourceTree = "<group>"; };
+		89949E8C0AEEA37700077E93 /* Power.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Power.m; sourceTree = "<group>"; };
+		899D59E215E228DF003E322D /* tsensors.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = tsensors.plist; sourceTree = "<group>"; };
+		89B2431F0B7E351000CAD103 /* smcfancontrol_v2.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = smcfancontrol_v2.icns; sourceTree = "<group>"; };
+		89C053BC0ADAB7630037CA16 /* smc.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = smc.c; sourceTree = "<group>"; };
+		89C053BD0ADAB7630037CA16 /* smc.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = smc.h; sourceTree = "<group>"; };
+		89E7D3640ADE819B000F67AB /* Machines.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = Machines.plist; sourceTree = "<group>"; };
+		89FE24050B7F4C2B00D2713C /* paypal.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = paypal.gif; sourceTree = "<group>"; };
+		89FE24220B7F4CD300D2713C /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		89FE24280B7F4CE900D2713C /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8D1107320486CEB800E47090 /* smcFanControl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = smcFanControl.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8924ECEB15AC96E70031730C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8924ECFD15AC98380031730C /* IOKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8D11072E0486CEB800E47090 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
+				894A494B0ADBEEF4008785F3 /* IOKit.framework in Frameworks */,
+				8985F1590ADD0B5500F9EC46 /* Security.framework in Frameworks */,
+				891DEF110B40736D001A7C32 /* WebKit.framework in Frameworks */,
+				895BDA3A0B8F8F42003CD894 /* Sparkle.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				89148EA115E2543D00A073EE /* NSFileManager+DirectoryLocations.m */,
+				89148EA215E2543D00A073EE /* NSFileManager+DirectoryLocations.h */,
+				894A465F0ADBD6CF008785F3 /* FanControl.h */,
+				894A46600ADBD6CF008785F3 /* FanControl.m */,
+				891682780AEBB14F00888535 /* StatusItemWindow.h */,
+				891682790AEBB14F00888535 /* StatusItemWindow.m */,
+				891683E70AEBD95B00888535 /* smcWrapper.h */,
+				891683E80AEBD95B00888535 /* smcWrapper.m */,
+				89949E8B0AEEA37700077E93 /* Power.h */,
+				89949E8C0AEEA37700077E93 /* Power.m */,
+				892A7F430B10B7700041B493 /* MachineDefaults.h */,
+				892A7F440B10B7700041B493 /* MachineDefaults.m */,
+				8932CF2213D0850F008BC447 /* SystemVersion.h */,
+				8932CF2313D08551008BC447 /* SystemVersion.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				895BDA390B8F8F42003CD894 /* Sparkle.framework */,
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8924ECFC15AC98380031730C /* IOKit.framework */,
+				891DEF100B40736D001A7C32 /* WebKit.framework */,
+				8985F1580ADD0B5500F9EC46 /* Security.framework */,
+				894A494A0ADBEEF4008785F3 /* IOKit.framework */,
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+				13E42FB307B3F0F600E4EEF1 /* CoreData.framework */,
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D1107320486CEB800E47090 /* smcFanControl.app */,
+				8924ECEE15AC96E70031730C /* smc */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* FanControl */ = {
+			isa = PBXGroup;
+			children = (
+				898C281A15E2B6E30044EEC3 /* smc-command */,
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				8D1107310486CEB800E47090 /* Info.plist */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = FanControl;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				29B97316FDCFA39411CA2CEA /* main.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				89559A830BAC338400DBA37E /* smcover.png */,
+				8987FBD00B878B3900A5ED8E /* smc.png */,
+				89033CA60B80E1EB00FDAF43 /* F.A.Q.rtf */,
+				89FE24210B7F4CD300D2713C /* MainMenu.nib */,
+				89B2431F0B7E351000CAD103 /* smcfancontrol_v2.icns */,
+				8917FB850ADEECAD00443DA1 /* paypal.gif */,
+				89E7D3640ADE819B000F67AB /* Machines.plist */,
+				899D59E215E228DF003E322D /* tsensors.plist */,
+				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+				893506170B440255001BFBA5 /* Localizable.strings */,
+				89FE24050B7F4C2B00D2713C /* paypal.gif */,
+			);
+			name = Resources;
+			path = Ressources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		898C281A15E2B6E30044EEC3 /* smc-command */ = {
+			isa = PBXGroup;
+			children = (
+				89C053BC0ADAB7630037CA16 /* smc.c */,
+				89C053BD0ADAB7630037CA16 /* smc.h */,
+			);
+			path = "smc-command";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8924ECED15AC96E70031730C /* smc */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8924ECF515AC96E70031730C /* Build configuration list for PBXNativeTarget "smc" */;
+			buildPhases = (
+				8924ECEA15AC96E70031730C /* Sources */,
+				8924ECEB15AC96E70031730C /* Frameworks */,
+				8924ECEC15AC96E70031730C /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = smc;
+			productName = "smc-command";
+			productReference = 8924ECEE15AC96E70031730C /* smc */;
+			productType = "com.apple.product-type.tool";
+		};
+		8D1107260486CEB800E47090 /* smcFanControl */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "smcFanControl" */;
+			buildPhases = (
+				8D1107290486CEB800E47090 /* Resources */,
+				8D11072C0486CEB800E47090 /* Sources */,
+				8D11072E0486CEB800E47090 /* Frameworks */,
+				895BDA550B8F90D3003CD894 /* CopyFiles */,
+				89B156840BA411BF002A258A /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = smcFanControl;
+			productInstallPath = "$(HOME)/Applications";
+			productName = FanControl;
+			productReference = 8D1107320486CEB800E47090 /* smcFanControl.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0440;
+			};
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "smcFanControl" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+				Italian,
+				zh_TW,
+				Spanish,
+				Dutch,
+			);
+			mainGroup = 29B97314FDCFA39411CA2CEA /* FanControl */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8D1107260486CEB800E47090 /* smcFanControl */,
+				8924ECED15AC96E70031730C /* smc */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D1107290486CEB800E47090 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				89E7D3650ADE819B000F67AB /* Machines.plist in Resources */,
+				8917FB860ADEECAD00443DA1 /* paypal.gif in Resources */,
+				893506180B440255001BFBA5 /* Localizable.strings in Resources */,
+				89B243200B7E351000CAD103 /* smcfancontrol_v2.icns in Resources */,
+				89FE24230B7F4CD300D2713C /* MainMenu.nib in Resources */,
+				89033CA70B80E1EB00FDAF43 /* F.A.Q.rtf in Resources */,
+				8987FBD20B878B3900A5ED8E /* smc.png in Resources */,
+				89559A840BAC338500DBA37E /* smcover.png in Resources */,
+				899D59E315E228DF003E322D /* tsensors.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8924ECEA15AC96E70031730C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8924ECFE15AC98880031730C /* smc.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8D11072C0486CEB800E47090 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072D0486CEB800E47090 /* main.m in Sources */,
+				89C053BE0ADAB7630037CA16 /* smc.c in Sources */,
+				894A46610ADBD6CF008785F3 /* FanControl.m in Sources */,
+				8916827A0AEBB14F00888535 /* StatusItemWindow.m in Sources */,
+				891683E90AEBD95B00888535 /* smcWrapper.m in Sources */,
+				89949E8D0AEEA37700077E93 /* Power.m in Sources */,
+				892A7F450B10B7700041B493 /* MachineDefaults.m in Sources */,
+				8932CF2413D08551008BC447 /* SystemVersion.m in Sources */,
+				89148EA315E2543D00A073EE /* NSFileManager+DirectoryLocations.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C165DFE840E0CC02AAC07 /* English */,
+				894DC9E40F8AA37C006A046F /* Spanish */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		89033CA60B80E1EB00FDAF43 /* F.A.Q.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				89033CA10B80E1DF00FDAF43 /* English */,
+				89033D900B80F61E00FDAF43 /* German */,
+				894DC9E30F8AA36F006A046F /* Spanish */,
+				8932CFF813D08DC4008BC447 /* Dutch */,
+			);
+			name = F.A.Q.rtf;
+			sourceTree = "<group>";
+		};
+		893506170B440255001BFBA5 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				893506130B440249001BFBA5 /* English */,
+				8935061B0B440264001BFBA5 /* German */,
+				894DC9E60F8AA399006A046F /* Spanish */,
+				8932CFF913D08DD7008BC447 /* Dutch */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		89FE24210B7F4CD300D2713C /* MainMenu.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				89FE24220B7F4CD300D2713C /* English */,
+				89FE24280B7F4CE900D2713C /* German */,
+				894DC9E20F8AA367006A046F /* Spanish */,
+				8932CFFA13D08DDF008BC447 /* Dutch */,
+			);
+			name = MainMenu.nib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		8924ECF615AC96E70031730C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Developer ID Application: Hendrik Holtmann";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = CMD_TOOL;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SDKROOT = macosx10.7;
+			};
+			name = Debug;
+		};
+		8924ECF715AC96E70031730C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Developer ID Application: Hendrik Holtmann";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = CMD_TOOL;
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				SDKROOT = macosx10.7;
+			};
+			name = Release;
+		};
+		C01FCF4B08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CODE_SIGN_IDENTITY = "Developer ID Application: Hendrik Holtmann";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					".//**",
+					"$(inherited)",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_MODEL_PPC64 = NO;
+				GCC_MODEL_TUNING = "";
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = "";
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SDKROOT)/usr/lib/system\"",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = smcFanControl;
+				PROVISIONING_PROFILE = "";
+				SDKROOT = macosx10.7;
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		C01FCF4C08A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CODE_SIGN_IDENTITY = "Developer ID Application: Hendrik Holtmann";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)\"";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = "";
+				GCC_VERSION = "";
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SDKROOT)/usr/lib/system\"",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = smcFanControl;
+				PROVISIONING_PROFILE = "";
+				SDKROOT = macosx10.7;
+				VALID_ARCHS = "i386 x86_64";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_VERSION = "";
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = "-fnested-functions";
+				OTHER_LDFLAGS = "";
+				SDKROOT = macosx10.7;
+				VALID_ARCHS = "i386 x86_64";
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_VERSION = "";
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CFLAGS = "-fnested-functions";
+				OTHER_LDFLAGS = "";
+				SDKROOT = macosx10.7;
+				SYMROOT = "~/builds";
+				VALID_ARCHS = "i386 x86_64";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8924ECF515AC96E70031730C /* Build configuration list for PBXNativeTarget "smc" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8924ECF615AC96E70031730C /* Debug */,
+				8924ECF715AC96E70031730C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "smcFanControl" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4B08A954540054247B /* Debug */,
+				C01FCF4C08A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "smcFanControl" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

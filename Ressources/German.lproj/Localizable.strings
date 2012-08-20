@@ -1,0 +1,23 @@
+"Do you really want to delete the favorite %@?" = "Wollen Sie den Favoriten %@ wirklich löschen?";
+
+"Yes" = "Ja";
+
+"No" = "Nein";
+
+"Delete favorite" = "Favoriten löschen";
+
+"MainFan" = "Hauptlüfter";
+
+"Left Fan" = "Linker Lüfter";
+
+"Right Fan" = "Rechter Lüfter";
+
+"smcFanControl has not been tested on this machine yet, but it should run if you follow the instructions. \n\nIf you choose to continue, please make you have no other FanControl-software running. Otherwise please quit, deinstall the other software, restart your machine and rerun smcFanControl!" = "smcFanControl wurde auf Ihrem Computermodel noch nicht getestet! Es sollte jedoch problemlos funktionieren, wenn Sie die Hinweise beachten.\n\nBevor Sie auf Weiter klicken, stellen Sie sicher das keine andere FanControl-Software läuft. Sollte dies noch der Fall sein, wählen Sie Abbrechen, deinstallieren Sie die andere Software, starten Sie Ihren Rechner neu und rufen Sie smcFanControl erneut auf!";
+
+"Continue" = "Weiter";
+
+"Quit" = "Abbrechen";
+
+"Alert!" = "Achtung!";
+
+"Active Setting" = "Aktive Einstellung";

@@ -1,0 +1,23 @@
+"Do you really want to delete the favorite %@?" = "¿Seguro qu desea eliminar el favorito: %@?";
+
+"Yes" = "Si";
+
+"No" = "No";
+
+"Delete favorite" = "Favorito eliminado";
+
+"MainFan" = "Ventilador principal";
+
+"Left Fan" = "Ventilador izquierdo";
+
+"Right Fan" = "Ventilador derecho";
+
+"smcFanControl has not been tested on this machine yet, but it should run if you follow the instructions. \n\nIf you choose to continue, please make you have no other FanControl-software running. Otherwise please quit, deinstall the other software, restart your machine and rerun smcFanControl!" = "smcFanControl no ha sido probado en esta máquina, pero debería de funcionar si sigue esta insrucciones. \n\nSi decide continuar aseguresé de que no hay otro programa de control de ventiladores; si no salga, desinstale los otros programas, reinicie y lance otra vez smcFanControl";
+
+"Continue" = "Continuar";
+
+"Quit" = "Salir";
+
+"Alert!" = "¡Atención!";
+
+"Active Setting" = "Configuración activa";

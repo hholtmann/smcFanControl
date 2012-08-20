@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>standard</key>
+	<string>TC0D</string>
+	<key>lastAlternative</key>
+	<string>TCAH</string>
+	<key>MacBookPro10,1</key>
+	<string>TC0F</string>
+	<key>iMac12,2</key>
+	<string>TC0H</string>
+	<key>iMac12,1</key>
+	<string>TC0H</string>
+</dict>
+</plist>
