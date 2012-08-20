@@ -1,7 +1,7 @@
 /*
  *	FanControl
  *
- *	Copyright (c) 2006 Hendrik Holtmann
+ *	Copyright (c) 2006-2012 Hendrik Holtmann
 *
  *	MachineDefaults.m - MacBook(Pro) FanControl application
  *
