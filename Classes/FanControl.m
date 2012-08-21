@@ -29,6 +29,12 @@
 #import <Sparkle/SUUpdater.h>
 #import "SystemVersion.h"
 
+@interface FanControl ()
++(void)copyMachinesIfNecessary;
+- (BOOL)isInAutoStart;
+- (void) setStartAtLogin:(BOOL)enabled;
+@end
+
 @implementation FanControl
 
 io_connect_t conn;

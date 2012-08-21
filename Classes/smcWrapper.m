@@ -23,7 +23,7 @@
 #import "smcWrapper.h"
 #import <CommonCrypto/CommonDigest.h>
 
-NSString * const smc_checksum=@"0becdb25cdf64eb74b001c8a77c5e6b7";
+NSString * const smc_checksum=@"2ea544babe8a58dccc1364c920d473c8";
 static NSDictionary *tsensors = nil;
 
 @implementation smcWrapper
@@ -160,7 +160,8 @@ static NSDictionary *tsensors = nil;
     unsigned char result[CC_MD5_DIGEST_LENGTH];
     CC_MD5((void *)[d bytes], [d length], result);
     NSMutableString *ret = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH*2];
-    for(int i = 0; i<CC_MD5_DIGEST_LENGTH; i++) {
+    int i;
+    for(i = 0; i<CC_MD5_DIGEST_LENGTH; i++) {
         [ret appendFormat:@"%02x",result[i]];
     }
     return ret;
