@@ -37,8 +37,6 @@
 	
 }
 
-- (id)init;
-
 - (id)delegate;
 - (void)setDelegate:(id)new_delegate;
 

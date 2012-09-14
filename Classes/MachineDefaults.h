@@ -30,8 +30,7 @@
 	int machine_num;
 }
 
-	+ (NSString *)computerModel;
-	- (id)init:(NSString*)p_machine;
-	-(NSDictionary*)get_machine_defaults;
-	- (void)dealloc;
++ (NSString *)computerModel;
+- (id)init:(NSString*)p_machine;
+-(NSDictionary*)copy_machine_defaults;
 @end
