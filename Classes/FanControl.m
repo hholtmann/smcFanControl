@@ -406,7 +406,10 @@ NSString *authpw;
 	}
     
     //--- NOTIFICATION CENTER
-    [self sendNotificationIfNeeded:fan.doubleValue];
+    BOOL postEnabled = [[defaults objectForKey:@"NotificationCenter"] boolValue];
+    if(postEnabled) {
+        [self sendNotificationIfNeeded:fan.doubleValue];
+    }
 }
 
 - (void)sendNotificationIfNeeded:(double)newFanValue {
@@ -417,21 +420,21 @@ NSString *authpw;
         return;
     }
 
-//    NSLog(@"%f - %f = %f", newFanValue, _oldFanValue, fabs(newFanValue - _oldFanValue));
+    NSLog(@"%f - %f = %f", newFanValue, _oldFanValue, fabs(newFanValue - _oldFanValue));
 
     //check for change
     static BOOL _needsChangeOfSpeed = YES;
     if(_needsChangeOfSpeed) {
         BOOL changeWasNotBigEnough = fabs(newFanValue - _oldFanValue) < 500;
         if(changeWasNotBigEnough) {
-//            NSLog(@"_needsChangeOfSpeed but changeWasNotBigEnough");
+            NSLog(@"_needsChangeOfSpeed but changeWasNotBigEnough");
             return;
         }
         _needsChangeOfSpeed = NO;
         
         //save
         _oldFanValue = newFanValue;
-//        NSLog(@"save");
+        NSLog(@"save");
         return;
     }
     
@@ -440,23 +443,24 @@ NSString *authpw;
     if(_needsStability) {
         BOOL changeWasTooBig = fabs(newFanValue - _oldFanValue) >= 500;
         if(changeWasTooBig) {
-//            NSLog(@"_needsStability but changeWasTooBig");
+            NSLog(@"_needsStability but changeWasTooBig");
+
+            //save
             _oldFanValue = newFanValue;
-//            NSLog(@"save");
+            NSLog(@"save");
             return;
         }
         _needsStability = NO;
     }
     
     //do notifications IF we want to
-//    NSLog(@"Post %d", [[defaults objectForKey:@"NotificationCenter"] boolValue]);
-    
-    BOOL postEnabled = [[defaults objectForKey:@"NotificationCenter"] boolValue];
-    if(postEnabled) {
-        NSUserNotification *note = [[NSUserNotification alloc] init];
-        note.title = [NSString stringWithFormat:@"Fan at %f rpm", newFanValue];
-        [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:note];
-    }
+    NSLog(@"Post %d", [[defaults objectForKey:@"NotificationCenter"] boolValue]);
+    [[NSUserNotificationCenter defaultUserNotificationCenter] removeAllDeliveredNotifications];
+    NSUserNotification *note = [[NSUserNotification alloc] init];
+    note.title = [NSString stringWithFormat:@"Fan at %f RPM", newFanValue];
+
+    [NSApp deactivate]; //we need this because the center often doesnt present |note| when we are active
+    [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:note];
     
     //save
     _oldFanValue = newFanValue;
