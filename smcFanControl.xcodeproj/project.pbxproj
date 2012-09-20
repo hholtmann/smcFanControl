@@ -25,7 +25,6 @@
 		8985F1590ADD0B5500F9EC46 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8985F1580ADD0B5500F9EC46 /* Security.framework */; };
 		8987FBD20B878B3900A5ED8E /* smc.png in Resources */ = {isa = PBXBuildFile; fileRef = 8987FBD00B878B3900A5ED8E /* smc.png */; };
 		89949E8D0AEEA37700077E93 /* Power.m in Sources */ = {isa = PBXBuildFile; fileRef = 89949E8C0AEEA37700077E93 /* Power.m */; };
-		899D59DC15E1CF60003E322D /* smc in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8924ECEE15AC96E70031730C /* smc */; };
 		899D59DD15E1CFFF003E322D /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 895BDA390B8F8F42003CD894 /* Sparkle.framework */; };
 		899D59E315E228DF003E322D /* tsensors.plist in Resources */ = {isa = PBXBuildFile; fileRef = 899D59E215E228DF003E322D /* tsensors.plist */; };
 		89B243200B7E351000CAD103 /* smcfancontrol_v2.icns in Resources */ = {isa = PBXBuildFile; fileRef = 89B2431F0B7E351000CAD103 /* smcfancontrol_v2.icns */; };
@@ -35,7 +34,18 @@
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		B4568AAF160BA4790066005F /* smc in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8924ECEE15AC96E70031730C /* smc */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B4568AAB160BA2ED0066005F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8924ECED15AC96E70031730C;
+			remoteInfo = smc;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		8924ECEC15AC96E70031730C /* CopyFiles */ = {
@@ -53,7 +63,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
-				899D59DC15E1CF60003E322D /* smc in CopyFiles */,
+				B4568AAF160BA4790066005F /* smc in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,6 +131,7 @@
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* smcFanControl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = smcFanControl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B43C610916012BFB00977E34 /* Readme.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = Readme.md; sourceTree = "<group>"; };
+		B4568AB0160BA5BC0066005F /* InfoPlist.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InfoPlist.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,14 +214,15 @@
 		29B97314FDCFA39411CA2CEA /* FanControl */ = {
 			isa = PBXGroup;
 			children = (
-				B43C610916012BFB00977E34 /* Readme.md */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				898C281A15E2B6E30044EEC3 /* smc-command */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
-				8D1107310486CEB800E47090 /* Info.plist */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				B43C610916012BFB00977E34 /* Readme.md */,
+				8D1107310486CEB800E47090 /* Info.plist */,
+				B4568AB0160BA5BC0066005F /* InfoPlist.h */,
 			);
 			name = FanControl;
 			sourceTree = "<group>";
@@ -283,15 +295,17 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "smcFanControl" */;
 			buildPhases = (
+				895BDA550B8F90D3003CD894 /* CopyFiles */,
+				89B156840BA411BF002A258A /* CopyFiles */,
+				B4568AAE160BA3510066005F /* ShellScript */,
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
-				895BDA550B8F90D3003CD894 /* CopyFiles */,
-				89B156840BA411BF002A258A /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				B4568AAC160BA2ED0066005F /* PBXTargetDependency */,
 			);
 			name = smcFanControl;
 			productInstallPath = "$(HOME)/Applications";
@@ -351,6 +365,22 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		B4568AAE160BA3510066005F /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "PATH=\"$BUILT_PRODUCTS_DIR/smc\"\ncd \"$PROJECT_DIR\"\nchecksum=`/sbin/md5 -q $PATH`\necho \"#define SMC_CHECKSUM @\\\"$checksum\\\"\" > InfoPlist.h\n`/usr/bin/touch Info.plist`";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		8924ECEA15AC96E70031730C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -377,6 +407,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B4568AAC160BA2ED0066005F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8924ECED15AC96E70031730C /* smc */;
+			targetProxy = B4568AAB160BA2ED0066005F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
@@ -447,6 +485,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
 			};
 			name = Debug;
 		};
@@ -470,6 +509,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.5;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};

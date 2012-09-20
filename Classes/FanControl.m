@@ -420,21 +420,21 @@ NSString *authpw;
         return;
     }
 
-    NSLog(@"%f - %f = %f", newFanValue, _oldFanValue, fabs(newFanValue - _oldFanValue));
+//    NSLog(@"%f - %f = %f", newFanValue, _oldFanValue, fabs(newFanValue - _oldFanValue));
 
     //check for change
     static BOOL _needsChangeOfSpeed = YES;
     if(_needsChangeOfSpeed) {
         BOOL changeWasNotBigEnough = fabs(newFanValue - _oldFanValue) < 500;
         if(changeWasNotBigEnough) {
-            NSLog(@"_needsChangeOfSpeed but changeWasNotBigEnough");
+//            NSLog(@"_needsChangeOfSpeed but changeWasNotBigEnough");
             return;
         }
         _needsChangeOfSpeed = NO;
         
         //save
         _oldFanValue = newFanValue;
-        NSLog(@"save");
+//        NSLog(@"save");
         return;
     }
     
@@ -443,18 +443,18 @@ NSString *authpw;
     if(_needsStability) {
         BOOL changeWasTooBig = fabs(newFanValue - _oldFanValue) >= 500;
         if(changeWasTooBig) {
-            NSLog(@"_needsStability but changeWasTooBig");
+//            NSLog(@"_needsStability but changeWasTooBig");
 
             //save
             _oldFanValue = newFanValue;
-            NSLog(@"save");
+//            NSLog(@"save");
             return;
         }
         _needsStability = NO;
     }
     
     //do notifications IF we want to
-    NSLog(@"Post %d", [[defaults objectForKey:@"NotificationCenter"] boolValue]);
+//    NSLog(@"Post %d", [[defaults objectForKey:@"NotificationCenter"] boolValue]);
     [[NSUserNotificationCenter defaultUserNotificationCenter] removeAllDeliveredNotifications];
     NSUserNotification *note = [[NSUserNotification alloc] init];
     note.title = [NSString stringWithFormat:@"Fan at %f RPM", newFanValue];
