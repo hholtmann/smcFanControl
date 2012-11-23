@@ -25,7 +25,7 @@
 #import <smc.h>
 #import <smcWrapper.h>
 #import <MachineDefaults.h>
-
+#import <Sparkle/SUUpdater.h>
 #import <Power.h>
 #include <mach/mach_port.h>
 #include <mach/mach_interface.h>
@@ -105,10 +105,8 @@
 	NSImage *menu_image;
 	NSImage *menu_image_alt;
 
-
-
+    IBOutlet SUUpdater *updater;
 }
-
 -(void)terminate:(id)sender;
 
 - (IBAction)paypal:(id)sender;

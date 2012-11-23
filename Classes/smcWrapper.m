@@ -19,11 +19,11 @@
  *	along with this program; if not, write to the Free Software
  *	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+#include "InfoPlist.h"
 
 #import "smcWrapper.h"
 #import <CommonCrypto/CommonDigest.h>
 
-NSString * const smc_checksum=@"2ea544babe8a58dccc1364c920d473c8";
 static NSDictionary *tsensors = nil;
 
 @implementation smcWrapper
@@ -61,6 +61,7 @@ static NSDictionary *tsensors = nil;
                 if (c_temp>0) break;
             }
         }
+        [allTSensors release];
     }
 
 	return c_temp;
@@ -170,11 +171,19 @@ static NSDictionary *tsensors = nil;
 //call smc binary with setuid rights and apply
 +(void)setKey_external:(NSString *)key value:(NSString *)value{
 	NSString *launchPath = [[NSBundle mainBundle]   pathForResource:@"smc" ofType:@""];
+    if(!launchPath) {
+		NSLog(@"ERROR: smcFanControl: Security Error: no smc-binary found. wont apply settings");
+        return;
+    }
 	//first check if it's the right binary (security)
 	NSString *checksum=[smcWrapper createCheckSum:launchPath];
-	if (![checksum  isEqualToString:smc_checksum]) {
-		NSLog(@"smcFanControl: Security Error: smc-binary is not the distributed one");
+	if (![checksum  isEqualToString:SMC_CHECKSUM]) {
+#ifdef DEBUG
+		NSLog(@"WARN: smcFanControl: Security Error: smc-binary is not the distributed one, will use it anyways in DEBUG mode");
+#else
+		NSLog(@"ERROR: smcFanControl: Security Error: smc-binary is not the distributed one. wont apply settings");
 		return;
+#endif
 	}
     NSArray *argsArray = [NSArray arrayWithObjects: @"-k",key,@"-w",value,nil];
 	NSTask *task;

@@ -55,12 +55,6 @@ static void powerSourceChanged(void * refCon)
 	CFRelease(powerSourcesList);
 }
 
-- (id)init{
-	[super init];
-	return self;
-}
-
-
 - (void)registerForSleepWakeNotification
 {
 	root_port = IORegisterForSystemPower(self, &notificationPort, SleepWatcher, &notifier);

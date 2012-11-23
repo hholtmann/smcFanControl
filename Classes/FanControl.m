@@ -26,14 +26,7 @@
 #import <Security/Authorization.h>
 #import <Security/AuthorizationDB.h>
 #import <Security/AuthorizationTags.h>
-#import <Sparkle/SUUpdater.h>
 #import "SystemVersion.h"
-
-@interface FanControl ()
-+(void)copyMachinesIfNecessary;
-- (BOOL)isInAutoStart;
-- (void) setStartAtLogin:(BOOL)enabled;
-@end
 
 @implementation FanControl
 
@@ -99,6 +92,11 @@ NSString *authpw;
 	
 }
 
+- (NSNumber*)hasNSUserNotification {
+    BOOL hasNSUserNotification = (NSClassFromString(@"NSUserNotification") != nil);
+    return [NSNumber numberWithBool:hasNSUserNotification];
+}
+
 -(void) awakeFromNib {
 		
 	s_sed = nil;
@@ -113,7 +111,7 @@ NSString *authpw;
 
 	mdefaults=[[MachineDefaults alloc] init:nil];
 
-	s_sed=[mdefaults get_machine_defaults];
+	s_sed=[mdefaults copy_machine_defaults];
 
 	
 	NSMutableArray *favorites=[NSMutableArray arrayWithObjects:
@@ -125,7 +123,7 @@ NSString *authpw;
 		//for macbooks add a second default
 		MachineDefaults *msdefaults=[[MachineDefaults alloc] init:nil];
 		NSMutableDictionary *sec_fav=[NSMutableDictionary dictionaryWithObjectsAndKeys:@"Higher RPM", @"Title",
-							[[msdefaults get_machine_defaults] objectForKey:@"Fans"], @"FanData",nil];
+							[[[msdefaults copy_machine_defaults] autorelease] objectForKey:@"Fans"], @"FanData",nil];
 		[favorites addObject:sec_fav];	
 		int i;					
 		for (i=0;i<[[s_sed objectForKey:@"Fans"] count];i++) {
@@ -157,7 +155,8 @@ NSString *authpw;
 			[NSNumber numberWithInt:0], @"Unit",
 			[NSNumber numberWithInt:0], @"SelDefault",
 			[NSNumber numberWithBool:NO], @"AutoStart",
-			[NSNumber numberWithBool:NO],@"AutomaticChange",
+			[NSNumber numberWithBool:NO], @"AutomaticChange",
+			[NSNumber numberWithBool:NO], @"NotificationCenter",
 			[NSNumber numberWithInt:0],@"selbatt",
 			[NSNumber numberWithInt:0],@"selac",
 			[NSNumber numberWithInt:0],@"selload",
@@ -245,7 +244,6 @@ NSString *authpw;
 	};
 }
 
-
 #pragma mark **Action-Methods**
 - (IBAction)loginItem:(id)sender{
 	if ([sender state]==NSOnState) {
@@ -271,7 +269,7 @@ NSString *authpw;
 - (IBAction)save_favorite:(id)sender{
 	MachineDefaults *msdefaults=[[MachineDefaults alloc] init:nil];
 	if ([[newfavorite_title stringValue] length]>0) {
-		NSMutableDictionary *toinsert=[[NSMutableDictionary alloc] initWithObjectsAndKeys:[newfavorite_title stringValue],@"Title",[[msdefaults get_machine_defaults] objectForKey:@"Fans"],@"FanData",nil]; //default as template
+		NSMutableDictionary *toinsert=[[NSMutableDictionary alloc] initWithObjectsAndKeys:[newfavorite_title stringValue],@"Title",[[[msdefaults copy_machine_defaults] autorelease] objectForKey:@"Fans"],@"FanData",nil]; //default as template
 		[toinsert setValue:[NSNumber numberWithInt:0] forKey:@"Standard"];
 		[FavoritesController addObject:toinsert];
 		[toinsert release];
@@ -406,6 +404,70 @@ NSString *authpw;
 		[s_status release];
 		
 	}
+    
+    //--- NOTIFICATION CENTER
+    BOOL postEnabled = [[defaults objectForKey:@"NotificationCenter"] boolValue];
+    if(postEnabled) {
+        [self sendNotificationIfNeeded:fan.doubleValue];
+    }
+}
+
+- (void)sendNotificationIfNeeded:(double)newFanValue {
+    //see if fans changed, have a static var to save old value
+    static double _oldFanValue = NSNotFound;
+    if(_oldFanValue == NSNotFound) {
+        _oldFanValue = newFanValue;
+        return;
+    }
+
+//    NSLog(@"%f - %f = %f", newFanValue, _oldFanValue, fabs(newFanValue - _oldFanValue));
+
+    //check for change
+    static BOOL _needsChangeOfSpeed = YES;
+    if(_needsChangeOfSpeed) {
+        BOOL changeWasNotBigEnough = fabs(newFanValue - _oldFanValue) < 500;
+        if(changeWasNotBigEnough) {
+//            NSLog(@"_needsChangeOfSpeed but changeWasNotBigEnough");
+            return;
+        }
+        _needsChangeOfSpeed = NO;
+        
+        //save
+        _oldFanValue = newFanValue;
+//        NSLog(@"save");
+        return;
+    }
+    
+    //check for stability
+    static BOOL _needsStability = YES;
+    if(_needsStability) {
+        BOOL changeWasTooBig = fabs(newFanValue - _oldFanValue) >= 500;
+        if(changeWasTooBig) {
+//            NSLog(@"_needsStability but changeWasTooBig");
+
+            //save
+            _oldFanValue = newFanValue;
+//            NSLog(@"save");
+            return;
+        }
+        _needsStability = NO;
+    }
+    
+    //do notifications IF we want to
+//    NSLog(@"Post %d", [[defaults objectForKey:@"NotificationCenter"] boolValue]);
+    [[NSUserNotificationCenter defaultUserNotificationCenter] removeAllDeliveredNotifications];
+    NSUserNotification *note = [[NSUserNotification alloc] init];
+    note.title = [NSString stringWithFormat:@"Fan at %f RPM", newFanValue];
+
+    [NSApp deactivate]; //we need this because the center often doesnt present |note| when we are active
+    [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:note];
+    
+    //save
+    _oldFanValue = newFanValue;
+
+    //reset
+    _needsChangeOfSpeed = YES;
+    _needsStability = YES;
 }
 
 
@@ -470,7 +532,6 @@ NSString *authpw;
 	[self apply_settings:sender controllerindex:[[[theMenu itemWithTag:1] submenu] indexOfItem:sender]];
 }
 
-
 -(void)terminate:(id)sender{
 	//get last active selection
 	[defaults synchronize];
@@ -524,7 +585,7 @@ NSString *authpw;
 
 //just a helper to bringt update-info-window to the front
 - (IBAction)updateCheck:(id)sender{
-	[[[SUUpdater alloc] init] checkForUpdates:sender];
+	[updater checkForUpdates:sender];
 	[[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
 }
 
@@ -589,7 +650,7 @@ NSString *authpw;
 	LSSharedFileListRef loginItems = LSSharedFileListCreate(kCFAllocatorDefault, kLSSharedFileListSessionLoginItems, /*options*/ NULL);
 	NSString *path = [[NSBundle mainBundle] bundlePath];
 	CFURLRef URLToToggle = (CFURLRef)[NSURL fileURLWithPath:path];
-	LSSharedFileListItemRef existingItem = NULL;
+	//LSSharedFileListItemRef existingItem = NULL;
 	
 	UInt32 seed = 0U;
 	NSArray *currentLoginItems = [NSMakeCollectable(LSSharedFileListCopySnapshot(loginItems, &seed)) autorelease];
@@ -605,7 +666,7 @@ NSString *authpw;
 			CFRelease(URL);
 			
 			if (foundIt) {
-				existingItem = item;
+				//existingItem = item;
 				found = YES;
 				break;
 			}
