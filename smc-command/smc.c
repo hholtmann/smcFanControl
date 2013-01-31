@@ -87,6 +87,11 @@ void printUInt(SMCVal_t val)
     printf("%u ", (unsigned int) _strtoul(val.bytes, val.dataSize, 10));
 }
 
+void printSP78(SMCVal_t val)
+{
+    printf("%u.%02u ",  *val.bytes, (*(val.bytes+1)) * 100 / 256);
+}
+
 void printBytesHex(SMCVal_t val)
 {
     int i;
@@ -108,6 +113,8 @@ void printVal(SMCVal_t val)
             printUInt(val);
         else if (strcmp(val.dataType, DATATYPE_FPE2) == 0)
             printFPE2(val);
+		else if (strcmp(val.dataType, DATATYPE_SP78) == 0 && val.dataSize == 2)
+			printSP78(val);
 
         printBytesHex(val);
     }

@@ -42,6 +42,7 @@
 #define DATATYPE_UINT8        "ui8 "
 #define DATATYPE_UINT16       "ui16"
 #define DATATYPE_UINT32       "ui32"
+#define DATATYPE_SP78         "sp78"
 
 typedef struct {
     char                  major;
@@ -65,7 +66,7 @@ typedef struct {
     char                  dataAttributes;
 } SMCKeyData_keyInfo_t;
 
-typedef char              SMCBytes_t[32]; 
+typedef unsigned char              SMCBytes_t[32];
 
 typedef struct {
   UInt32                  key; 
