@@ -381,6 +381,9 @@ kern_return_t SMCPrintFans(void)
     for (i = 0; i < totalFans; i++)
     {
         printf("\nFan #%d:\n", i);
+        sprintf(key, "F%dID", i);
+        SMCReadKey(key, &val);
+        printf("    Fan ID       : %s\n", val.bytes+4);
         sprintf(key, "F%dAc", i); 
         SMCReadKey(key, &val); 
         printf("    Actual speed : %.0f\n", _strtof(val.bytes, val.dataSize, 2));
