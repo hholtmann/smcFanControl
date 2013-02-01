@@ -98,5 +98,4 @@ kern_return_t SMCClose(io_connect_t conn);
 void smc_init();
 void smc_close();
 
-float _strtof(char *str, int size, int e);
-
+float _strtof(unsigned char *str, int size, int e);

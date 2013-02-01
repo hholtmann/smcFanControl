@@ -52,7 +52,7 @@ void _ultostr(char *str, UInt32 val)
             (unsigned int) val);
 }
 
-float _strtof(char *str, int size, int e)
+float _strtof(unsigned char *str, int size, int e)
 {
     float total = 0;
     int i;
@@ -64,6 +64,8 @@ float _strtof(char *str, int size, int e)
         else
            total += str[i] << (size - 1 - i) * (8 - e);
     }
+
+	total += (str[size-1] & 0x03) * 0.25;
 
     return total;
 }
@@ -77,9 +79,7 @@ void smc_close(){
 }
 void printFPE2(SMCVal_t val)
 {
-    /* FIXME: This decode is incomplete, last 2 bits are dropped */
-
-    printf("%.0f ", _strtof(val.bytes, val.dataSize, 2));
+    printf("%.02f ", _strtof(val.bytes, val.dataSize, 2));
 }
 
 void printUInt(SMCVal_t val)
