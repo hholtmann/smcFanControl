@@ -43,6 +43,7 @@
 #define DATATYPE_UINT16       "ui16"
 #define DATATYPE_UINT32       "ui32"
 #define DATATYPE_SP78         "sp78"
+#define DATATYPE_SI8          "si8 "
 
 typedef struct {
     char                  major;

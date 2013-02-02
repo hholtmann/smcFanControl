@@ -92,6 +92,11 @@ void printSP78(SMCVal_t val)
     printf("%u.%02u ",  *val.bytes, (*(val.bytes+1)) * 100 / 256);
 }
 
+void printSI8(SMCVal_t val)
+{
+    printf("%d ", (signed char)*val.bytes);
+}
+
 void printBytesHex(SMCVal_t val)
 {
     int i;
@@ -115,6 +120,8 @@ void printVal(SMCVal_t val)
             printFPE2(val);
 		else if (strcmp(val.dataType, DATATYPE_SP78) == 0 && val.dataSize == 2)
 			printSP78(val);
+		else if (strcmp(val.dataType, DATATYPE_SI8) == 0 && val.dataSize == 1)
+			printSI8(val);
 
         printBytesHex(val);
     }
