@@ -97,6 +97,11 @@ void printSI8(SMCVal_t val)
     printf("%d ", (signed char)*val.bytes);
 }
 
+void printSI16(SMCVal_t val)
+{
+    printf("%d ", ntohs(*(SInt16*)val.bytes));
+}
+
 void printBytesHex(SMCVal_t val)
 {
     int i;
@@ -122,6 +127,8 @@ void printVal(SMCVal_t val)
 			printSP78(val);
 		else if (strcmp(val.dataType, DATATYPE_SI8) == 0 && val.dataSize == 1)
 			printSI8(val);
+		else if (strcmp(val.dataType, DATATYPE_SI16) == 0 && val.dataSize == 2)
+			printSI16(val);
 
         printBytesHex(val);
     }
