@@ -45,6 +45,7 @@
 #define DATATYPE_SP78         "sp78"
 #define DATATYPE_SI8          "si8 "
 #define DATATYPE_SI16         "si16"
+#define DATATYPE_PWM          "{pwm"
 
 typedef struct {
     char                  major;

@@ -102,6 +102,11 @@ void printSI16(SMCVal_t val)
     printf("%d ", ntohs(*(SInt16*)val.bytes));
 }
 
+void printPWM(SMCVal_t val)
+{
+    printf("%.1f%% ", ntohs(*(UInt16*)val.bytes) * 100 / 65536.0);
+}
+
 void printBytesHex(SMCVal_t val)
 {
     int i;
@@ -129,6 +134,8 @@ void printVal(SMCVal_t val)
 			printSI8(val);
 		else if (strcmp(val.dataType, DATATYPE_SI16) == 0 && val.dataSize == 2)
 			printSI16(val);
+		else if (strcmp(val.dataType, DATATYPE_PWM) == 0 && val.dataSize == 2)
+			printPWM(val);
 
         printBytesHex(val);
     }
