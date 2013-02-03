@@ -89,7 +89,7 @@ void printUInt(SMCVal_t val)
 
 void printSP78(SMCVal_t val)
 {
-    printf("%u.%02u ",  *val.bytes, (*(val.bytes+1)) * 100 / 256);
+    printf("%d.%02u ", (signed char)*val.bytes, (*(val.bytes+1)) * 100 / 256);
 }
 
 void printSI8(SMCVal_t val)
