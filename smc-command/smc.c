@@ -77,9 +77,50 @@ void smc_init(){
 void smc_close(){
 	SMCClose(conn);
 }
+
+void printFP1F(SMCVal_t val)
+{
+    printf("%.5f ", ntohs(*(UInt16*)val.bytes) / 32768.0);
+}
+
+void printFP4C(SMCVal_t val)
+{
+    printf("%.5f ", ntohs(*(UInt16*)val.bytes) / 4096.0);
+}
+
+void printFP5B(SMCVal_t val)
+{
+    printf("%.5f ", ntohs(*(UInt16*)val.bytes) / 2048.0);
+}
+
+void printFP6A(SMCVal_t val)
+{
+    printf("%.4f ", ntohs(*(UInt16*)val.bytes) / 1024.0);
+}
+
+void printFP79(SMCVal_t val)
+{
+    printf("%.4f ", ntohs(*(UInt16*)val.bytes) / 512.0);
+}
+
+void printFP88(SMCVal_t val)
+{
+    printf("%.3f ", ntohs(*(UInt16*)val.bytes) / 256.0);
+}
+
+void printFPA6(SMCVal_t val)
+{
+    printf("%.2f ", ntohs(*(UInt16*)val.bytes) / 64.0);
+}
+
+void printFPC4(SMCVal_t val)
+{
+    printf("%.2f ", ntohs(*(UInt16*)val.bytes) / 16.0);
+}
+
 void printFPE2(SMCVal_t val)
 {
-    printf("%.02f ", _strtof(val.bytes, val.dataSize, 2));
+    printf("%.2f ", ntohs(*(UInt16*)val.bytes) / 4.0);
 }
 
 void printUInt(SMCVal_t val)
@@ -89,7 +130,27 @@ void printUInt(SMCVal_t val)
 
 void printSP78(SMCVal_t val)
 {
-    printf("%d.%02u ", (signed char)*val.bytes, (*(val.bytes+1)) * 100 / 256);
+    printf("%.3f ", ((SInt16)ntohs(*(UInt16*)val.bytes)) / 256.0);
+}
+
+void printSP87(SMCVal_t val)
+{
+    printf("%.3f ", ((SInt16)ntohs(*(UInt16*)val.bytes)) / 128.0);
+}
+
+void printSP96(SMCVal_t val)
+{
+    printf("%.2f ", ((SInt16)ntohs(*(UInt16*)val.bytes)) / 64.0);
+}
+
+void printSPB4(SMCVal_t val)
+{
+    printf("%.2f ", ((SInt16)ntohs(*(UInt16*)val.bytes)) / 16.0);
+}
+
+void printSPF0(SMCVal_t val)
+{
+    printf("%.0f ", (float)ntohs(*(UInt16*)val.bytes));
 }
 
 void printSI8(SMCVal_t val)
@@ -126,10 +187,34 @@ void printVal(SMCVal_t val)
             (strcmp(val.dataType, DATATYPE_UINT16) == 0) ||
             (strcmp(val.dataType, DATATYPE_UINT32) == 0))
             printUInt(val);
-        else if (strcmp(val.dataType, DATATYPE_FPE2) == 0)
+        else if (strcmp(val.dataType, DATATYPE_FP1F) == 0 && val.dataSize == 2)
+            printFP1F(val);
+        else if (strcmp(val.dataType, DATATYPE_FP4C) == 0 && val.dataSize == 2)
+            printFP4C(val);
+        else if (strcmp(val.dataType, DATATYPE_FP5B) == 0 && val.dataSize == 2)
+            printFP5B(val);
+        else if (strcmp(val.dataType, DATATYPE_FP6A) == 0 && val.dataSize == 2)
+            printFP6A(val);
+        else if (strcmp(val.dataType, DATATYPE_FP79) == 0 && val.dataSize == 2)
+            printFP79(val);
+        else if (strcmp(val.dataType, DATATYPE_FP88) == 0 && val.dataSize == 2)
+            printFP88(val);
+        else if (strcmp(val.dataType, DATATYPE_FPA6) == 0 && val.dataSize == 2)
+            printFPA6(val);
+        else if (strcmp(val.dataType, DATATYPE_FPC4) == 0 && val.dataSize == 2)
+            printFPC4(val);
+        else if (strcmp(val.dataType, DATATYPE_FPE2) == 0 && val.dataSize == 2)
             printFPE2(val);
 		else if (strcmp(val.dataType, DATATYPE_SP78) == 0 && val.dataSize == 2)
 			printSP78(val);
+		else if (strcmp(val.dataType, DATATYPE_SP87) == 0 && val.dataSize == 2)
+			printSP87(val);
+		else if (strcmp(val.dataType, DATATYPE_SP96) == 0 && val.dataSize == 2)
+			printSP96(val);
+		else if (strcmp(val.dataType, DATATYPE_SPB4) == 0 && val.dataSize == 2)
+			printSPB4(val);
+		else if (strcmp(val.dataType, DATATYPE_SPF0) == 0 && val.dataSize == 2)
+			printSPF0(val);
 		else if (strcmp(val.dataType, DATATYPE_SI8) == 0 && val.dataSize == 1)
 			printSI8(val);
 		else if (strcmp(val.dataType, DATATYPE_SI16) == 0 && val.dataSize == 2)
