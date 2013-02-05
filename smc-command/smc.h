@@ -48,6 +48,11 @@
 #define DATATYPE_FPC4         "fpc4"
 #define DATATYPE_FPE2         "fpe2"
 
+#define DATATYPE_SP1E         "sp1e"
+#define DATATYPE_SP3C         "sp3c"
+#define DATATYPE_SP4B         "sp4b"
+#define DATATYPE_SP5A         "sp5a"
+#define DATATYPE_SP69         "sp69"
 #define DATATYPE_SP78         "sp78"
 #define DATATYPE_SP87         "sp87"
 #define DATATYPE_SP96         "sp96"

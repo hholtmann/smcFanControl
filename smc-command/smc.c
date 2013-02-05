@@ -128,6 +128,31 @@ void printUInt(SMCVal_t val)
     printf("%u ", (unsigned int) _strtoul(val.bytes, val.dataSize, 10));
 }
 
+void printSP1E(SMCVal_t val)
+{
+    printf("%.5f ", ((SInt16)ntohs(*(UInt16*)val.bytes)) / 16384.0);
+}
+
+void printSP3C(SMCVal_t val)
+{
+    printf("%.5f ", ((SInt16)ntohs(*(UInt16*)val.bytes)) / 4096.0);
+}
+
+void printSP4B(SMCVal_t val)
+{
+    printf("%.4f ", ((SInt16)ntohs(*(UInt16*)val.bytes)) / 2048.0);
+}
+
+void printSP5A(SMCVal_t val)
+{
+    printf("%.4f ", ((SInt16)ntohs(*(UInt16*)val.bytes)) / 1024.0);
+}
+
+void printSP69(SMCVal_t val)
+{
+    printf("%.3f ", ((SInt16)ntohs(*(UInt16*)val.bytes)) / 512.0);
+}
+
 void printSP78(SMCVal_t val)
 {
     printf("%.3f ", ((SInt16)ntohs(*(UInt16*)val.bytes)) / 256.0);
@@ -205,6 +230,16 @@ void printVal(SMCVal_t val)
             printFPC4(val);
         else if (strcmp(val.dataType, DATATYPE_FPE2) == 0 && val.dataSize == 2)
             printFPE2(val);
+		else if (strcmp(val.dataType, DATATYPE_SP1E) == 0 && val.dataSize == 2)
+			printSP1E(val);
+		else if (strcmp(val.dataType, DATATYPE_SP3C) == 0 && val.dataSize == 2)
+			printSP3C(val);
+		else if (strcmp(val.dataType, DATATYPE_SP4B) == 0 && val.dataSize == 2)
+			printSP4B(val);
+		else if (strcmp(val.dataType, DATATYPE_SP5A) == 0 && val.dataSize == 2)
+			printSP5A(val);
+		else if (strcmp(val.dataType, DATATYPE_SP69) == 0 && val.dataSize == 2)
+			printSP69(val);
 		else if (strcmp(val.dataType, DATATYPE_SP78) == 0 && val.dataSize == 2)
 			printSP78(val);
 		else if (strcmp(val.dataType, DATATYPE_SP87) == 0 && val.dataSize == 2)
