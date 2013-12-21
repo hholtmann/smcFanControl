@@ -2,7 +2,8 @@
  *	FanControl
  *
  *	Copyright (c) 2006-2012 Hendrik Holtmann
-*
+ *  Portions Copyright (c) 2013 Michael Wilber
+ *
  *	FanControl.m - MacBook(Pro) FanControl application
  *
  *	This program is free software; you can redistribute it and/or modify
@@ -37,18 +38,10 @@
 
 @implementation FanControl
 
-io_connect_t conn;
-kern_return_t result;
-SMCVal_t      val;
+// Number of fans reported by the hardware.
+int g_numFans = 0;
+
 NSUserDefaults *defaults;
-Boolean supported=false;
-extern char   *optarg;
-SMCVal_t val;
-OSStatus status;
-NSDictionary* machine_defaults;
-NSString *authpw;
-
-
 
 #pragma mark **Init-Methods**
 
@@ -100,7 +93,7 @@ NSString *authpw;
 }
 
 -(void) awakeFromNib {
-		
+    
 	s_sed = nil;
 	pw=[[Power alloc] init];
 	[pw setDelegate:self];
@@ -169,11 +162,11 @@ NSString *authpw;
 	
 	
 
-	
+	g_numFans = [smcWrapper get_fan_num];
 	s_menus=[[NSMutableArray alloc] init];
 	[s_menus autorelease];
 	int i;
-	for(i=0;i<[smcWrapper get_fan_num];i++){
+	for(i=0;i<g_numFans;i++){
 		NSMenuItem *mitem=[[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"Fan: %d",i] action:NULL keyEquivalent:@""];
 		[mitem setTag:(i+1)*10];
 		[s_menus insertObject:mitem atIndex:i];
@@ -222,7 +215,7 @@ NSString *authpw;
 
 	//release MachineDefaults class first call
 	//add timer for reading to RunLoop
-	_readTimer = [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(readFanData:) userInfo:nil repeats:YES];
+	_readTimer = [NSTimer scheduledTimerWithTimeInterval:4.0 target:self selector:@selector(readFanData:) userInfo:nil repeats:YES];
 	[_readTimer fire];
 	//autoapply settings if valid
 	[self upgradeFavorites];
@@ -305,10 +298,11 @@ NSString *authpw;
 }
 
 
-
+// Called via a timer mechanism. This is where all the temp / RPM reading is done.
 //reads fan data and updates the gui
 -(void) readFanData:(NSTimer*)timer{
 	
+    int i = 0;
 	NSString *temp;
 	NSString *fan;
 
@@ -317,16 +311,45 @@ NSString *authpw;
 	if (s_sed==nil) {
 		return;
 	}
-	
-	//populate Menu Items with recent Data
-	int i;
-	for(i=0;i<[smcWrapper get_fan_num];i++){
-		NSString *fandesc=[[[s_sed objectForKey:@"Fans"] objectAtIndex:i] objectForKey:@"Description"];
-		[[theMenu itemWithTag:(i+1)*10] setTitle:[NSString stringWithFormat:@"%@: %@ rpm",fandesc,[[NSNumber numberWithInt:[smcWrapper get_fan_rpm:i]] stringValue]]];
+    
+    // Store fan speeds in simple array so that they only need to be read once.
+    int fanRpms[kMaxFanRpms] = { 0 };
+    if (g_numFans > kMaxFanRpms)
+        return;
+
+    
+    // Determine which fan speed to show in the menubar.
+    int selected = 0;
+	NSArray *fans = [[[FavoritesController arrangedObjects] objectAtIndex:[FavoritesController selectionIndex]] objectForKey:@"FanData"];
+	for (i=0;i<[fans count];i++)
+	{
+		if ([[[fans objectAtIndex:i] objectForKey:@"menu"] boolValue]==YES) {
+			selected = i;
+            break;
+		}
 	}
-	
-	
+    if (selected < 0 || selected >= g_numFans)
+    {
+        // Bad selected fan index.
+        return;
+    }
+    
+    //read the current fan speeds
+	for(i=0; i<g_numFans; ++i){
+        fanRpms[i] = [smcWrapper get_fan_rpm:i];
+	}
+    
 	float c_temp=[smcWrapper get_maintemp];
+    const int selectedRpm = fanRpms[selected];
+    
+    //populate Menu Items with recent Data
+    
+    // Proceed with building the strings, etc. to update the text in the menubar.
+    for(i=0; i<g_numFans; ++i){
+		NSString *fandesc=[[[s_sed objectForKey:@"Fans"] objectAtIndex:i] objectForKey:@"Description"];
+		[[theMenu itemWithTag:(i+1)*10] setTitle:[NSString stringWithFormat:@"%@: %@ rpm",fandesc,[[NSNumber numberWithInt:fanRpms[i]] stringValue]]];
+	}
+    
 	if ([[defaults objectForKey:@"Unit"] intValue]==0) { 
 		temp=[NSString stringWithFormat:@"%@%CC",[NSNumber numberWithFloat:c_temp],(unsigned short)0xb0];
 	} else {
@@ -338,21 +361,13 @@ NSString *authpw;
 	//avoid jumping in menu bar
 	[nc setFormat:@"000;000;-000"];
 	
-	int selected = 0;
-	NSArray *fans = [[[FavoritesController arrangedObjects] objectAtIndex:[FavoritesController selectionIndex]] objectForKey:@"FanData"];
-	for (i=0;i<[fans count];i++)
-	{
-		if ([[[fans objectAtIndex:i] objectForKey:@"menu"] boolValue]==YES) {
-			selected = i;
-		}
-	}
-	
-	fan=[NSString stringWithFormat:@"%@rpm",[nc stringForObjectValue:[NSNumber numberWithFloat:[smcWrapper get_fan_rpm:selected]]]];
+	fan=[NSString stringWithFormat:@"%@rpm",[nc stringForObjectValue:[NSNumber numberWithFloat:selectedRpm]]];
 
-	if ([[defaults objectForKey:@"MenuBar"] intValue]<=1) { 
+    const int menuBarSetting = [[defaults objectForKey:@"MenuBar"] intValue];
+	if (menuBarSetting <= 1) {
 		NSString *add;
 		int fsize;
-		if ([[defaults objectForKey:@"MenuBar"] intValue]==0) {
+		if (menuBarSetting==0) {
 			add=@"\n";
 			fsize=9;
 			[statusItem setLength:53];
@@ -361,6 +376,7 @@ NSString *authpw;
 			fsize=11;
 			[statusItem setLength:96];
 		}
+        
 		NSMutableAttributedString *s_status=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@%@%@",temp,add,fan]];
 		NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
 		[paragraphStyle setAlignment:NSLeftTextAlignment];
@@ -373,9 +389,7 @@ NSString *authpw;
 		[paragraphStyle release];
 		[s_status release];
 	}
-	
-	
-	if ([[defaults objectForKey:@"MenuBar"] intValue]==2) {
+	else if (menuBarSetting==2) {
 		[statusItem setLength:26]; 
 		[statusItem setTitle:nil];
 		[statusItem setToolTip:[NSString stringWithFormat:@"%@\n%@",temp,fan]];
@@ -383,8 +397,7 @@ NSString *authpw;
 		[statusItem setAlternateImage:menu_image_alt];
 		
 	}
-
-	if ([[defaults objectForKey:@"MenuBar"] intValue]==3) { 
+	else if (menuBarSetting==3) {
 		[statusItem setLength:46];
 		NSMutableAttributedString *s_status=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",temp]];
 		[s_status addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Lucida Grande" size:12] range:NSMakeRange(0,[s_status length])];
@@ -395,7 +408,8 @@ NSString *authpw;
 		[s_status release];
 
 	}
-	if ([[defaults objectForKey:@"MenuBar"] intValue]==4) { 
+	else if (menuBarSetting==4) {
+        //TODO: Main temp not used in this case, don't bother reading the main temp in this case.
 		[statusItem setLength:65];
 		NSMutableAttributedString *s_status=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",fan]];
 		[s_status addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Lucida Grande" size:12] range:NSMakeRange(0,[s_status length])];
@@ -474,7 +488,7 @@ NSString *authpw;
 -(void)terminate:(id)sender{
 	//get last active selection
 	[defaults synchronize];
-	SMCClose(conn);
+	[smcWrapper cleanUp];
 	[_readTimer invalidate];
 	[pw deregisterForSleepWakeNotification];
 	[pw deregisterForPowerChange];
@@ -669,20 +683,23 @@ NSString *authpw;
 
 
 #pragma mark **SMC-Binary Owner/Right Check**
+//TODO: It looks like this function is called inefficiently.
 //call smc binary with sudo rights and apply
 +(void)setRights{
 	NSString *smcpath = [[NSBundle mainBundle]   pathForResource:@"smc" ofType:@""];
 	NSFileManager *fmanage=[NSFileManager defaultManager];
     NSDictionary *fdic = [fmanage attributesOfItemAtPath:smcpath error:nil];
 	if ([[fdic valueForKey:@"NSFileOwnerAccountName"] isEqualToString:@"root"] && [[fdic valueForKey:@"NSFileGroupOwnerAccountName"] isEqualToString:@"admin"] && ([[fdic valueForKey:@"NSFilePosixPermissions"] intValue]==3437)) {
-		return;
-	 } 
+		// If the SMC binary has already been modified to run as root, then do nothing.
+        return;
+	 }
+    //TODO: Is the usage of commPipe safe?
 	FILE *commPipe;
 	AuthorizationRef authorizationRef;
 	AuthorizationItem gencitem = { "system.privilege.admin", 0, NULL, 0 };
 	AuthorizationRights gencright = { 1, &gencitem };
 	int flags = kAuthorizationFlagExtendRights | kAuthorizationFlagInteractionAllowed;
-	status = AuthorizationCreate(&gencright,  kAuthorizationEmptyEnvironment, flags, &authorizationRef);
+	OSStatus status = AuthorizationCreate(&gencright,  kAuthorizationEmptyEnvironment, flags, &authorizationRef);
 	NSString *tool=@"/usr/sbin/chown";
     NSArray *argsArray = [NSArray arrayWithObjects: @"root:admin",smcpath,nil];
 	int i;

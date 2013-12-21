@@ -2,7 +2,8 @@
  *	FanControl
  *
  *	Copyright (c) 2006-2012 Hendrik Holtmann
-*
+ *  Portions Copyright (c) 2013 Michael Wilber
+ *
  *	smcWrapper.m - MacBook(Pro) FanControl application
  *
  *	This program is free software; you can redistribute it and/or modify
@@ -27,6 +28,8 @@
 
 @interface smcWrapper : NSObject {
 }
+
++(void) cleanUp;
 
 +(int) get_fan_rpm:(int)fan_number;
 +(float) get_maintemp;

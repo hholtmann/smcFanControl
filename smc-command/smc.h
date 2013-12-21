@@ -1,6 +1,7 @@
 /*
  * Apple System Management Control (SMC) Tool
  * Copyright (C) 2006 devnull 
+ * Portions Copyright (C) 2013 Michael Wilber
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,13 +90,20 @@ typedef struct {
 } SMCVal_t;
 
 UInt32 _strtoul(char *str, int size, int base);
-kern_return_t SMCOpen(io_connect_t *conn);
-kern_return_t SMCReadKey(UInt32Char_t key, SMCVal_t *val);
-kern_return_t SMCReadKey2(UInt32Char_t key, SMCVal_t *val,io_connect_t conn);
-kern_return_t SMCWriteSimple(UInt32Char_t key,char *wvalue,io_connect_t conn);
-kern_return_t SMCClose(io_connect_t conn);
+float _strtof(char *str, int size, int e);
+
+// Exclude command-line only code from smcFanControl UI
+#ifdef CMD_TOOL
+
 void smc_init();
 void smc_close();
+kern_return_t SMCReadKey(UInt32Char_t key, SMCVal_t *val);
+kern_return_t SMCWriteSimple(UInt32Char_t key,char *wvalue,io_connect_t conn);
 
-float _strtof(char *str, int size, int e);
+#endif //#ifdef CMD_TOOL
+
+kern_return_t SMCOpen(io_connect_t *conn);
+kern_return_t SMCClose(io_connect_t conn);
+kern_return_t SMCReadKey2(UInt32Char_t key, SMCVal_t *val,io_connect_t conn);
+
 

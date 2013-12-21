@@ -2,7 +2,8 @@
  *	FanControl
  *
  *	Copyright (c) 2006-2012 Hendrik Holtmann
-*
+ *  Portions Copyright (c) 2013 Michael Wilber
+ *
  *	FanControl.h - MacBook(Pro) FanControl application
  *
  *	This program is free software; you can redistribute it and/or modify
@@ -36,6 +37,9 @@
 
 
 #define kMenuBarHeight				22
+
+// Max number of fans supported.
+#define kMaxFanRpms 100
 
 
 @interface FanControl : NSObject
@@ -104,9 +108,6 @@
 	 
 	NSImage *menu_image;
 	NSImage *menu_image_alt;
-
-
-
 }
 
 -(void)terminate:(id)sender;
