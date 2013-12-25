@@ -440,7 +440,7 @@ int main(int argc, char *argv[])
     
     kern_return_t result;
     int           op = OP_NONE;
-    UInt32Char_t  key = { 0 }; //MAW
+    UInt32Char_t  key = { 0 };
     SMCVal_t      val;
     
     while ((c = getopt(argc, argv, "fhk:lrw:v")) != -1)

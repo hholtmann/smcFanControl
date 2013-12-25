@@ -60,9 +60,7 @@ static NSDictionary *tsensors = nil;
         if (c_temp<=0) {
             NSArray *allTSensors = [tsensors allKeys];
             for (NSString *key in allTSensors) {
-                bool bPtrEq = (key == foundKey);
-                bool bCmpEq = ([key isEqualToString:foundKey]);
-                if (false == bPtrEq && false == bCmpEq) {
+                if (![key isEqualToString:foundKey]) {
                     SMCReadKey2((char*)[[tsensors objectForKey:key] UTF8String], &val,conn);
                     c_temp= ((val.bytes[0] * 256 + val.bytes[1]) >> 2)/64;
                     if (c_temp>0) break;

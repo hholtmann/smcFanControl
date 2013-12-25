@@ -236,6 +236,11 @@ NSUserDefaults *defaults;
 	for(i=0;i<[s_menus count];i++) {
 		[theMenu insertItem:[s_menus objectAtIndex:i] atIndex:i];
 	};
+    
+    // Sign up for menuNeedsUpdate call
+    // so that the fan speeds in the menu can be updated
+    // only when needed.
+    [theMenu setDelegate:self];
 }
 
 
@@ -303,123 +308,140 @@ NSUserDefaults *defaults;
 -(void) readFanData:(NSTimer*)timer{
 	
     int i = 0;
-	NSString *temp;
-	NSString *fan;
-
 	
 	//on init handling
 	if (s_sed==nil) {
 		return;
 	}
     
-    // Store fan speeds in simple array so that they only need to be read once.
-    int fanRpms[kMaxFanRpms] = { 0 };
-    if (g_numFans > kMaxFanRpms)
-        return;
-
-    
-    // Determine which fan speed to show in the menubar.
-    int selected = 0;
-	NSArray *fans = [[[FavoritesController arrangedObjects] objectAtIndex:[FavoritesController selectionIndex]] objectForKey:@"FanData"];
-	for (i=0;i<[fans count];i++)
-	{
-		if ([[[fans objectAtIndex:i] objectForKey:@"menu"] boolValue]==YES) {
-			selected = i;
+    // Determine what data is actually needed to keep the energy impact
+    // as low as possible.
+    bool bNeedTemp = false;
+    bool bNeedRpm = false;
+    const int menuBarSetting = [[defaults objectForKey:@"MenuBar"] intValue];
+    switch (menuBarSetting) {
+        default:
+        case 1:
+            bNeedTemp = true;
+            bNeedRpm = true;
             break;
-		}
-	}
-    if (selected < 0 || selected >= g_numFans)
-    {
-        // Bad selected fan index.
-        return;
+            
+        case 2:
+            bNeedTemp = true;
+            bNeedRpm = true;
+            break;
+            
+        case 3:
+            bNeedTemp = true;
+            bNeedRpm = false;
+            break;
+            
+        case 4:
+            bNeedTemp = false;
+            bNeedRpm = true;
+            break;
+    }
+
+    NSString *temp = nil;
+	NSString *fan = nil;
+    float c_temp = 0.0f;
+    int selectedRpm = 0;
+    
+    if (bNeedRpm == true) {
+        // Read the current fan speed for the desired fan and format text for display in the menubar.
+        NSArray *fans = [[[FavoritesController arrangedObjects] objectAtIndex:[FavoritesController selectionIndex]] objectForKey:@"FanData"];
+        for (i=0; i<g_numFans && i<[fans count]; i++)
+        {
+            if ([[[fans objectAtIndex:i] objectForKey:@"menu"] boolValue]==YES) {
+                selectedRpm = [smcWrapper get_fan_rpm:i];
+                break;
+            }
+        }
+        
+        NSNumberFormatter *nc=[[[NSNumberFormatter alloc] init] autorelease];
+        //avoid jumping in menu bar
+        [nc setFormat:@"000;000;-000"];
+        
+        fan = [NSString stringWithFormat:@"%@rpm",[nc stringForObjectValue:[NSNumber numberWithFloat:selectedRpm]]];
     }
     
-    //read the current fan speeds
-	for(i=0; i<g_numFans; ++i){
-        fanRpms[i] = [smcWrapper get_fan_rpm:i];
-	}
-    
-	float c_temp=[smcWrapper get_maintemp];
-    const int selectedRpm = fanRpms[selected];
-    
-    //populate Menu Items with recent Data
-    
-    // Proceed with building the strings, etc. to update the text in the menubar.
-    for(i=0; i<g_numFans; ++i){
-		NSString *fandesc=[[[s_sed objectForKey:@"Fans"] objectAtIndex:i] objectForKey:@"Description"];
-		[[theMenu itemWithTag:(i+1)*10] setTitle:[NSString stringWithFormat:@"%@: %@ rpm",fandesc,[[NSNumber numberWithInt:fanRpms[i]] stringValue]]];
-	}
-    
-	if ([[defaults objectForKey:@"Unit"] intValue]==0) { 
-		temp=[NSString stringWithFormat:@"%@%CC",[NSNumber numberWithFloat:c_temp],(unsigned short)0xb0];
-	} else {
-		NSNumberFormatter *ncf=[[[NSNumberFormatter alloc] init] autorelease];
-		[ncf setFormat:@"00;00;-00"];
-		temp=[NSString stringWithFormat:@"%@%CF",[ncf stringForObjectValue:[[NSNumber numberWithFloat:c_temp] celsius_fahrenheit]],(unsigned short)0xb0];
-	}	
-	NSNumberFormatter *nc=[[[NSNumberFormatter alloc] init] autorelease];
-	//avoid jumping in menu bar
-	[nc setFormat:@"000;000;-000"];
-	
-	fan=[NSString stringWithFormat:@"%@rpm",[nc stringForObjectValue:[NSNumber numberWithFloat:selectedRpm]]];
-
-    const int menuBarSetting = [[defaults objectForKey:@"MenuBar"] intValue];
-	if (menuBarSetting <= 1) {
-		NSString *add;
-		int fsize;
-		if (menuBarSetting==0) {
-			add=@"\n";
-			fsize=9;
-			[statusItem setLength:53];
-		} else {
-			add=@" ";
-			fsize=11;
-			[statusItem setLength:96];
-		}
+    if (bNeedTemp == true) {
+        // Read current temperature and format text for the menubar.
+        c_temp = [smcWrapper get_maintemp];
         
-		NSMutableAttributedString *s_status=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@%@%@",temp,add,fan]];
-		NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-		[paragraphStyle setAlignment:NSLeftTextAlignment];
-		[s_status addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Lucida Grande" size:fsize] range:NSMakeRange(0,[s_status length])];
-		[s_status addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0,[s_status length])];
-		[s_status addAttribute:NSForegroundColorAttributeName value:(NSColor*)[NSUnarchiver unarchiveObjectWithData:[defaults objectForKey:@"MenuColor"]]  range:NSMakeRange(0,[s_status length])];
-		[statusItem setAttributedTitle:s_status];
-		[statusItem setImage:nil];
-		[statusItem setAlternateImage:nil];
-		[paragraphStyle release];
-		[s_status release];
-	}
-	else if (menuBarSetting==2) {
-		[statusItem setLength:26]; 
-		[statusItem setTitle:nil];
-		[statusItem setToolTip:[NSString stringWithFormat:@"%@\n%@",temp,fan]];
-		[statusItem setImage:menu_image];
-		[statusItem setAlternateImage:menu_image_alt];
-		
-	}
-	else if (menuBarSetting==3) {
-		[statusItem setLength:46];
-		NSMutableAttributedString *s_status=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",temp]];
-		[s_status addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Lucida Grande" size:12] range:NSMakeRange(0,[s_status length])];
-		[s_status addAttribute:NSForegroundColorAttributeName value:(NSColor*)[NSUnarchiver unarchiveObjectWithData:[defaults objectForKey:@"MenuColor"]]  range:NSMakeRange(0,[s_status length])];
-		[statusItem setAttributedTitle:s_status];
-		[statusItem setImage:nil];
-		[statusItem setAlternateImage:nil];
-		[s_status release];
-
-	}
-	else if (menuBarSetting==4) {
-        //TODO: Main temp not used in this case, don't bother reading the main temp in this case.
-		[statusItem setLength:65];
-		NSMutableAttributedString *s_status=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",fan]];
-		[s_status addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Lucida Grande" size:12] range:NSMakeRange(0,[s_status length])];
-		[s_status addAttribute:NSForegroundColorAttributeName value:(NSColor*)[NSUnarchiver unarchiveObjectWithData:[defaults objectForKey:@"MenuColor"]]  range:NSMakeRange(0,[s_status length])];
-		[statusItem setAttributedTitle:s_status];
-		[statusItem setImage:nil];
-		[statusItem setAlternateImage:nil];
-		[s_status release];
-		
-	}
+        if ([[defaults objectForKey:@"Unit"] intValue]==0) {
+            temp = [NSString stringWithFormat:@"%@%CC",[NSNumber numberWithFloat:c_temp],(unsigned short)0xb0];
+        } else {
+            NSNumberFormatter *ncf=[[[NSNumberFormatter alloc] init] autorelease];
+            [ncf setFormat:@"00;00;-00"];
+            temp = [NSString stringWithFormat:@"%@%CF",[ncf stringForObjectValue:[[NSNumber numberWithFloat:c_temp] celsius_fahrenheit]],(unsigned short)0xb0];
+        }
+    }
+    
+    // Update the temp and/or fan speed text in the menubar.
+    NSMutableAttributedString *s_status = nil;
+    NSMutableParagraphStyle *paragraphStyle = nil;
+    
+    switch (menuBarSetting) {
+        default:
+        case 1: {
+            int fsize = 0;
+            NSString *add = nil;
+            if (menuBarSetting==0) {
+                add=@"\n";
+                fsize=9;
+                [statusItem setLength:53];
+            } else {
+                add=@" ";
+                fsize=11;
+                [statusItem setLength:96];
+            }
+            
+            s_status=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@%@%@",temp,add,fan]];
+            paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+            [paragraphStyle setAlignment:NSLeftTextAlignment];
+            [s_status addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Lucida Grande" size:fsize] range:NSMakeRange(0,[s_status length])];
+            [s_status addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0,[s_status length])];
+            [s_status addAttribute:NSForegroundColorAttributeName value:(NSColor*)[NSUnarchiver unarchiveObjectWithData:[defaults objectForKey:@"MenuColor"]]  range:NSMakeRange(0,[s_status length])];
+            [statusItem setAttributedTitle:s_status];
+            [statusItem setImage:nil];
+            [statusItem setAlternateImage:nil];
+            break;
+        }
+            
+        case 2:
+            // TODO: Big waste of energy to update this tooltip every X seconds when the user
+            // is unlikely to hover the smcFanControl icon over and over again.
+            [statusItem setLength:26];
+            [statusItem setTitle:nil];
+            [statusItem setToolTip:[NSString stringWithFormat:@"%@\n%@",temp,fan]];
+            [statusItem setImage:menu_image];
+            [statusItem setAlternateImage:menu_image_alt];
+            break;
+            
+        case 3:
+            [statusItem setLength:46];
+            s_status=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",temp]];
+            [s_status addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Lucida Grande" size:12] range:NSMakeRange(0,[s_status length])];
+            [s_status addAttribute:NSForegroundColorAttributeName value:(NSColor*)[NSUnarchiver unarchiveObjectWithData:[defaults objectForKey:@"MenuColor"]]  range:NSMakeRange(0,[s_status length])];
+            [statusItem setAttributedTitle:s_status];
+            [statusItem setImage:nil];
+            [statusItem setAlternateImage:nil];
+            break;
+            
+        case 4:
+            [statusItem setLength:65];
+            s_status=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",fan]];
+            [s_status addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Lucida Grande" size:12] range:NSMakeRange(0,[s_status length])];
+            [s_status addAttribute:NSForegroundColorAttributeName value:(NSColor*)[NSUnarchiver unarchiveObjectWithData:[defaults objectForKey:@"MenuColor"]]  range:NSMakeRange(0,[s_status length])];
+            [statusItem setAttributedTitle:s_status];
+            [statusItem setImage:nil];
+            [statusItem setAlternateImage:nil];
+            break;
+    }
+    
+    [paragraphStyle release];
+    [s_status release];
 }
 
 
@@ -530,7 +552,24 @@ NSUserDefaults *defaults;
 			[[[FanController arrangedObjects] objectAtIndex:i] setValue:[NSNumber numberWithBool:NO] forKey:@"menu"];
 		}	
 	}
-}	
+}
+
+// Called when user clicks on smcFanControl status bar item
+// in the status area of the menubar. The fan speed
+// menu items are now only updated here in order to
+// reduce the energy impact of -readFanData.
+- (void)menuNeedsUpdate:(NSMenu*)menu {
+    if (theMenu == menu) {
+        if (s_sed == nil)
+            return;
+        
+        int i;
+        for(i=0; i<g_numFans; ++i){
+            NSString *fandesc=[[[s_sed objectForKey:@"Fans"] objectAtIndex:i] objectForKey:@"Description"];
+            [[theMenu itemWithTag:(i+1)*10] setTitle:[NSString stringWithFormat:@"%@: %@ rpm",fandesc,[[NSNumber numberWithInt:[smcWrapper get_fan_rpm:i]] stringValue]]];
+        }
+    }
+}
 
 
 

@@ -38,11 +38,8 @@
 
 #define kMenuBarHeight				22
 
-// Max number of fans supported.
-#define kMaxFanRpms 100
 
-
-@interface FanControl : NSObject
+@interface FanControl : NSObject <NSMenuDelegate>
 
 {
     IBOutlet id currentSpeed;
@@ -134,6 +131,7 @@
 - (void) syncBinder:(Boolean)bind;
 - (IBAction) changeMenu:(id)sender;
 - (IBAction)menuSelect:(id)sender;
+- (void)menuNeedsUpdate:(NSMenu*)menu;
 @end
 
 
