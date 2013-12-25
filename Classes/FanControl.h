@@ -2,7 +2,8 @@
  *	FanControl
  *
  *	Copyright (c) 2006-2012 Hendrik Holtmann
-*
+ *  Portions Copyright (c) 2013 Michael Wilber
+ *
  *	FanControl.h - MacBook(Pro) FanControl application
  *
  *	This program is free software; you can redistribute it and/or modify
@@ -38,7 +39,7 @@
 #define kMenuBarHeight				22
 
 
-@interface FanControl : NSObject
+@interface FanControl : NSObject <NSMenuDelegate>
 
 {
     IBOutlet id currentSpeed;
@@ -104,9 +105,6 @@
 	 
 	NSImage *menu_image;
 	NSImage *menu_image_alt;
-
-
-
 }
 
 -(void)terminate:(id)sender;
@@ -133,6 +131,7 @@
 - (void) syncBinder:(Boolean)bind;
 - (IBAction) changeMenu:(id)sender;
 - (IBAction)menuSelect:(id)sender;
+- (void)menuNeedsUpdate:(NSMenu*)menu;
 @end
 
 
