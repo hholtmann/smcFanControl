@@ -115,7 +115,7 @@ typedef struct {
 } SMCVal_t;
 
 UInt32 _strtoul(char *str, int size, int base);
-float _strtof(char *str, int size, int e);
+float _strtof(unsigned char *str, int size, int e);
 
 // Exclude command-line only code from smcFanControl UI
 #ifdef CMD_TOOL

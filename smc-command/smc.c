@@ -69,17 +69,17 @@ float _strtof(unsigned char *str, int size, int e)
 {
     float total = 0;
     int i;
-
+    
     for (i = 0; i < size; i++)
     {
         if (i == (size - 1))
-           total += (str[i] & 0xff) >> e;
+            total += (str[i] & 0xff) >> e;
         else
-           total += str[i] << (size - 1 - i) * (8 - e);
+            total += str[i] << (size - 1 - i) * (8 - e);
     }
-
+    
 	total += (str[size-1] & 0x03) * 0.25;
-
+    
     return total;
 }
 
@@ -270,9 +270,8 @@ void printVal(SMCVal_t val)
             printf("no data\n");
     }
 }
-=======
+
 #pragma mark Shared SMC functions
->>>>>>> 3328c0018f364d7873b2aabaeb4284f19d586cb0
 
 kern_return_t SMCOpen(io_connect_t *conn)
 {
@@ -418,47 +417,6 @@ void smc_init(){
 
 void smc_close(){
 	SMCClose(g_conn);
-}
-void printFPE2(SMCVal_t val)
-{
-    /* FIXME: This decode is incomplete, last 2 bits are dropped */
-    
-    printf("%.0f ", _strtof(val.bytes, val.dataSize, 2));
-}
-
-void printUInt(SMCVal_t val)
-{
-    printf("%u ", (unsigned int) _strtoul(val.bytes, val.dataSize, 10));
-}
-
-void printBytesHex(SMCVal_t val)
-{
-    int i;
-    
-    printf("(bytes");
-    for (i = 0; i < val.dataSize; i++)
-        printf(" %02x", (unsigned char) val.bytes[i]);
-    printf(")\n");
-}
-
-void printVal(SMCVal_t val)
-{
-    printf("  %-4s  [%-4s]  ", val.key, val.dataType);
-    if (val.dataSize > 0)
-    {
-        if ((strcmp(val.dataType, DATATYPE_UINT8) == 0) ||
-            (strcmp(val.dataType, DATATYPE_UINT16) == 0) ||
-            (strcmp(val.dataType, DATATYPE_UINT32) == 0))
-            printUInt(val);
-        else if (strcmp(val.dataType, DATATYPE_FPE2) == 0)
-            printFPE2(val);
-        
-        printBytesHex(val);
-    }
-    else
-    {
-        printf("no data\n");
-    }
 }
 
 kern_return_t SMCCall(int index, SMCKeyData_t *inputStructure, SMCKeyData_t *outputStructure)
