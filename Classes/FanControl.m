@@ -222,7 +222,8 @@ NSString *authpw;
 
 	//release MachineDefaults class first call
 	//add timer for reading to RunLoop
-	_readTimer = [NSTimer scheduledTimerWithTimeInterval:3.0 target:self selector:@selector(readFanData:) userInfo:nil repeats:YES];
+	_readTimer = [NSTimer scheduledTimerWithTimeInterval:15.0 target:self selector:@selector(readFanData:) userInfo:nil repeats:YES];
+	[_readTimer setTolerance:5.0];
 	[_readTimer fire];
 	//autoapply settings if valid
 	[self upgradeFavorites];
