@@ -216,6 +216,9 @@ NSUserDefaults *defaults;
 	//release MachineDefaults class first call
 	//add timer for reading to RunLoop
 	_readTimer = [NSTimer scheduledTimerWithTimeInterval:4.0 target:self selector:@selector(readFanData:) userInfo:nil repeats:YES];
+    if ([_readTimer respondsToSelector:@selector(setTolerance:)]) {
+        [_readTimer setTolerance:2.0];
+    }
 	[_readTimer fire];
 	//autoapply settings if valid
 	[self upgradeFavorites];
