@@ -26,14 +26,15 @@
 
 //TODO: This is the smcFanControl 2.4 checksum, it needs to be updated for the next release.
 NSString * const smc_checksum=@"2ea544babe8a58dccc1364c920d473c8";
-static NSDictionary *tsensors = nil;
+static NSArray *allSensors = nil;
+
 
 @implementation smcWrapper
 	io_connect_t conn;
 
 +(void)init{
 	SMCOpen(&conn);
-    tsensors = [[NSDictionary alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"tsensors" ofType:@"plist"]];
+    allSensors = [[NSArray alloc] initWithObjects:@"TC0D",@"TC0H",@"TC0F",@"TCAH",@"TCBH",@"TC0P",nil];
 }
 +(void)cleanUp{
     SMCClose(conn);
@@ -41,33 +42,23 @@ static NSDictionary *tsensors = nil;
 
 +(float) get_maintemp{
 	float c_temp;
-        
-	NSRange range_pro=[[MachineDefaults computerModel] rangeOfString:@"MacPro"];
-	if (range_pro.length > 0) {
-		//special readout for MacPro
-		c_temp=[smcWrapper get_mptemp];
-	} else {
-        SMCVal_t      val;
-        NSString *foundKey = [tsensors objectForKey:[MachineDefaults computerModel]];
-        if (foundKey !=nil) {
-            foundKey = [MachineDefaults computerModel];
-        } else {
-            foundKey = @"standard";
-        }
-        SMCReadKey2((char*)[[tsensors objectForKey:foundKey] UTF8String], &val,conn);
-		c_temp= ((val.bytes[0] * 256 + val.bytes[1]) >> 2)/64;
-        
-        if (c_temp<=0) {
-            NSArray *allTSensors = [tsensors allKeys];
-            for (NSString *key in allTSensors) {
-                if (![key isEqualToString:foundKey]) {
-                    SMCReadKey2((char*)[[tsensors objectForKey:key] UTF8String], &val,conn);
-                    c_temp= ((val.bytes[0] * 256 + val.bytes[1]) >> 2)/64;
-                    if (c_temp>0) break;
+    
+    SMCVal_t      val;
+    NSString *sensor = [[NSUserDefaults standardUserDefaults] objectForKey:@"TSensor"];
+    SMCReadKey2((char*)[sensor UTF8String], &val,conn);
+    c_temp= ((val.bytes[0] * 256 + val.bytes[1]) >> 2)/64;
+    
+    if (c_temp<=0) {
+        for (NSString *sensor in allSensors) {
+                SMCReadKey2((char*)[sensor UTF8String], &val,conn);
+                c_temp= ((val.bytes[0] * 256 + val.bytes[1]) >> 2)/64;
+                if (c_temp>0) {
+                    [[NSUserDefaults standardUserDefaults] setObject:sensor forKey:@"TSensor"];
+                    break;
                 }
-            }
         }
     }
+
 
 	return c_temp;
 }

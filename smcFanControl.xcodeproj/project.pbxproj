@@ -27,7 +27,6 @@
 		89949E8D0AEEA37700077E93 /* Power.m in Sources */ = {isa = PBXBuildFile; fileRef = 89949E8C0AEEA37700077E93 /* Power.m */; };
 		899D59DC15E1CF60003E322D /* smc in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8924ECEE15AC96E70031730C /* smc */; };
 		899D59DD15E1CFFF003E322D /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 895BDA390B8F8F42003CD894 /* Sparkle.framework */; };
-		899D59E315E228DF003E322D /* tsensors.plist in Resources */ = {isa = PBXBuildFile; fileRef = 899D59E215E228DF003E322D /* tsensors.plist */; };
 		89B243200B7E351000CAD103 /* smcfancontrol_v2.icns in Resources */ = {isa = PBXBuildFile; fileRef = 89B2431F0B7E351000CAD103 /* smcfancontrol_v2.icns */; };
 		89C053BE0ADAB7630037CA16 /* smc.c in Sources */ = {isa = PBXBuildFile; fileRef = 89C053BC0ADAB7630037CA16 /* smc.c */; };
 		89E7D3650ADE819B000F67AB /* Machines.plist in Resources */ = {isa = PBXBuildFile; fileRef = 89E7D3640ADE819B000F67AB /* Machines.plist */; };
@@ -110,7 +109,6 @@
 		8987FBD00B878B3900A5ED8E /* smc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = smc.png; sourceTree = "<group>"; };
 		89949E8B0AEEA37700077E93 /* Power.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Power.h; sourceTree = "<group>"; };
 		89949E8C0AEEA37700077E93 /* Power.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Power.m; sourceTree = "<group>"; };
-		899D59E215E228DF003E322D /* tsensors.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = tsensors.plist; sourceTree = "<group>"; };
 		89B2431F0B7E351000CAD103 /* smcfancontrol_v2.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = smcfancontrol_v2.icns; sourceTree = "<group>"; };
 		89C053BC0ADAB7630037CA16 /* smc.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = smc.c; sourceTree = "<group>"; };
 		89C053BD0ADAB7630037CA16 /* smc.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = smc.h; sourceTree = "<group>"; };
@@ -231,7 +229,6 @@
 				89B2431F0B7E351000CAD103 /* smcfancontrol_v2.icns */,
 				8917FB850ADEECAD00443DA1 /* paypal.gif */,
 				89E7D3640ADE819B000F67AB /* Machines.plist */,
-				899D59E215E228DF003E322D /* tsensors.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				893506170B440255001BFBA5 /* Localizable.strings */,
 				89FE24050B7F4C2B00D2713C /* paypal.gif */,
@@ -344,7 +341,6 @@
 				89033CA70B80E1EB00FDAF43 /* F.A.Q.rtf in Resources */,
 				8987FBD20B878B3900A5ED8E /* smc.png in Resources */,
 				89559A840BAC338500DBA37E /* smcover.png in Resources */,
-				899D59E315E228DF003E322D /* tsensors.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

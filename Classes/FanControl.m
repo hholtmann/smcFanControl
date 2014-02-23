@@ -155,6 +155,7 @@ NSUserDefaults *defaults;
 			[NSNumber numberWithInt:0],@"selac",
 			[NSNumber numberWithInt:0],@"selload",
 			[NSNumber numberWithInt:0],@"MenuBar",
+            @"TC0D",@"TSensor",
 			feedURL,@"SUFeedURL",
 			[NSArchiver archivedDataWithRootObject:[NSColor blackColor]],@"MenuColor",
 			favorites,@"Favorites",
