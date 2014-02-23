@@ -290,19 +290,24 @@ NSUserDefaults *defaults;
  }
 }
 
-- (IBAction)delete_favorite:(id)sender{
-	int pressesButton=NSRunCriticalAlertPanelRelativeToWindow(
-			NSLocalizedString(@"Delete favorite",nil),
-			[NSString stringWithFormat:NSLocalizedString(@"Do you really want to delete the favorite %@?",nil), [ [ [FavoritesController arrangedObjects] objectAtIndex:[FavoritesController selectionIndex]] objectForKey:@"Title"] ],
-			NSLocalizedString(@"No",nil),
-			NSLocalizedString(@"Yes",nil),nil,mainwindow);
-	if (pressesButton==0) {
+
+
+- (void) deleteAlertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo;
+{
+    if (returnCode==0) {
 		//delete favorite, but resets presets before
 		[self check_deletion:@"selbatt"];
 		[self check_deletion:@"selac"];
 		[self check_deletion:@"selload"];
-		[FavoritesController removeObjects:[FavoritesController selectedObjects]];
+        [FavoritesController removeObjects:[FavoritesController selectedObjects]];
 	}
+}
+
+- (IBAction)delete_favorite:(id)sender{
+	
+    NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Delete favorite",nil) defaultButton:NSLocalizedString(@"No",nil) alternateButton:NSLocalizedString(@"Yes",nil) otherButton:nil informativeTextWithFormat:[NSString stringWithFormat:NSLocalizedString(@"Do you really want to delete the favorite %@?",nil), [ [ [FavoritesController arrangedObjects] objectAtIndex:[FavoritesController selectionIndex]] objectForKey:@"Title"] ]];
+    
+    [alert beginSheetModalForWindow:mainwindow modalDelegate:self didEndSelector:@selector(deleteAlertDidEnd:returnCode:contextInfo:) contextInfo:NULL];
 }
 
 
