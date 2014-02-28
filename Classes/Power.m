@@ -56,7 +56,9 @@ static void powerSourceChanged(void * refCon)
 }
 
 - (id)init{
-	[super init];
+    if (self = [super init]) {
+        
+    }
 	return self;
 }
 

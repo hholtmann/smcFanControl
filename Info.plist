@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>smcFanControl</string>
 	<key>CFBundleGetInfoString</key>
-	<string>smcFanControl 2.5, Hendrik Holtmann (GPL)</string>
+	<string>smcFanControl 2.5ß, Hendrik Holtmann (GPL)</string>
 	<key>CFBundleIconFile</key>
 	<string>smcfancontrol_v2</string>
 	<key>CFBundleIdentifier</key>
@@ -19,11 +19,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.5</string>
+	<string>2.5ß</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>2.5</string>
+	<string>2.5ß</string>
 	<key>LSUIElement</key>
 	<string>1</string>
 	<key>NSHumanReadableCopyright</key>
