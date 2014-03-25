@@ -27,8 +27,10 @@
 
 
 - (id)init:(NSString*)p_machine{
-	machine=[MachineDefaults computerModel];
-	supported_machines=[[NSArray alloc] initWithContentsOfFile:[[[NSFileManager defaultManager] applicationSupportDirectory] stringByAppendingPathComponent:@"Machines.plist"]];
+    if (self = [super init]){
+        machine=[MachineDefaults computerModel];
+        supported_machines=[[NSArray alloc] initWithContentsOfFile:[[[NSFileManager defaultManager] applicationSupportDirectory] stringByAppendingPathComponent:@"Machines.plist"]];
+    }
 	return self;
 }
 
@@ -83,7 +85,7 @@
 	[xmldata writeToFile:[[[NSFileManager defaultManager] applicationSupportDirectory] stringByAppendingPathComponent:@"Machines.plist"] atomically:YES];
 	[supported_m release];
 	//return new machine-live-data
-	return [new_machine retain];
+	return new_machine;
 }
 
 

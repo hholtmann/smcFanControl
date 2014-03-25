@@ -131,7 +131,7 @@ void printFPE2(SMCVal_t val)
 
 void printUInt(SMCVal_t val)
 {
-    printf("%u ", (unsigned int) _strtoul(val.bytes, val.dataSize, 10));
+    printf("%u ", (unsigned int) _strtoul((char *)val.bytes, val.dataSize, 10));
 }
 
 void printSP1E(SMCVal_t val)
@@ -468,7 +468,7 @@ UInt32 SMCReadIndexCount(void)
     SMCVal_t val;
     
     SMCReadKey("#KEY", &val);
-    return _strtoul(val.bytes, val.dataSize, 10);
+    return _strtoul((char *)val.bytes, val.dataSize, 10);
 }
 
 kern_return_t SMCPrintAll(void)
@@ -515,7 +515,7 @@ kern_return_t SMCPrintFans(void)
     if (result != kIOReturnSuccess)
         return kIOReturnError;
     
-    totalFans = _strtoul(val.bytes, val.dataSize, 10);
+    totalFans = _strtoul((char *)val.bytes, val.dataSize, 10);
     printf("Total fans in system: %d\n", totalFans);
     
     for (i = 0; i < totalFans; i++)
@@ -540,7 +540,7 @@ kern_return_t SMCPrintFans(void)
         SMCReadKey(key, &val);
         printf("    Target speed : %.0f\n", _strtof(val.bytes, val.dataSize, 2));
         SMCReadKey("FS! ", &val);
-        if ((_strtoul(val.bytes, 2, 16) & (1 << i)) == 0)
+        if ((_strtoul((char *)val.bytes, 2, 16) & (1 << i)) == 0)
             printf("    Mode         : auto\n");
         else
             printf("    Mode         : forced\n");
