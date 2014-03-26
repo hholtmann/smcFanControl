@@ -107,7 +107,7 @@ static NSArray *allSensors = nil;
     SMCVal_t      val;
     int           totalFans;
 	SMCReadKey2("FNum", &val,conn);
-    totalFans = _strtoul(val.bytes, val.dataSize, 10); 
+    totalFans = _strtoul((char *)val.bytes, val.dataSize, 10);
 	return totalFans;
 }
 
