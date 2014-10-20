@@ -101,10 +101,10 @@ NSUserDefaults *defaults;
 	[pw registerForSleepWakeNotification];
 	[pw registerForPowerChange];
 	
-	
-    //load defaults
 
-	[DefaultsController setAppliesImmediately:NO];
+    //load defaults
+    
+    [DefaultsController setAppliesImmediately:NO];
 
 	mdefaults=[[MachineDefaults alloc] init:nil];
 
@@ -232,7 +232,7 @@ NSUserDefaults *defaults;
     
     //autostart
     [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:[self isInAutoStart]] forKey:@"AutoStart"];
-		
+    
 }
 
 
