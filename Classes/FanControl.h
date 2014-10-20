@@ -106,7 +106,6 @@
 	NSImage *menu_image;
 	NSImage *menu_image_alt;
 }
-@property (assign) IBOutlet NSTableView *fanTableView;
 
 
 -(void)terminate:(id)sender;
