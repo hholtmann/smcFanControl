@@ -31,9 +31,10 @@
 #import "SystemVersion.h"
 
 @interface FanControl ()
-+(void)copyMachinesIfNecessary;
++ (void)copyMachinesIfNecessary;
 - (BOOL)isInAutoStart;
-- (void) setStartAtLogin:(BOOL)enabled;
+- (void)setStartAtLogin:(BOOL)enabled;
++ (void)checkRightStatus:(OSStatus)status;
 @end
 
 @implementation FanControl
@@ -773,6 +774,20 @@ NSUserDefaults *defaults;
 		LSSharedFileListItemRemove(loginItems, existingItem);
 }
 
+
++(void) checkRightStatus:(OSStatus) status
+{
+    if (status != errAuthorizationSuccess) {
+        NSAlert *alert = [NSAlert alertWithMessageText:@"Authorization failed" defaultButton:@"Quit" alternateButton:nil otherButton:nil informativeTextWithFormat:[NSString stringWithFormat:@"Authorization failed with code %d",status]];
+        [alert setAlertStyle:2];
+        NSInteger result = [alert runModal];
+        
+        if (result == NSAlertDefaultReturn) {
+            [[NSApplication sharedApplication] terminate:self];
+        }
+    }
+}
+
 #pragma mark **SMC-Binary Owner/Right Check**
 //TODO: It looks like this function is called inefficiently.
 //call smc binary with sudo rights and apply
@@ -791,16 +806,10 @@ NSUserDefaults *defaults;
 	AuthorizationRights gencright = { 1, &gencitem };
 	int flags = kAuthorizationFlagExtendRights | kAuthorizationFlagInteractionAllowed;
 	OSStatus status = AuthorizationCreate(&gencright,  kAuthorizationEmptyEnvironment, flags, &authorizationRef);
-    if (status != errAuthorizationSuccess) {
-        NSAlert *alert = [NSAlert alertWithMessageText:@"Authorization failed" defaultButton:@"Quit" alternateButton:nil otherButton:nil informativeTextWithFormat:[NSString stringWithFormat:@"Authorization failed with code %d",status]];
-        [alert setAlertStyle:2];
-        NSInteger result = [alert runModal];
-        
-        if (result == NSAlertDefaultReturn) {
-            [[NSApplication sharedApplication] terminate:self];
-        }
-    }
-	NSString *tool=@"/usr/sbin/chown";
+    
+    [self checkRightStatus:status];
+    
+    NSString *tool=@"/usr/sbin/chown";
     NSArray *argsArray = [NSArray arrayWithObjects: @"root:admin",smcpath,nil];
 	int i;
 	char *args[255];
@@ -809,16 +818,10 @@ NSUserDefaults *defaults;
 	}
 	args[i] = NULL;
 	status=AuthorizationExecuteWithPrivileges(authorizationRef,[tool UTF8String],0,args,&commPipe);
-    if (status != errAuthorizationSuccess) {
-        NSAlert *alert = [NSAlert alertWithMessageText:@"Authorization failed" defaultButton:@"Quit" alternateButton:nil otherButton:nil informativeTextWithFormat:[NSString stringWithFormat:@"Authorization failed with code %d",status]];
-        [alert setAlertStyle:2];
-        NSInteger result = [alert runModal];
-        
-        if (result == NSAlertDefaultReturn) {
-            [[NSApplication sharedApplication] terminate:self];
-        }
-    }
-	//second call for suid-bit
+    
+    [self checkRightStatus:status];
+    
+    	//second call for suid-bit
 	tool=@"/bin/chmod";
 	argsArray = [NSArray arrayWithObjects: @"6555",smcpath,nil];
 	for(i = 0;i < [argsArray count];i++){
@@ -826,15 +829,8 @@ NSUserDefaults *defaults;
 	}
 	args[i] = NULL;
 	status=AuthorizationExecuteWithPrivileges(authorizationRef,[tool UTF8String],0,args,&commPipe);
-    if (status != errAuthorizationSuccess) {
-        NSAlert *alert = [NSAlert alertWithMessageText:@"Authorization failed" defaultButton:@"Quit" alternateButton:nil otherButton:nil informativeTextWithFormat:[NSString stringWithFormat:@"Authorization failed with code %d",status]];
-        [alert setAlertStyle:2];
-        NSInteger result = [alert runModal];
-        
-        if (result == NSAlertDefaultReturn) {
-            [[NSApplication sharedApplication] terminate:self];
-        }
-    }
+
+    [self checkRightStatus:status];
 }
 
 

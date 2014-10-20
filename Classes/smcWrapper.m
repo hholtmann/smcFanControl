@@ -24,8 +24,6 @@
 #import "smcWrapper.h"
 #import <CommonCrypto/CommonDigest.h>
 
-//TODO: This is the smcFanControl 2.5ß checksum, it needs to be updated for the next release.
-NSString * const smc_checksum=@"03548c5634bd01315b19c46bf329cceb";
 static NSArray *allSensors = nil;
 
 
@@ -153,26 +151,39 @@ static NSArray *allSensors = nil;
 }	
 
 
-+ (NSString*)createCheckSum:(NSString*)path {
-    NSData *d=[NSData dataWithContentsOfMappedFile:path];
-    unsigned char result[CC_MD5_DIGEST_LENGTH];
-    CC_MD5((void *)[d bytes], [d length], result);
-    NSMutableString *ret = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH*2];
-    int i;
-    for(i = 0; i<CC_MD5_DIGEST_LENGTH; i++) {
-        [ret appendFormat:@"%02x",result[i]];
++ (BOOL)validateSMC:(NSString*)path
+{
+    SecStaticCodeRef ref = NULL;
+    
+    NSURL * url = [NSURL URLWithString:path];
+    
+    OSStatus status;
+    
+    // obtain the cert info from the executable
+    status = SecStaticCodeCreateWithPath((CFURLRef)url, kSecCSDefaultFlags, &ref);
+    
+    if (status != noErr) {
+        return false;
     }
-    return ret;
+    
+    status = SecStaticCodeCheckValidity(ref, kSecCSDefaultFlags, nil);
+    
+    if (status != noErr) {
+        NSLog(@"Codesign verification failed: Error id = %d",status);
+        return false;
+    }
+
+    return true;
 }
 
 //call smc binary with setuid rights and apply
 // The smc binary is given root permissions in FanControl.m with the setRights method.
 +(void)setKey_external:(NSString *)key value:(NSString *)value{
 	NSString *launchPath = [[NSBundle mainBundle]   pathForResource:@"smc" ofType:@""];
-	NSString *checksum=[smcWrapper createCheckSum:launchPath];
+    
     //first check if it's the right binary (security)
     // MW: Disabled smc binary checksum. This should be re-enabled in an official release.
-	if (![checksum  isEqualToString:smc_checksum]) {
+	if (![smcWrapper validateSMC:launchPath]) {
 		NSLog(@"smcFanControl: Security Error: smc-binary is not the distributed one");
 		return;
 	}
