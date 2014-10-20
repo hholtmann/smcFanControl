@@ -10,29 +10,29 @@
 	<string>smcFanControl</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>873C5522-1316-4367-B29F-BE94D7522D13</key>
+		<key>4B1FAC2C01D9B3B4FE6C32B0274DA6C3D41C10ED</key>
 		<string>https://github.com/hholtmann/smcFanControl.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>smcFanControl.xcodeproj/project.xcworkspace</string>
+	<string>smcFanControl.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>873C5522-1316-4367-B29F-BE94D7522D13</key>
+		<key>4B1FAC2C01D9B3B4FE6C32B0274DA6C3D41C10ED</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/hholtmann/smcFanControl.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>873C5522-1316-4367-B29F-BE94D7522D13</string>
+	<string>4B1FAC2C01D9B3B4FE6C32B0274DA6C3D41C10ED</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>873C5522-1316-4367-B29F-BE94D7522D13</string>
+			<string>4B1FAC2C01D9B3B4FE6C32B0274DA6C3D41C10ED</string>
 			<key>IDESourceControlWCCName</key>
 			<string>smcFanControl</string>
 		</dict>

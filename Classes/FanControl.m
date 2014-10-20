@@ -100,8 +100,9 @@ NSUserDefaults *defaults;
 	[pw registerForSleepWakeNotification];
 	[pw registerForPowerChange];
 	
-	//load defaults
 	
+    //load defaults
+
 	[DefaultsController setAppliesImmediately:NO];
 
 	mdefaults=[[MachineDefaults alloc] init:nil];
@@ -131,7 +132,7 @@ NSUserDefaults *defaults;
 
 	//sync option for Macbook Pro's
 	NSRange range_mbp=[[MachineDefaults computerModel] rangeOfString:@"MacBookPro"];
-	if (range_mbp.length>0) {
+	if (range_mbp.length>0  && [[s_sed objectForKey:@"Fans"] count] == 2) {
 		[sync setHidden:NO];
 	}
 
@@ -211,8 +212,12 @@ NSUserDefaults *defaults;
 	[self changeMenu:nil];
 	
 	//seting toolbar image
-	menu_image=[[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"smc" ofType:@"png"]];
-	menu_image_alt=[[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"smcover" ofType:@"png"]];
+    menu_image = [[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"smc" ofType:@"png"]];
+    menu_image_alt  = [[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"smcover" ofType:@"png"]];
+    if ([menu_image respondsToSelector:@selector(setTemplate:)]) {
+        [menu_image setTemplate:YES];
+        [menu_image_alt setTemplate:YES];
+    }
 
 	//release MachineDefaults class first call
 	//add timer for reading to RunLoop
@@ -233,9 +238,14 @@ NSUserDefaults *defaults;
 -(void)init_statusitem{
 	statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength: NSVariableStatusItemLength] retain];
 	[statusItem setMenu: theMenu];
-	[statusItem setEnabled: YES];
-	[statusItem setHighlightMode:YES];
-	[statusItem setTitle:@"smc..."];
+    
+    if ([statusItem respondsToSelector:@selector(button)]) {
+        [statusItem.button setTitle:@"smc..."];
+    } else {
+        [statusItem setEnabled: YES];
+        [statusItem setHighlightMode:YES];
+        [statusItem setTitle:@"smc..."];
+    }
 	int i;
 	for(i=0;i<[s_menus count];i++) {
 		[theMenu insertItem:[s_menus objectAtIndex:i] atIndex:i];
@@ -312,9 +322,10 @@ NSUserDefaults *defaults;
 }
 
 
+
 // Called via a timer mechanism. This is where all the temp / RPM reading is done.
 //reads fan data and updates the gui
--(void) readFanData:(NSTimer*)timer{
+-(void) readFanData:(id)caller{
 	
     int i = 0;
 	
@@ -391,6 +402,11 @@ NSUserDefaults *defaults;
     NSMutableAttributedString *s_status = nil;
     NSMutableParagraphStyle *paragraphStyle = nil;
     
+    NSColor *menuColor = (NSColor*)[NSUnarchiver unarchiveObjectWithData:[defaults objectForKey:@"MenuColor"]];
+    BOOL setColor = NO;
+    if (!([[menuColor colorUsingColorSpaceName:
+              NSCalibratedWhiteColorSpace] whiteComponent] == 0.0) || ![statusItem respondsToSelector:@selector(button)]) setColor = YES;
+    
     switch (menuBarSetting) {
         default:
         case 1: {
@@ -411,10 +427,18 @@ NSUserDefaults *defaults;
             [paragraphStyle setAlignment:NSLeftTextAlignment];
             [s_status addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Lucida Grande" size:fsize] range:NSMakeRange(0,[s_status length])];
             [s_status addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0,[s_status length])];
-            [s_status addAttribute:NSForegroundColorAttributeName value:(NSColor*)[NSUnarchiver unarchiveObjectWithData:[defaults objectForKey:@"MenuColor"]]  range:NSMakeRange(0,[s_status length])];
-            [statusItem setAttributedTitle:s_status];
-            [statusItem setImage:nil];
-            [statusItem setAlternateImage:nil];
+         
+            if (setColor) [s_status addAttribute:NSForegroundColorAttributeName value:menuColor  range:NSMakeRange(0,[s_status length])];
+            
+            if ([statusItem respondsToSelector:@selector(button)]) {
+                [statusItem.button setAttributedTitle:s_status];
+                [statusItem.button setImage:nil];
+                [statusItem.button setAlternateImage:nil];
+            } else {
+                [statusItem setAttributedTitle:s_status];
+                [statusItem setImage:nil];
+                [statusItem setAlternateImage:nil];
+            }
             break;
         }
             
@@ -422,30 +446,49 @@ NSUserDefaults *defaults;
             // TODO: Big waste of energy to update this tooltip every X seconds when the user
             // is unlikely to hover the smcFanControl icon over and over again.
             [statusItem setLength:26];
-            [statusItem setTitle:nil];
-            [statusItem setToolTip:[NSString stringWithFormat:@"%@\n%@",temp,fan]];
-            [statusItem setImage:menu_image];
-            [statusItem setAlternateImage:menu_image_alt];
+            if ([statusItem respondsToSelector:@selector(button)]) {
+                [statusItem.button setTitle:nil];
+                [statusItem.button setToolTip:[NSString stringWithFormat:@"%@\n%@",temp,fan]];
+                [statusItem.button setImage:menu_image];
+                [statusItem.button setAlternateImage:menu_image_alt];
+            } else {
+                [statusItem setTitle:nil];
+                [statusItem setToolTip:[NSString stringWithFormat:@"%@\n%@",temp,fan]];
+                [statusItem setImage:menu_image];
+                [statusItem setAlternateImage:menu_image_alt];
+            }
             break;
             
         case 3:
             [statusItem setLength:46];
             s_status=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",temp]];
             [s_status addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Lucida Grande" size:12] range:NSMakeRange(0,[s_status length])];
-            [s_status addAttribute:NSForegroundColorAttributeName value:(NSColor*)[NSUnarchiver unarchiveObjectWithData:[defaults objectForKey:@"MenuColor"]]  range:NSMakeRange(0,[s_status length])];
-            [statusItem setAttributedTitle:s_status];
-            [statusItem setImage:nil];
-            [statusItem setAlternateImage:nil];
+            if (setColor) [s_status addAttribute:NSForegroundColorAttributeName value:menuColor  range:NSMakeRange(0,[s_status length])];
+            if ([statusItem respondsToSelector:@selector(button)]) {
+                [statusItem.button setAttributedTitle:s_status];
+                [statusItem.button setImage:nil];
+                [statusItem.button setAlternateImage:nil];
+            } else {
+                [statusItem setAttributedTitle:s_status];
+                [statusItem setImage:nil];
+                [statusItem setAlternateImage:nil];
+            }
             break;
             
         case 4:
             [statusItem setLength:65];
             s_status=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",fan]];
             [s_status addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Lucida Grande" size:12] range:NSMakeRange(0,[s_status length])];
-            [s_status addAttribute:NSForegroundColorAttributeName value:(NSColor*)[NSUnarchiver unarchiveObjectWithData:[defaults objectForKey:@"MenuColor"]]  range:NSMakeRange(0,[s_status length])];
-            [statusItem setAttributedTitle:s_status];
-            [statusItem setImage:nil];
-            [statusItem setAlternateImage:nil];
+            if (setColor) [s_status addAttribute:NSForegroundColorAttributeName value:menuColor  range:NSMakeRange(0,[s_status length])];
+            if ([statusItem respondsToSelector:@selector(button)]) {
+                [statusItem.button setAttributedTitle:s_status];
+                [statusItem.button setImage:nil];
+                [statusItem.button setAlternateImage:nil];
+            } else {
+                [statusItem setAttributedTitle:s_status];
+                [statusItem setImage:nil];
+                [statusItem setAlternateImage:nil];
+            }
             break;
     }
     
