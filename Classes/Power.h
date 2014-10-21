@@ -37,10 +37,9 @@
 	
 }
 
-- (id)init;
+- (instancetype)init NS_DESIGNATED_INITIALIZER;
 
-- (id)delegate;
-- (void)setDelegate:(id)new_delegate;
+@property (NS_NONATOMIC_IOSONLY, unsafe_unretained) id delegate;
 
 - (void)registerForSleepWakeNotification;
 - (void)deregisterForSleepWakeNotification;

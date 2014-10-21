@@ -31,7 +31,7 @@ static int lastsource=0;
 
 
 void SleepWatcher( void * refCon, io_service_t service, natural_t messageType, void * messageArgument ){
-		[(Power *)refCon powerMessageReceived: messageType withArgument: messageArgument];
+		[(__bridge Power *)refCon powerMessageReceived: messageType withArgument: messageArgument];
 }
 
 
@@ -48,14 +48,14 @@ static void powerSourceChanged(void * refCon)
 		powerSource = CFArrayGetValueAtIndex(powerSourcesList, i);
 		description = IOPSGetPowerSourceDescription(powerBlob, powerSource);
 		//work with NSArray from here
-		NSDictionary *n_description = (NSDictionary *)description;
-		[(Power *)refCon powerSourceMesssageReceived:n_description];	
+		NSDictionary *n_description = (__bridge NSDictionary *)description;
+		[(__bridge Power *)refCon powerSourceMesssageReceived:n_description];
 	}	
 	CFRelease(powerBlob);
 	CFRelease(powerSourcesList);
 }
 
-- (id)init{
+- (instancetype)init{
     if (self = [super init]) {
         
     }
@@ -65,14 +65,14 @@ static void powerSourceChanged(void * refCon)
 
 - (void)registerForSleepWakeNotification
 {
-	root_port = IORegisterForSystemPower(self, &notificationPort, SleepWatcher, &notifier);
+	root_port = IORegisterForSystemPower((__bridge void *)(self), &notificationPort, SleepWatcher, &notifier);
 	CFRunLoopAddSource(CFRunLoopGetCurrent(), IONotificationPortGetRunLoopSource(notificationPort), kCFRunLoopDefaultMode);
 }
 
 
 - (void)registerForPowerChange
 {
-	powerNotifierRunLoopSource = IOPSNotificationCreateRunLoopSource(powerSourceChanged,self);
+	powerNotifierRunLoopSource = IOPSNotificationCreateRunLoopSource(powerSourceChanged,(__bridge void *)(self));
 	if (powerNotifierRunLoopSource) {
 		CFRunLoopAddSource(CFRunLoopGetCurrent(), powerNotifierRunLoopSource, kCFRunLoopDefaultMode);
 	}
@@ -118,7 +118,7 @@ static void powerSourceChanged(void * refCon)
 }
 
 - (void)powerSourceMesssageReceived:(NSDictionary *)n_description{
-		if (([[n_description objectForKey:@"Power Source State"] isEqualToString:@"AC Power"] && [[n_description objectForKey:@"Is Charging"] intValue]==1) && lastsource!=1) {
+		if (([n_description[@"Power Source State"] isEqualToString:@"AC Power"] && [n_description[@"Is Charging"] intValue]==1) && lastsource!=1) {
 				lastsource=1;
 			if ([_delegate respondsToSelector:@selector(powerChangeToACLoading:)])
 				[_delegate powerChangeToACLoading:self];
@@ -129,7 +129,7 @@ static void powerSourceChanged(void * refCon)
 		}
 		
 		
-		if (([[n_description objectForKey:@"Power Source State"] isEqualToString:@"AC Power"] && [[n_description objectForKey:@"Is Charging"] intValue]==0) && lastsource!=2) {
+		if (([n_description[@"Power Source State"] isEqualToString:@"AC Power"] && [n_description[@"Is Charging"] intValue]==0) && lastsource!=2) {
 				lastsource=2;
 			if ([_delegate respondsToSelector:@selector(powerChangeToAC:)])
 				[_delegate powerChangeToAC:self];
@@ -139,7 +139,7 @@ static void powerSourceChanged(void * refCon)
 			}
 		}
 	
-		if (([[n_description objectForKey:@"Power Source State"] isEqualToString:@"Battery Power"]) && lastsource!=3) {
+		if (([n_description[@"Power Source State"] isEqualToString:@"Battery Power"]) && lastsource!=3) {
 			lastsource=3;
 			if ([_delegate respondsToSelector:@selector(powerChangeToBattery:)])
 				[_delegate powerChangeToBattery:self];
@@ -171,7 +171,6 @@ static void powerSourceChanged(void * refCon)
     if (_delegate)
         [nc removeObserver:_delegate name:nil object:self];
 	
-    [super dealloc];
 }
 
 

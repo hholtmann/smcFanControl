@@ -99,13 +99,14 @@
 	IBOutlet id DefaultsController;
 	
 	MachineDefaults *mdefaults;
-	NSDictionary *s_sed;
 
 	NSDictionary *undo_dic;
 	 
 	NSImage *menu_image;
 	NSImage *menu_image_alt;
 }
+
+@property (nonatomic, strong ) 	NSMutableDictionary *machineDefaultsDict;
 
 
 -(void)terminate:(id)sender;
@@ -137,8 +138,8 @@
 
 
 @interface NSNumber (NumberAdditions)
-- (NSString *) tohex;
-- (NSNumber*) celsius_fahrenheit;
+@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString *tohex;
+@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSNumber *celsius_fahrenheit;
 
 @end
 

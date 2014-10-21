@@ -25,8 +25,8 @@
 		8985F1590ADD0B5500F9EC46 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8985F1580ADD0B5500F9EC46 /* Security.framework */; };
 		8987FBD20B878B3900A5ED8E /* smc.png in Resources */ = {isa = PBXBuildFile; fileRef = 8987FBD00B878B3900A5ED8E /* smc.png */; };
 		89949E8D0AEEA37700077E93 /* Power.m in Sources */ = {isa = PBXBuildFile; fileRef = 89949E8C0AEEA37700077E93 /* Power.m */; };
-		899D59DC15E1CF60003E322D /* smc in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8924ECEE15AC96E70031730C /* smc */; };
-		899D59DD15E1CFFF003E322D /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 895BDA390B8F8F42003CD894 /* Sparkle.framework */; };
+		899D59DC15E1CF60003E322D /* smc in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8924ECEE15AC96E70031730C /* smc */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		899D59DD15E1CFFF003E322D /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 895BDA390B8F8F42003CD894 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		89B243200B7E351000CAD103 /* smcfancontrol_v2.icns in Resources */ = {isa = PBXBuildFile; fileRef = 89B2431F0B7E351000CAD103 /* smcfancontrol_v2.icns */; };
 		89C053BE0ADAB7630037CA16 /* smc.c in Sources */ = {isa = PBXBuildFile; fileRef = 89C053BC0ADAB7630037CA16 /* smc.c */; };
 		89E7D3650ADE819B000F67AB /* Machines.plist in Resources */ = {isa = PBXBuildFile; fileRef = 89E7D3640ADE819B000F67AB /* Machines.plist */; };
@@ -101,7 +101,6 @@
 		894A494A0ADBEEF4008785F3 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
 		894DC9E20F8AA367006A046F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Spanish; path = Spanish.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		894DC9E30F8AA36F006A046F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Spanish; path = Spanish.lproj/F.A.Q.rtf; sourceTree = "<group>"; };
-		894DC9E40F8AA37C006A046F /* Spanish */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = Spanish; path = Spanish.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		894DC9E60F8AA399006A046F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Spanish; path = Spanish.lproj/Localizable.strings; sourceTree = "<group>"; };
 		89559A830BAC338400DBA37E /* smcover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = smcover.png; sourceTree = "<group>"; };
 		895BDA390B8F8F42003CD894 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
@@ -301,7 +300,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0610;
 				TargetAttributes = {
 					8924ECED15AC96E70031730C = {
 						DevelopmentTeam = MC98392EJC;
@@ -383,7 +382,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				089C165DFE840E0CC02AAC07 /* English */,
-				894DC9E40F8AA37C006A046F /* Spanish */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -430,8 +428,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application: Hendrik Holtmann";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application: Hendrik Holtmann";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -457,8 +455,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application: Hendrik Holtmann";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application: Hendrik Holtmann";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -478,6 +476,8 @@
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application: Hendrik Holtmann";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
@@ -498,8 +498,9 @@
 					"$(inherited)",
 					"\"$(SDKROOT)/usr/lib/system\"",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CODE_SIGN_FLAGS = "--deep";
 				PRODUCT_NAME = smcFanControl;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
@@ -511,6 +512,8 @@
 		C01FCF4C08A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "Developer ID Application: Hendrik Holtmann";
 				COMBINE_HIDPI_IMAGES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -530,8 +533,9 @@
 					"$(inherited)",
 					"\"$(SDKROOT)/usr/lib/system\"",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CODE_SIGN_FLAGS = "--deep";
 				PRODUCT_NAME = smcFanControl;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;

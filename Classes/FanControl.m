@@ -32,7 +32,7 @@
 
 @interface FanControl ()
 + (void)copyMachinesIfNecessary;
-- (BOOL)isInAutoStart;
+@property (NS_NONATOMIC_IOSONLY, getter=isInAutoStart, readonly) BOOL inAutoStart;
 - (void)setStartAtLogin:(BOOL)enabled;
 + (void)checkRightStatus:(OSStatus)status;
 @end
@@ -80,14 +80,14 @@ NSUserDefaults *defaults;
 	for (i=0;i<[rfavorites count];i++)
 	{
 		BOOL selected = NO;
-		NSArray *fans = [[rfavorites objectAtIndex:i] objectForKey:@"FanData"];
+		NSArray *fans = rfavorites[i][@"FanData"];
 		for (j=0;j<[fans count];j++) {
-			if ([[[fans objectAtIndex:j] objectForKey:@"menu"] boolValue] == YES ) {
+			if ([fans[j][@"menu"] boolValue] == YES ) {
 				selected = YES;
 			}
 		}
 		if (selected==NO) {
-			[[[[rfavorites objectAtIndex:i] objectForKey:@"FanData"] objectAtIndex:0] setObject:[NSNumber numberWithBool:YES] forKey:@"menu"];
+			rfavorites[i][@"FanData"][0][@"menu"] = @YES;
 		}
 	}
 	
@@ -95,7 +95,6 @@ NSUserDefaults *defaults;
 
 -(void) awakeFromNib {
     
-	s_sed = nil;
 	pw=[[Power alloc] init];
 	[pw setDelegate:self];
 	[pw registerForSleepWakeNotification];
@@ -108,57 +107,51 @@ NSUserDefaults *defaults;
 
 	mdefaults=[[MachineDefaults alloc] init:nil];
 
-	s_sed=[mdefaults get_machine_defaults];
+    self.machineDefaultsDict=[[NSMutableDictionary alloc] initWithDictionary:[mdefaults get_machine_defaults]];
 
-	
-	NSMutableArray *favorites=[NSMutableArray arrayWithObjects:
-							[NSMutableDictionary dictionaryWithObjectsAndKeys:
-							@"Default", @"Title",
-							[s_sed objectForKey:@"Fans"], @"FanData",nil],nil];
+    NSMutableArray *favorites = [[NSMutableArray alloc] init];
+    
+    NSMutableDictionary *defaultFav = [[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Default", @"Title",
+                                  [NSKeyedUnarchiver unarchiveObjectWithData:[NSKeyedArchiver archivedDataWithRootObject:[[mdefaults get_machine_defaults] objectForKey:@"Fans"]]], @"FanData",nil];
+
+    [favorites addObject:defaultFav];
+    
+    
 	NSRange range=[[MachineDefaults computerModel] rangeOfString:@"MacBook"];
 	if (range.length>0) {
 		//for macbooks add a second default
-		MachineDefaults *msdefaults=[[MachineDefaults alloc] init:nil];
-		NSMutableDictionary *sec_fav=[NSMutableDictionary dictionaryWithObjectsAndKeys:@"Higher RPM", @"Title",
-							[[msdefaults get_machine_defaults] objectForKey:@"Fans"], @"FanData",nil];
-		[favorites addObject:sec_fav];	
-		int i;					
-		for (i=0;i<[[s_sed objectForKey:@"Fans"] count];i++) {
-			int min_value=([[[[s_sed objectForKey:@"Fans"] objectAtIndex:i] valueForKey:@"Minspeed"] intValue])*2;
-			[[[[favorites objectAtIndex:1] objectForKey:@"FanData"] objectAtIndex:i] setObject:[NSNumber numberWithInt:min_value] forKey:@"selspeed"];
-
+		NSMutableDictionary *higherFav=[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Higher RPM", @"Title",
+                                        [NSKeyedUnarchiver unarchiveObjectWithData:[NSKeyedArchiver archivedDataWithRootObject:[[mdefaults get_machine_defaults] objectForKey:@"Fans"]]], @"FanData",nil];
+		for (NSUInteger i=0;i<[_machineDefaultsDict[@"Fans"] count];i++) {
+            
+            int min_value=([[[[_machineDefaultsDict objectForKey:@"Fans"] objectAtIndex:i] objectForKey:@"Minspeed"] intValue])*2;
+            [[[higherFav objectForKey:@"FanData"] objectAtIndex:i] setObject:[NSNumber numberWithInt:min_value] forKey:@"selspeed"];
 		}
-		[msdefaults release];
-	}							
+        [favorites addObject:higherFav];
+
+	}
 
 	//sync option for Macbook Pro's
 	NSRange range_mbp=[[MachineDefaults computerModel] rangeOfString:@"MacBookPro"];
-	if (range_mbp.length>0  && [[s_sed objectForKey:@"Fans"] count] == 2) {
+	if (range_mbp.length>0  && [_machineDefaultsDict[@"Fans"] count] == 2) {
 		[sync setHidden:NO];
 	}
 
-	
-	NSString *feedURL = nil;
-	if ([SystemVersion isTiger]) {
-		feedURL = @"http://www.eidac.de/smcfancontrol/smcfancontrol_tiger.xml";
-	} else {
-		feedURL = @"http://www.eidac.de/smcfancontrol/smcfancontrol.xml";
-	}
-																													
 	//load user defaults
 	defaults = [NSUserDefaults standardUserDefaults];
 	[defaults registerDefaults:
 		[NSMutableDictionary dictionaryWithObjectsAndKeys:
-			[NSNumber numberWithInt:0], @"Unit",
-			[NSNumber numberWithInt:0], @"SelDefault",
-			[NSNumber numberWithBool:NO], @"AutoStart",
-			[NSNumber numberWithBool:NO],@"AutomaticChange",
-			[NSNumber numberWithInt:0],@"selbatt",
-			[NSNumber numberWithInt:0],@"selac",
-			[NSNumber numberWithInt:0],@"selload",
-			[NSNumber numberWithInt:0],@"MenuBar",
+			@0, @"Unit",
+			@0, @"SelDefault",
+			@NO, @"AutoStart",
+			@NO,@"AutomaticChange",
+			@0,@"selbatt",
+			@0,@"selac",
+			@0,@"selload",
+			@0,@"MenuBar",
             @"TC0D",@"TSensor",
-			feedURL,@"SUFeedURL",
+            @0,@"NumLaunches",
+            @NO,@"DonationMessageShown",
 			[NSArchiver archivedDataWithRootObject:[NSColor blackColor]],@"MenuColor",
 			favorites,@"Favorites",
 	nil]];
@@ -167,13 +160,11 @@ NSUserDefaults *defaults;
 
 	g_numFans = [smcWrapper get_fan_num];
 	s_menus=[[NSMutableArray alloc] init];
-	[s_menus autorelease];
 	int i;
 	for(i=0;i<g_numFans;i++){
 		NSMenuItem *mitem=[[NSMenuItem alloc] initWithTitle:[NSString stringWithFormat:@"Fan: %d",i] action:NULL keyEquivalent:@""];
 		[mitem setTag:(i+1)*10];
 		[s_menus insertObject:mitem atIndex:i];
-		[mitem release];
 	}
 	
 	[FavoritesController bind:@"content"
@@ -184,9 +175,9 @@ NSUserDefaults *defaults;
 	
 	// set slider sync - only for MBP
 	for (i=0;i<[[FavoritesController arrangedObjects] count];i++) {
-		if([[[[FavoritesController arrangedObjects] objectAtIndex:i] objectForKey:@"sync"] boolValue]==YES) {
+		if([[FavoritesController arrangedObjects][i][@"sync"] boolValue]==YES) {
 			[FavoritesController setSelectionIndex:i];
-			[self syncBinder:[[[[FavoritesController arrangedObjects] objectAtIndex:i] objectForKey:@"sync"] boolValue]];
+			[self syncBinder:[[FavoritesController arrangedObjects][i][@"sync"] boolValue]];
 		}
 	}
 
@@ -220,24 +211,42 @@ NSUserDefaults *defaults;
         [menu_image_alt setTemplate:YES];
     }
 
-	//release MachineDefaults class first call
 	//add timer for reading to RunLoop
 	_readTimer = [NSTimer scheduledTimerWithTimeInterval:4.0 target:self selector:@selector(readFanData:) userInfo:nil repeats:YES];
     if ([_readTimer respondsToSelector:@selector(setTolerance:)]) {
         [_readTimer setTolerance:2.0];
     }
 	[_readTimer fire];
+    
 	//autoapply settings if valid
 	[self upgradeFavorites];
     
     //autostart
-    [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:[self isInAutoStart]] forKey:@"AutoStart"];
-    
+    [[NSUserDefaults standardUserDefaults] setValue:@([self isInAutoStart]) forKey:@"AutoStart"];
+     NSUInteger numLaunches = [[[NSUserDefaults standardUserDefaults] objectForKey:@"NumLaunches"] integerValue];
+    [[NSUserDefaults standardUserDefaults] setObject:@(numLaunches+1) forKey:@"NumLaunches"];
+    if (numLaunches != 0 && (numLaunches % 5 == 0) && ![[[NSUserDefaults standardUserDefaults] objectForKey:@"DonationMessageShown"] boolValue]) {
+        [self displayDonationMessage];
+    }
+}
+
+-(void)displayDonationMessage
+{
+    NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Consider a donation",nil)
+                                     defaultButton:NSLocalizedString(@"Donate over Paypal",nil) alternateButton:NSLocalizedString(@"Never ask me again",nil) otherButton:NSLocalizedString(@"Remind me later",nil)
+                         informativeTextWithFormat:NSLocalizedString(@"smcFanControl keeps your Mac cool since 2006.\n\nIf smcFanControl is helfpul for you and you want to support further development, a small donation over Paypal is much appreciated.",nil)];
+    NSModalResponse code=[alert runModal];
+    if (code == NSAlertDefaultReturn) {
+        [self paypal:nil];
+        [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:@"DonationMessageShown"];
+    } else if (code == NSAlertAlternateReturn) {
+        [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:@"DonationMessageShown"];
+    }
 }
 
 
 -(void)init_statusitem{
-	statusItem = [[[NSStatusBar systemStatusBar] statusItemWithLength: NSVariableStatusItemLength] retain];
+	statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength: NSVariableStatusItemLength];
 	[statusItem setMenu: theMenu];
     
     if ([statusItem respondsToSelector:@selector(button)]) {
@@ -249,7 +258,7 @@ NSUserDefaults *defaults;
     }
 	int i;
 	for(i=0;i<[s_menus count];i++) {
-		[theMenu insertItem:[s_menus objectAtIndex:i] atIndex:i];
+		[theMenu insertItem:s_menus[i] atIndex:i];
 	};
     
     // Sign up for menuNeedsUpdate call
@@ -284,21 +293,19 @@ NSUserDefaults *defaults;
 - (IBAction)save_favorite:(id)sender{
 	MachineDefaults *msdefaults=[[MachineDefaults alloc] init:nil];
 	if ([[newfavorite_title stringValue] length]>0) {
-		NSMutableDictionary *toinsert=[[NSMutableDictionary alloc] initWithObjectsAndKeys:[newfavorite_title stringValue],@"Title",[[msdefaults get_machine_defaults] objectForKey:@"Fans"],@"FanData",nil]; //default as template
-		[toinsert setValue:[NSNumber numberWithInt:0] forKey:@"Standard"];
+		NSMutableDictionary *toinsert=[[NSMutableDictionary alloc] initWithObjectsAndKeys:[newfavorite_title stringValue],@"Title",[msdefaults get_machine_defaults][@"Fans"],@"FanData",nil]; //default as template
+		[toinsert setValue:@0 forKey:@"Standard"];
 		[FavoritesController addObject:toinsert];
-		[toinsert release];
 		[newfavoritewindow close];
 		[[NSApplication sharedApplication] endSheet:newfavoritewindow];
 	}
-	[msdefaults release];
 	[self upgradeFavorites];
 }
 
 
 -(void) check_deletion:(id)combo{
  if ([FavoritesController selectionIndex]==[[defaults objectForKey:combo] intValue]) {
-	 [defaults setObject:[NSNumber numberWithInt:0] forKey:combo];
+	 [defaults setObject:@0 forKey:combo];
  }
 }
 
@@ -317,7 +324,7 @@ NSUserDefaults *defaults;
 
 - (IBAction)delete_favorite:(id)sender{
 	
-    NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Delete favorite",nil) defaultButton:NSLocalizedString(@"No",nil) alternateButton:NSLocalizedString(@"Yes",nil) otherButton:nil informativeTextWithFormat:[NSString stringWithFormat:NSLocalizedString(@"Do you really want to delete the favorite %@?",nil), [ [ [FavoritesController arrangedObjects] objectAtIndex:[FavoritesController selectionIndex]] objectForKey:@"Title"] ]];
+    NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Delete favorite",nil) defaultButton:NSLocalizedString(@"No",nil) alternateButton:NSLocalizedString(@"Yes",nil) otherButton:nil informativeTextWithFormat:[NSString stringWithFormat:NSLocalizedString(@"Do you really want to delete the favorite %@?",nil), [FavoritesController arrangedObjects][[FavoritesController selectionIndex]][@"Title"] ]];
     
     [alert beginSheetModalForWindow:mainwindow modalDelegate:self didEndSelector:@selector(deleteAlertDidEnd:returnCode:contextInfo:) contextInfo:NULL];
 }
@@ -331,7 +338,7 @@ NSUserDefaults *defaults;
     int i = 0;
 	
 	//on init handling
-	if (s_sed==nil) {
+	if (_machineDefaultsDict==nil) {
 		return;
 	}
     
@@ -370,16 +377,16 @@ NSUserDefaults *defaults;
     
     if (bNeedRpm == true) {
         // Read the current fan speed for the desired fan and format text for display in the menubar.
-        NSArray *fans = [[[FavoritesController arrangedObjects] objectAtIndex:[FavoritesController selectionIndex]] objectForKey:@"FanData"];
+        NSArray *fans = [FavoritesController arrangedObjects][[FavoritesController selectionIndex]][@"FanData"];
         for (i=0; i<g_numFans && i<[fans count]; i++)
         {
-            if ([[[fans objectAtIndex:i] objectForKey:@"menu"] boolValue]==YES) {
+            if ([fans[i][@"menu"] boolValue]==YES) {
                 selectedRpm = [smcWrapper get_fan_rpm:i];
                 break;
             }
         }
         
-        NSNumberFormatter *nc=[[[NSNumberFormatter alloc] init] autorelease];
+        NSNumberFormatter *nc=[[NSNumberFormatter alloc] init];
         //avoid jumping in menu bar
         [nc setFormat:@"000;000;-000"];
         
@@ -391,11 +398,11 @@ NSUserDefaults *defaults;
         c_temp = [smcWrapper get_maintemp];
         
         if ([[defaults objectForKey:@"Unit"] intValue]==0) {
-            temp = [NSString stringWithFormat:@"%@%CC",[NSNumber numberWithFloat:c_temp],(unsigned short)0xb0];
+            temp = [NSString stringWithFormat:@"%@%CC",@(c_temp),(unsigned short)0xb0];
         } else {
-            NSNumberFormatter *ncf=[[[NSNumberFormatter alloc] init] autorelease];
+            NSNumberFormatter *ncf=[[NSNumberFormatter alloc] init];
             [ncf setFormat:@"00;00;-00"];
-            temp = [NSString stringWithFormat:@"%@%CF",[ncf stringForObjectValue:[[NSNumber numberWithFloat:c_temp] celsius_fahrenheit]],(unsigned short)0xb0];
+            temp = [NSString stringWithFormat:@"%@%CF",[ncf stringForObjectValue:[@(c_temp) celsius_fahrenheit]],(unsigned short)0xb0];
         }
     }
     
@@ -493,8 +500,6 @@ NSUserDefaults *defaults;
             break;
     }
     
-    [paragraphStyle release];
-    [s_status release];
 }
 
 
@@ -521,17 +526,17 @@ NSUserDefaults *defaults;
 	int i;
 	[FanControl setRights];
 	[FavoritesController setSelectionIndex:cIndex];
-	for (i=0;i<[[[[FavoritesController arrangedObjects] objectAtIndex:cIndex] objectForKey:@"FanData"] count];i++) {
-		[smcWrapper setKey_external:[NSString stringWithFormat:@"F%dMn",i] value:[[[[FanController arrangedObjects] objectAtIndex:i] objectForKey:@"selspeed"] tohex]];
+	for (i=0;i<[[FavoritesController arrangedObjects][cIndex][@"FanData"] count];i++) {
+		[smcWrapper setKey_external:[NSString stringWithFormat:@"F%dMn",i] value:[[FanController arrangedObjects][i][@"selspeed"] tohex]];
 	}
-	NSMenu *submenu = [[[NSMenu alloc] init] autorelease];
+	NSMenu *submenu = [[NSMenu alloc] init];
 	
 	for(i=0;i<[[FavoritesController arrangedObjects] count];i++){
-		NSMenuItem *submenuItem = [[[NSMenuItem alloc] initWithTitle:[[[FavoritesController arrangedObjects] objectAtIndex:i] objectForKey:@"Title"] action:@selector(apply_quickselect:) keyEquivalent:@""] autorelease];
+		NSMenuItem *submenuItem = [[NSMenuItem alloc] initWithTitle:[FavoritesController arrangedObjects][i][@"Title"] action:@selector(apply_quickselect:) keyEquivalent:@""];
 		[submenuItem setTag:i*100]; //for later manipulation
 		[submenuItem setEnabled:YES];
 		[submenuItem setTarget:self];
-		[submenuItem setRepresentedObject:[[FavoritesController arrangedObjects] objectAtIndex:i]];
+		[submenuItem setRepresentedObject:[FavoritesController arrangedObjects][i]];
 		[submenu addItem:submenuItem];
 	}
 	
@@ -540,9 +545,9 @@ NSUserDefaults *defaults;
 		[[[[theMenu itemWithTag:1] submenu] itemAtIndex:i] setState:NSOffState];
 	}
 	[[[[theMenu itemWithTag:1] submenu] itemAtIndex:cIndex] setState:NSOnState];
-	[defaults setObject:[NSNumber numberWithInt:cIndex] forKey:@"SelDefault"];
+	[defaults setObject:@(cIndex) forKey:@"SelDefault"];
 	//change active setting display
-	[[theMenu itemWithTag:1] setTitle:[NSString stringWithFormat:@"%@: %@",NSLocalizedString(@"Active Setting",nil),[ [ [FavoritesController arrangedObjects] objectAtIndex:[FavoritesController selectionIndex]] objectForKey:@"Title"] ]];
+	[[theMenu itemWithTag:1] setTitle:[NSString stringWithFormat:@"%@: %@",NSLocalizedString(@"Active Setting",nil),[FavoritesController arrangedObjects][[FavoritesController selectionIndex]][@"Title"] ]];
 }
 
 
@@ -567,13 +572,6 @@ NSUserDefaults *defaults;
 	[_readTimer invalidate];
 	[pw deregisterForSleepWakeNotification];
 	[pw deregisterForPowerChange];
-	[pw release];
-	[menu_image release];
-	[menu_image_alt release];
-	//[mdefaults release];
-	//[statusItem release];
-	//[s_menus release];
-	//[theMenu release];
 	[[NSApplication sharedApplication] terminate:self];
 }
 
@@ -602,7 +600,7 @@ NSUserDefaults *defaults;
 	int i;
 	for (i=0;i<[[FanController arrangedObjects] count];i++) {
 		if (i!=[sender selectedRow]) {
-			[[[FanController arrangedObjects] objectAtIndex:i] setValue:[NSNumber numberWithBool:NO] forKey:@"menu"];
+			[[FanController arrangedObjects][i] setValue:@NO forKey:@"menu"];
 		}	
 	}
 }
@@ -612,16 +610,18 @@ NSUserDefaults *defaults;
 // menu items are now only updated here in order to
 // reduce the energy impact of -readFanData.
 - (void)menuNeedsUpdate:(NSMenu*)menu {
-    if (theMenu == menu) {
-        if (s_sed == nil)
-            return;
-        
-        int i;
-        for(i=0; i<g_numFans; ++i){
-            NSString *fandesc=[[[s_sed objectForKey:@"Fans"] objectAtIndex:i] objectForKey:@"Description"];
-            [[theMenu itemWithTag:(i+1)*10] setTitle:[NSString stringWithFormat:@"%@: %@ rpm",fandesc,[[NSNumber numberWithInt:[smcWrapper get_fan_rpm:i]] stringValue]]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (theMenu == menu) {
+            if (_machineDefaultsDict == nil)
+                return;
+            
+            int i;
+            for(i=0; i<g_numFans; ++i){
+                NSString *fandesc=_machineDefaultsDict[@"Fans"][i][@"Description"];
+                [[theMenu itemWithTag:(i+1)*10] setTitle:[NSString stringWithFormat:@"%@: %@ rpm",fandesc,[@([smcWrapper get_fan_rpm:i]) stringValue]]];
+            }
         }
-    }
+    });
 }
 
 
@@ -633,7 +633,6 @@ NSUserDefaults *defaults;
     SUUpdater *updater = [[SUUpdater alloc] init];
 	[updater checkForUpdates:sender];
 	[[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
-    [updater release];
 }
 
 - (IBAction)visitHomepage:(id)sender{
@@ -649,11 +648,11 @@ NSUserDefaults *defaults;
 	//in case plist is corrupt, don't bind
 	if ([[FanController arrangedObjects] count]>1 ) {
 		if (bind==YES) {
-			[[[FanController arrangedObjects] objectAtIndex:1] bind:@"selspeed" toObject:[[FanController arrangedObjects] objectAtIndex:0] withKeyPath:@"selspeed" options:nil];
-			[[[FanController arrangedObjects] objectAtIndex:0] bind:@"selspeed" toObject:[[FanController arrangedObjects] objectAtIndex:1] withKeyPath:@"selspeed" options:nil];
+			[[FanController arrangedObjects][1] bind:@"selspeed" toObject:[FanController arrangedObjects][0] withKeyPath:@"selspeed" options:nil];
+			[[FanController arrangedObjects][0] bind:@"selspeed" toObject:[FanController arrangedObjects][1] withKeyPath:@"selspeed" options:nil];
 		} else {
-			[[[FanController arrangedObjects] objectAtIndex:1] unbind:@"selspeed"];
-			[[[FanController arrangedObjects] objectAtIndex:0] unbind:@"selspeed"];
+			[[FanController arrangedObjects][1] unbind:@"selspeed"];
+			[[FanController arrangedObjects][0] unbind:@"selspeed"];
 		}
 	}	
 }
@@ -696,14 +695,14 @@ NSUserDefaults *defaults;
 	BOOL found = NO;
 	LSSharedFileListRef loginItems = LSSharedFileListCreate(kCFAllocatorDefault, kLSSharedFileListSessionLoginItems, /*options*/ NULL);
 	NSString *path = [[NSBundle mainBundle] bundlePath];
-	CFURLRef URLToToggle = (CFURLRef)[NSURL fileURLWithPath:path];
+	CFURLRef URLToToggle = (__bridge CFURLRef)[NSURL fileURLWithPath:path];
 	//LSSharedFileListItemRef existingItem = NULL;
 	
 	UInt32 seed = 0U;
-	NSArray *currentLoginItems = [NSMakeCollectable(LSSharedFileListCopySnapshot(loginItems, &seed)) autorelease];
+    NSArray *currentLoginItems = CFBridgingRelease(LSSharedFileListCopySnapshot(loginItems, &seed));
 	
 	for (id itemObject in currentLoginItems) {
-		LSSharedFileListItemRef item = (LSSharedFileListItemRef)itemObject;
+		LSSharedFileListItemRef item = (__bridge LSSharedFileListItemRef)itemObject;
 		
 		UInt32 resolutionFlags = kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes;
 		CFURLRef URL = NULL;
@@ -730,14 +729,14 @@ NSUserDefaults *defaults;
 	NSString *path = [[NSBundle mainBundle] bundlePath];
 	
 	OSStatus status;
-	CFURLRef URLToToggle = (CFURLRef)[NSURL fileURLWithPath:path];
+	CFURLRef URLToToggle = (__bridge CFURLRef)[NSURL fileURLWithPath:path];
 	LSSharedFileListItemRef existingItem = NULL;
 	
 	UInt32 seed = 0U;
-	NSArray *currentLoginItems = [NSMakeCollectable(LSSharedFileListCopySnapshot(loginItems, &seed)) autorelease];
+    NSArray *currentLoginItems = CFBridgingRelease(LSSharedFileListCopySnapshot(loginItems, &seed));
 	
 	for (id itemObject in currentLoginItems) {
-		LSSharedFileListItemRef item = (LSSharedFileListItemRef)itemObject;
+		LSSharedFileListItemRef item = (__bridge LSSharedFileListItemRef)itemObject;
 		
 		UInt32 resolutionFlags = kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes;
 		CFURLRef URL = NULL;
@@ -769,7 +768,7 @@ NSUserDefaults *defaults;
 				icon = NULL;
 		}
 		
-		LSSharedFileListInsertItemURL(loginItems, kLSSharedFileListItemBeforeFirst, (CFStringRef)displayName, icon, URLToToggle, /*propertiesToSet*/ NULL, /*propertiesToClear*/ NULL);
+		LSSharedFileListInsertItemURL(loginItems, kLSSharedFileListItemBeforeFirst, (__bridge CFStringRef)displayName, icon, URLToToggle, /*propertiesToSet*/ NULL, /*propertiesToClear*/ NULL);
 	} else if (!enabled && (existingItem != NULL))
 		LSSharedFileListItemRemove(loginItems, existingItem);
 }
@@ -810,11 +809,11 @@ NSUserDefaults *defaults;
     [self checkRightStatus:status];
     
     NSString *tool=@"/usr/sbin/chown";
-    NSArray *argsArray = [NSArray arrayWithObjects: @"root:admin",smcpath,nil];
+    NSArray *argsArray = @[@"root:admin",smcpath];
 	int i;
 	char *args[255];
 	for(i = 0;i < [argsArray count];i++){
-		args[i] = (char *)[[argsArray objectAtIndex:i]cString];
+		args[i] = (char *)[argsArray[i]cString];
 	}
 	args[i] = NULL;
 	status=AuthorizationExecuteWithPrivileges(authorizationRef,[tool UTF8String],0,args,&commPipe);
@@ -823,9 +822,9 @@ NSUserDefaults *defaults;
     
     	//second call for suid-bit
 	tool=@"/bin/chmod";
-	argsArray = [NSArray arrayWithObjects: @"6555",smcpath,nil];
+	argsArray = @[@"6555",smcpath];
 	for(i = 0;i < [argsArray count];i++){
-		args[i] = (char *)[[argsArray objectAtIndex:i]cString];
+		args[i] = (char *)[argsArray[i]cString];
 	}
 	args[i] = NULL;
 	status=AuthorizationExecuteWithPrivileges(authorizationRef,[tool UTF8String],0,args,&commPipe);
@@ -849,7 +848,7 @@ NSUserDefaults *defaults;
 - (NSNumber*) celsius_fahrenheit{
 	float celsius=[self floatValue];
 	float fahrenheit=(celsius*9)/5+32;
-	return [NSNumber numberWithFloat:fahrenheit];
+	return @(fahrenheit);
 }
 
 @end

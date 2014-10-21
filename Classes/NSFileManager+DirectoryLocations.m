@@ -110,7 +110,7 @@ NSString * const DirectoryLocationDomain = @"DirectoryLocationDomain";
 */
 - (NSString *)applicationSupportDirectory
 {
-	NSString *executableName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleExecutable"];
+	NSString *executableName = [[NSBundle mainBundle] infoDictionary][@"CFBundleExecutable"];
     
 	NSError *error = nil;
     

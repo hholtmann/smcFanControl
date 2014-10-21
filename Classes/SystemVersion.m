@@ -68,18 +68,18 @@ static NSString *const kSystemVersionPlistPath = @"/System/Library/CoreServices/
 #endif // MAC_OS_X_VERSION_MIN_REQUIRED <= MAC_OS_X_VERSION_10_3
 		
 #else // GTM_MACOS_SDK
-		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-		NSDictionary *systemVersionPlist
-		= [NSDictionary dictionaryWithContentsOfFile:kSystemVersionPlistPath];
-		NSString *version = [systemVersionPlist objectForKey:@"ProductVersion"];
-		NSArray *versionInfo = [version componentsSeparatedByString:@"."];
-		int length = [versionInfo count];
-		sGTMSystemVersionMajor = [[versionInfo objectAtIndex:0] intValue];
-		sGTMSystemVersionMinor = [[versionInfo objectAtIndex:1] intValue];
-		if (length == 3) {
-			sGTMSystemVersionBugFix = [[versionInfo objectAtIndex:2] intValue];
+		@autoreleasepool {
+			NSDictionary *systemVersionPlist
+			= [NSDictionary dictionaryWithContentsOfFile:kSystemVersionPlistPath];
+			NSString *version = systemVersionPlist[@"ProductVersion"];
+			NSArray *versionInfo = [version componentsSeparatedByString:@"."];
+			int length = [versionInfo count];
+			sGTMSystemVersionMajor = [versionInfo[0] intValue];
+			sGTMSystemVersionMinor = [versionInfo[1] intValue];
+			if (length == 3) {
+				sGTMSystemVersionBugFix = [versionInfo[2] intValue];
+			}
 		}
-		[pool release];
 #endif // GTM_MACOS_SDK
 	}
 }
@@ -104,7 +104,7 @@ static NSString *const kSystemVersionPlistPath = @"/System/Library/CoreServices/
 		if (!sBuild) {
 			NSDictionary *systemVersionPlist
 			= [NSDictionary dictionaryWithContentsOfFile:kSystemVersionPlistPath];
-			sBuild = [[systemVersionPlist objectForKey:@"ProductBuildVersion"] retain];
+			sBuild = systemVersionPlist[@"ProductBuildVersion"];
 		}
 	}
 	return sBuild;

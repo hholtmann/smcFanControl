@@ -31,6 +31,6 @@
 	inDomain:(NSSearchPathDomainMask)domainMask
 	appendPathComponent:(NSString *)appendComponent
 	error:(NSError **)errorOut;
-- (NSString *)applicationSupportDirectory;
+@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString *applicationSupportDirectory;
 
 @end

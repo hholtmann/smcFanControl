@@ -24,15 +24,15 @@
 #import "smcWrapper.h"
 #import <CommonCrypto/CommonDigest.h>
 
-static NSArray *allSensors = nil;
 
+NSArray *allSensors;
 
 @implementation smcWrapper
 	io_connect_t conn;
 
 +(void)init{
 	SMCOpen(&conn);
-    allSensors = [[NSArray alloc] initWithObjects:@"TC0D",@"TC0H",@"TC0F",@"TCAH",@"TCBH",@"TC0P",nil];
+    allSensors = [NSArray arrayWithObjects:@"TC0D",@"TC0P",@"TCAD",@"TC0H",@"TC0F",@"TCAH",@"TCBH",nil];
 }
 +(void)cleanUp{
     SMCClose(conn);
@@ -40,7 +40,6 @@ static NSArray *allSensors = nil;
 
 +(float) get_maintemp{
 	float c_temp;
-    
     SMCVal_t      val;
     NSString *sensor = [[NSUserDefaults standardUserDefaults] objectForKey:@"TSensor"];
     SMCReadKey2((char*)[sensor UTF8String], &val,conn);
@@ -57,8 +56,6 @@ static NSArray *allSensors = nil;
                 }
         }
     }
-
-
 	return c_temp;
 }
 
@@ -116,7 +113,7 @@ static NSArray *allSensors = nil;
 	//kern_return_t result;
 	NSMutableString *desc;
 //	desc=[[NSMutableString alloc] initWithFormat:@"Fan #%d: ",fan_number+1];
-	desc=[[[NSMutableString alloc]init] autorelease];
+	desc=[[NSMutableString alloc]init];
 	sprintf(key, "F%dID", fan_number);
 	SMCReadKey2(key, &val,conn);
 	int i;
@@ -160,19 +157,25 @@ static NSArray *allSensors = nil;
     OSStatus status;
     
     // obtain the cert info from the executable
-    status = SecStaticCodeCreateWithPath((CFURLRef)url, kSecCSDefaultFlags, &ref);
+    status = SecStaticCodeCreateWithPath((__bridge CFURLRef)url, kSecCSDefaultFlags, &ref);
     
     if (status != noErr) {
         return false;
     }
     
-    status = SecStaticCodeCheckValidity(ref, kSecCSDefaultFlags, nil);
-    
-    if (status != noErr) {
-        NSLog(@"Codesign verification failed: Error id = %d",status);
+    @try {
+        status = SecStaticCodeCheckValidity(ref, kSecCSDefaultFlags, nil);
+        
+        if (status != noErr) {
+            NSLog(@"Codesign verification failed: Error id = %d",status);
+            return false;
+        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"Codesign exception %@",exception);
         return false;
     }
-
+    
     return true;
 }
 
@@ -187,13 +190,12 @@ static NSArray *allSensors = nil;
 		NSLog(@"smcFanControl: Security Error: smc-binary is not the distributed one");
 		return;
 	}
-    NSArray *argsArray = [NSArray arrayWithObjects: @"-k",key,@"-w",value,nil];
+    NSArray *argsArray = @[@"-k",key,@"-w",value];
 	NSTask *task;
     task = [[NSTask alloc] init];
 	[task setLaunchPath: launchPath];
 	[task setArguments: argsArray];
 	[task launch];
-	[task release];
 }
 
 @end
