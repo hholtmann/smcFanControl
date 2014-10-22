@@ -32,31 +32,39 @@ NSArray *allSensors;
 
 +(void)init{
 	SMCOpen(&conn);
-    allSensors = [NSArray arrayWithObjects:@"TC0D",@"TC0P",@"TCAD",@"TC0H",@"TC0F",@"TCAH",@"TCBH",nil];
 }
 +(void)cleanUp{
     SMCClose(conn);
 }
 
+
+
 +(float) get_maintemp{
-	float c_temp;
-    SMCVal_t      val;
-    NSString *sensor = [[NSUserDefaults standardUserDefaults] objectForKey:@"TSensor"];
-    SMCReadKey2((char*)[sensor UTF8String], &val,conn);
-    c_temp= ((val.bytes[0] * 256 + val.bytes[1]) >> 2)/64;
+    float retValue;
+    NSRange range_pro=[[MachineDefaults computerModel] rangeOfString:@"MacPro"];
+    if (range_pro.length > 0) {
+        retValue = [smcWrapper get_mptemp];
+    } else {
     
-    if (c_temp<=0) {
-        for (NSString *sensor in allSensors) {
-                SMCReadKey2((char*)[sensor UTF8String], &val,conn);
-                c_temp= ((val.bytes[0] * 256 + val.bytes[1]) >> 2)/64;
-                if (c_temp>0) {
-                    [[NSUserDefaults standardUserDefaults] setObject:sensor forKey:@"TSensor"];
-                    [[NSUserDefaults standardUserDefaults] synchronize];
-                    break;
-                }
+        SMCVal_t      val;
+        NSString *sensor = [[NSUserDefaults standardUserDefaults] objectForKey:@"TSensor"];
+        SMCReadKey2((char*)[sensor UTF8String], &val,conn);
+        retValue= ((val.bytes[0] * 256 + val.bytes[1]) >> 2)/64;
+        allSensors = [NSArray arrayWithObjects:@"TC0D",@"TC0P",@"TCAD",@"TC0H",@"TC0F",@"TCAH",@"TCBH",nil];
+        if (retValue<=0 || floor(retValue) == 129 ) { //workaround for some iMac Models
+            for (NSString *sensor in allSensors) {
+                        SMCReadKey2((char*)[sensor UTF8String], &val,conn);
+                        retValue= ((val.bytes[0] * 256 + val.bytes[1]) >> 2)/64;
+                        if (retValue>0 && floor(retValue) != 129 ) {
+                            [[NSUserDefaults standardUserDefaults] setObject:sensor forKey:@"TSensor"];
+                            [[NSUserDefaults standardUserDefaults] synchronize];
+                            break;
+                        }
+            }
         }
     }
-	return c_temp;
+    
+	return retValue;
 }
 
 
