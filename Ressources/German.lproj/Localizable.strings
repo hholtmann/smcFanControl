@@ -31,3 +31,11 @@
 "Donate over Paypal" = "Spenden über PayPal";
 
 "smcFanControl keeps your Mac cool since 2006.\n\nIf smcFanControl is helfpul for you and you want to support further development, a small donation over Paypal is much appreciated." = "smcFanControl hält seit 2006 Macs in aller Welt kühl.\n\nWenn Sie smcFanControl gerne benutzen und Sie die Weiterentwicklung unterstützen wollen, freuen wir uns über eine kleine Spende über PayPal.";
+
+"Do you want to reset smcFanControl to default settings? Favorites will be deleted and fans will return to default speed." = "Wollen Sie smcFanControl auf die Default-Einstellungen zurücksetzen?\nDie Favoriten werden gelöscht und die Lüfter auf Werkseinstellung gesetzt.";
+
+"Please shutdown your computer now to return to default fan settings." = "Bitte schalten Sie den Computer jetzt aus, um die Werkseinstellung für die Lüfter wiederherzustellen.";
+
+"Reset Settings" = "Einstellungen zurücksetzen";
+
+"Shutdown required" = "Ausschalten erforderlich";

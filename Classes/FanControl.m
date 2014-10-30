@@ -635,6 +635,46 @@ NSUserDefaults *defaults;
 	[[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
 }
 
+
+-(void)performReset
+{
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+
+    NSError *error;
+    NSString *machinesPath = [[fileManager applicationSupportDirectory] stringByAppendingPathComponent:@"Machines.plist"];
+    [fileManager removeItemAtPath:machinesPath error:&error];
+    if (error) {
+        NSLog(@"Error deleting %@",machinesPath);
+    }
+    error = nil;
+    
+    NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
+    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
+    
+    
+    NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Shutdown required",nil)
+                                     defaultButton:NSLocalizedString(@"OK",nil) alternateButton:nil otherButton:nil
+                         informativeTextWithFormat:NSLocalizedString(@"Please shutdown your computer now to return to default fan settings.",nil)];
+    NSModalResponse code=[alert runModal];
+    if (code == NSAlertDefaultReturn) {
+        [[NSApplication sharedApplication] terminate:self];
+    }
+}
+
+- (IBAction)resetSettings:(id)sender
+{
+    NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Reset Settings",nil)
+                                     defaultButton:NSLocalizedString(@"Yes",nil) alternateButton:NSLocalizedString(@"No",nil) otherButton:nil
+                         informativeTextWithFormat:NSLocalizedString(@"Do you want to reset smcFanControl to default settings? Favorites will be deleted and fans will return to default speed.",nil)];
+    NSModalResponse code=[alert runModal];
+    if (code == NSAlertDefaultReturn) {
+        [self performReset];
+    } else if (code == NSAlertAlternateReturn) {
+
+    }
+
+}
+
 - (IBAction)visitHomepage:(id)sender{
 	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.eidac.de/products"]];
 }

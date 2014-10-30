@@ -23,7 +23,7 @@
 
 #import "smcWrapper.h"
 #import <CommonCrypto/CommonDigest.h>
-
+NSString * const smc_checksum=@"4c9919172e1111c660f12015a7324767";
 
 NSArray *allSensors;
 
@@ -37,34 +37,40 @@ NSArray *allSensors;
     SMCClose(conn);
 }
 
-
++(float)readTempSensors
+{
+    float retValue;
+    SMCVal_t      val;
+    NSString *sensor = [[NSUserDefaults standardUserDefaults] objectForKey:@"TSensor"];
+    SMCReadKey2((char*)[sensor UTF8String], &val,conn);
+    retValue= ((val.bytes[0] * 256 + val.bytes[1]) >> 2)/64;
+    allSensors = [NSArray arrayWithObjects:@"TC0D",@"TC0P",@"TCAD",@"TC0H",@"TC0F",@"TCAH",@"TCBH",nil];
+    if (retValue<=0 || floor(retValue) == 129 ) { //workaround for some iMac Models
+        for (NSString *sensor in allSensors) {
+            SMCReadKey2((char*)[sensor UTF8String], &val,conn);
+            retValue= ((val.bytes[0] * 256 + val.bytes[1]) >> 2)/64;
+            if (retValue>0 && floor(retValue) != 129 ) {
+                [[NSUserDefaults standardUserDefaults] setObject:sensor forKey:@"TSensor"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                break;
+            }
+        }
+    }
+    return retValue;
+}
 
 +(float) get_maintemp{
     float retValue;
     NSRange range_pro=[[MachineDefaults computerModel] rangeOfString:@"MacPro"];
     if (range_pro.length > 0) {
         retValue = [smcWrapper get_mptemp];
-    } else {
-    
-        SMCVal_t      val;
-        NSString *sensor = [[NSUserDefaults standardUserDefaults] objectForKey:@"TSensor"];
-        SMCReadKey2((char*)[sensor UTF8String], &val,conn);
-        retValue= ((val.bytes[0] * 256 + val.bytes[1]) >> 2)/64;
-        allSensors = [NSArray arrayWithObjects:@"TC0D",@"TC0P",@"TCAD",@"TC0H",@"TC0F",@"TCAH",@"TCBH",nil];
-        if (retValue<=0 || floor(retValue) == 129 ) { //workaround for some iMac Models
-            for (NSString *sensor in allSensors) {
-                        SMCReadKey2((char*)[sensor UTF8String], &val,conn);
-                        retValue= ((val.bytes[0] * 256 + val.bytes[1]) >> 2)/64;
-                        if (retValue>0 && floor(retValue) != 129 ) {
-                            [[NSUserDefaults standardUserDefaults] setObject:sensor forKey:@"TSensor"];
-                            [[NSUserDefaults standardUserDefaults] synchronize];
-                            break;
-                        }
-            }
+        if (retValue<=0 || floor(retValue) == 129 ) {
+            retValue = [smcWrapper readTempSensors];
         }
+    } else {
+        retValue = [smcWrapper readTempSensors];
     }
-    
-	return retValue;
+    return retValue;
 }
 
 
@@ -187,17 +193,27 @@ NSArray *allSensors;
     return true;
 }
 
++ (NSString*)createCheckSum:(NSString*)path {
+    NSData *d=[NSData dataWithContentsOfMappedFile:path];
+    unsigned char result[CC_MD5_DIGEST_LENGTH];
+    CC_MD5((void *)[d bytes], [d length], result);
+    NSMutableString *ret = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH*2];
+    for(int i = 0; i<CC_MD5_DIGEST_LENGTH; i++) {
+        [ret appendFormat:@"%02x",result[i]];
+    }
+    return ret;
+}
+
 //call smc binary with setuid rights and apply
 // The smc binary is given root permissions in FanControl.m with the setRights method.
 +(void)setKey_external:(NSString *)key value:(NSString *)value{
 	NSString *launchPath = [[NSBundle mainBundle]   pathForResource:@"smc" ofType:@""];
     
-    //first check if it's the right binary (security)
-    // MW: Disabled smc binary checksum. This should be re-enabled in an official release.
-	if (![smcWrapper validateSMC:launchPath]) {
-		NSLog(@"smcFanControl: Security Error: smc-binary is not the distributed one");
-		return;
-	}
+   	NSString *checksum=[smcWrapper createCheckSum:launchPath];
+    if (![checksum  isEqualToString:smc_checksum]) {
+        NSLog(@"smcFanControl: Security Error: smc-binary is not the distributed one");
+        return;
+    }
     NSArray *argsArray = @[@"-k",key,@"-w",value];
 	NSTask *task;
     task = [[NSTask alloc] init];
