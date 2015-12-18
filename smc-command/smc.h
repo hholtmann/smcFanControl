@@ -22,6 +22,7 @@
 #define __SMC_H__
 #endif
 
+#define CMD_TOOL
 #define VERSION               "0.01"
 
 #define OP_NONE               0
