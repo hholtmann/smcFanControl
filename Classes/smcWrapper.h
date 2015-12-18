@@ -21,7 +21,6 @@
  *	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <openssl/evp.h>
 #import <Cocoa/Cocoa.h>
 #import <smc.h>
 #import <MachineDefaults.h>

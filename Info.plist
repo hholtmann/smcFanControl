@@ -34,5 +34,10 @@
 	<string>NSApplication</string>
 	<key>SUFeedURL</key>
 	<string>http://www.eidac.de/smcfancontrol/smcfancontrol.xml</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 </dict>
 </plist>
