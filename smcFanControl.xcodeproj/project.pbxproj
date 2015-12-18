@@ -75,6 +75,9 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		4C65C0201AC83BED006E760F /* French */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4C65C0211AC83BF2006E760F /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		4C65C0221AC83BF7006E760F /* French */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = French; path = French.lproj/F.A.Q.rtf; sourceTree = "<group>"; };
 		89033CA10B80E1DF00FDAF43 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/F.A.Q.rtf; sourceTree = "<group>"; };
 		89033D900B80F61E00FDAF43 /* German */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = German; path = German.lproj/F.A.Q.rtf; sourceTree = "<group>"; };
 		89148EA115E2543D00A073EE /* NSFileManager+DirectoryLocations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileManager+DirectoryLocations.m"; sourceTree = "<group>"; };
@@ -320,6 +323,7 @@
 				zh_TW,
 				Spanish,
 				Dutch,
+				French,
 			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* FanControl */;
 			projectDirPath = "";
@@ -393,6 +397,7 @@
 				89033D900B80F61E00FDAF43 /* German */,
 				894DC9E30F8AA36F006A046F /* Spanish */,
 				8932CFF813D08DC4008BC447 /* Dutch */,
+				4C65C0221AC83BF7006E760F /* French */,
 			);
 			name = F.A.Q.rtf;
 			sourceTree = "<group>";
@@ -404,6 +409,7 @@
 				8935061B0B440264001BFBA5 /* German */,
 				894DC9E60F8AA399006A046F /* Spanish */,
 				8932CFF913D08DD7008BC447 /* Dutch */,
+				4C65C0201AC83BED006E760F /* French */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -415,6 +421,7 @@
 				89FE24280B7F4CE900D2713C /* German */,
 				894DC9E20F8AA367006A046F /* Spanish */,
 				8932CFFA13D08DDF008BC447 /* Dutch */,
+				4C65C0211AC83BF2006E760F /* French */,
 			);
 			name = MainMenu.nib;
 			sourceTree = "<group>";

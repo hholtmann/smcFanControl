@@ -1,0 +1,95 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1347\cocoasubrtf130
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\listtable{\list\listtemplateid1\listhybrid{\listlevel\levelnfc23\levelnfcn23\leveljc0\leveljcn0\levelfollow0\levelstartat1\levelspace360\levelindent0{\*\levelmarker \{disc\}}{\leveltext\leveltemplateid1\'01\uc0\u8226 ;}{\levelnumbers;}\fi-360\li720\lin720 }{\listname ;}\listid1}}
+{\*\listoverridetable{\listoverride\listid1\listoverridecount0\ls1}}
+\paperw12240\paperh15840\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\f0\fs62 \cf0 F.A.Q smcFanControl 2.4\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\fs24 \cf0 \
+
+\b Comment installer ou d\'e9sinstaller smcFanControl?\
+
+\b0 smcFanControl est une simple application. Ainsi apr\'e8s son t\'e9l\'e9chargement, d\'e9placez-le o\'f9 vous le souhaitez (ex. le dossier Applications). Pour le d\'e9sinstaller, il suffit de le d\'e9placer dans la corbeille. smcFanControl n'installer aucun d\'e9mon ou processus en arri\'e8re plan. \
+To les changements op\'e9r\'e9s par smcFanControl sur le contr\'f4leur de ventilation sont perdus \'e0 l'extinction de la machine (pas lors d'un red\'e9marrage) ou lorsque la machine entre veille (si smcFanControl n'est plus en cours d'ex\'e9cution \'e0 la reprise d'activit\'e9). La vitesse minimum de rotation revient alors \'e0 la valeur par d\'e9faut d\'e9finie par le syst\'e8me.\
+\
+
+\b Lorsque j'utilise smcFanControl et d\'e9finis une vitesse minimum, la vitesse augmente-t-elle tout de m\'eame lorsque la temp\'e9rature du CPU augmente ?\
+Oui
+\b0 , la vitesse augmentera comme d\'e9fini par Apple. smcFanControl laissera toujours vos ventilateur en mode automatique et ne modifiera \ul que la vitesse minimum\ulnone  du ventilateur. Ainsi, plus la vitesse minimum d\'e9finie est \'e9lev\'e9e, plus le contr\'f4leur de ventilation mettra du temps \'e0 juger n\'e9c\'e9ssaire l'augmentation de vitesse \'e0 mesure que la temp\'e9rature augmente.\
+\
+
+\b Pourquoi smcFanControl me demande un identifiant et un mot de passe et quels identifiants dois-je utiliser ?\
+
+\b0 smcFanControl a besoin des identifiants d'un compte administrateur afin de pouvoir modifier la vitesse de rotation des ventilateurs. Vous n'aurez \'e0 les rentrer qu'une seuls fois. Pour autant, ces identifiants ne sont pas sauvegard\'e9s par smcFanControl. Ils sont justes utilis\'e9s pour voir d\'e9finir correctement les droits d'ex\'e9cution du programme.\
+\
+
+\b J'obtiens le message d'avertissement "smcFanControl n'a pas encore \'e9t\'e9 test\'e9 sur cette machine". Qu'est ce que cela signifie?\
+
+\b0 Techniquement, smcFanControl fonctionne avec tous les Mac intel, mais ces machines ont des valeurs par d\'e9faut diff\'e9rente. Si vous obtenez ce message, smcFanControl tente de lire la valeur par d\'e9faut directement du System Management Controller. Si vous suivez les instructions (ne pas lancer d'autres logiciels de gestion de ventilation, etc.) vous devriez pouvoir utiliser smcFanControl sur une machine que n'a pas encore \'e9t\'e9 test\'e9e par nos soins.\
+\
+
+\b Comment revenir au valeur par d\'e9fauts d\'e9finies par Apple ?\
+
+\b0 Placer les curseurs \'e0 gaucher et cliquer "enregistrer". Les valeurs minimales autoris\'e9es sont celles d\'e9finies par d\'e9faut par Apple. Depuis la derni\'e8re mise \'e0 jour Apple du contr\'f4leur SMC les valeurs minimum par d\'e9faut sont de 1000rpm pour les MBP 15,4", 1500rpm pour le MB 13,3". 2000rpm les MBP Core2Duo et 1800rpm pour les MB Core2Duo.\
+
+\b \
+Pourquoi ne puis-je pas d\'e9finir 0 rpm?\
+
+\b0 smcFanControl ne vous permet que de d\'e9finir une valeur comprise entre les minimum et maximum d'Apple. D\'e9finir une valeur \'e0 0 est possible sur le plan technique mais provoquerait probablement des dommages \'e0 votre mat\'e9riel.\
+\
+
+\b Quand les r\'e9glages smcFanControl sont-ils perdus ?\
+
+\b0 Les r\'e9glages de vitesse minimum de rotation des ventilateurs sont perdus dans deux sc\'e9narios :\
+a) L'ordinateur est entr\'e9 en veille et smcFanControl  n'est plus en cours d'ex\'e9cution (dans le cas contraire, smcFanControl v\'e9rifie l'\'e9tat de veille et applique \'e0 nouveau les r\'e9glages au r\'e9veil de la machine).\
+b) \'c9teindre votre machine.\
+\
+
+\b Quelle sonde est utilis\'e9e pour lire la temp\'e9rature affich\'e9e?\
+
+\b0 Ce n'est pas directement la sonde du CPU CoreDuo. Cela permet en outre de ne pas charg\'e9 une extension Kernel afin de lire la temp\'e9rature. La sonde utilis\'e9e est tr\'e8s proche de celle du CoreDuo, mais n'est effectivement pas exactement pareil.\
+\
+
+\b Qu'en est il de Windows avec Bootcamp?\
+\
+
+\b0 smcFanControl \'e9tant une application native OSX, vous ne pouvez d\'e9finir la valeur minimum des rotation lorsque vous \'eates sous windows.\
+Toutefois, vous pouvez d\'e9finir une vitesse minimale sous OSX  puis red\'e9marrer sous windows, vos r\'e9glages n'\'e9tant pas perdu lors du red\'e9marrage. Certes personnes ont report\'e9s que cette m\'e9thode permettait de se pr\'e9venir de certain crash de jeux sous Windows.\
+\
+
+\b Ne serait-il pas mieux de d\'e9finir la vitesse de rotation en fonction de la temp\'e9rature plut\'f4t que de choisir une vitesse minimale et laisse Apple faire le reste ?\
+
+\b0 Oui, cette approche serait probablement plus int\'e9ressante. MAIS : cette m\'e9thode n'a pas \'e9t\'e9 retenue car elle comporte des risques. D\'e9finir la vitesse en fonction de la temp\'e9rature requiert un programme qui tourne en continue. Si ce programme crash ou devient incompatible \'e0 la suite d'une mise \'e0 jour, le ventilateur pourrait \'eatre d\'e9fini \'e0 une valeur trop basse qui pourrait endommager votre machine. D'autre part, cette logique est complexe \'e0 mettre en oeuvre. Un mac intel poss\'e8de une dizaine de sondes de temp\'e9rature, lues continuellement afin de d\'e9finir la vitesse ad\'e9quate de rotation des ventilateurs. Ainsi il ne serait pas judicieux de se reposer sur la lecture d'une seule sonde pour le contr\'f4le de la ventilation.\
+\
+
+\b Je poss\'e8de un MBP et smcFanControl m'indique 0 rpm pour l'un des ventilateurs\
+
+\b0 Dans ce cas, le ventilateur n'a remont\'e9 aucune information \'e0 smcFanControl.
+\b  
+\b0 Il est possible que le ventilateur subisse un disfonctionnement. Vous pouvez diagnostiquer vitre Mac \'e0 l'aide du Test Hardware d'Apple (cette outils est livr\'e9 avec le DVD d'installation de votre machine). 
+\b \
+
+\b0 \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\ls1\ilvl0
+\b \cf0 Quelles sont les principales diff\'e9rence entre les versions 1.2x et 2.x de smcFanControl ?\
+\pard\tx220\tx720\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\li720\fi-720\pardirnatural
+\ls1\ilvl0
+\b0 \cf0 {\listtext	\'95	}La version 2.x a \'e9t\'e9 enti\'e8rement r\'e9\'e9crites.\
+{\listtext	\'95	}La version 1.x \'e9tait une application "normale" plac\'e9e dans le dock. La version 2.x se trouve d\'e9sormais dans la bar des menus, permettant un acc\'e8s rapide ainsi qu'un contr\'f4le plus simple de la temp\'e9rature et vitesse de rotation.\
+{\listtext	\'95	}La version 2.x supporte tous les Macs intel.\
+{\listtext	\'95	}Dans la version 2.x vous pouvez d\'e9finir plusieurs r\'e9glages favoris et les activer en un clic.\
+{\listtext	\'95	}Sur les Macs portables, vous pouvez activer automatiquement un r\'e9glage favoris en fonction de la source d'alimentation. Ainsi vous pouvez choisir de rafraichir automatique votre mac lorsque que celui-ci est branch\'e9 ou en charge (et que typiquement dans ces conditions il chauffe davantage).\
+{\listtext	\'95	}La version 2.x poss\'e8de d\'e9sormais une option de d\'e9marrage automatique avec la session.\
+{\listtext	\'95	}La version 2.x utilise la fen\'eatre standard d'authentification d'OSX\
+{\listtext	\'95	}La version 2.x uses the Framework Sparkle pour v\'e9rifier automatiquement les mises \'e0 jour\
+\pard\tx560\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 \
+
+\b Code source : https://github.com/hholtmann/smcFanControl
+\b0 \
+}
