@@ -407,7 +407,7 @@ kern_return_t SMCReadKey2(UInt32Char_t key, SMCVal_t *val,io_connect_t conn)
 
 #pragma mark Command line only
 // Exclude command-line only code from smcFanControl UI
-#ifdef CMD_TOOL
+#ifdef CMD_TOOL_BUILD
 
 io_connect_t g_conn = 0;
 
