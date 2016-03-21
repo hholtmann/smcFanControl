@@ -33,11 +33,6 @@
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>SUFeedURL</key>
-	<string>http://www.eidac.de/smcfancontrol/smcfancontrol.xml</string>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
+	<string>https://www.eidac.de/smcfancontrol/smcfancontrol.xml</string>
 </dict>
 </plist>

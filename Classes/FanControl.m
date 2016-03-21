@@ -676,7 +676,7 @@ NSUserDefaults *defaults;
 }
 
 - (IBAction)visitHomepage:(id)sender{
-	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.eidac.de/products"]];
+	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://www.eidac.de/products"]];
 }
 
 

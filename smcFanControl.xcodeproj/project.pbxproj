@@ -18,11 +18,11 @@
 		892A7F450B10B7700041B493 /* MachineDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 892A7F440B10B7700041B493 /* MachineDefaults.m */; };
 		8932CF2413D08551008BC447 /* SystemVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 8932CF2313D08551008BC447 /* SystemVersion.m */; };
 		893355FF1CA02F1A00388D5D /* smc.c in Sources */ = {isa = PBXBuildFile; fileRef = 89C053BC0ADAB7630037CA16 /* smc.c */; };
+		893356001CA0328900388D5D /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 895BDA390B8F8F42003CD894 /* Sparkle.framework */; };
 		893506180B440255001BFBA5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 893506170B440255001BFBA5 /* Localizable.strings */; };
 		894A46610ADBD6CF008785F3 /* FanControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 894A46600ADBD6CF008785F3 /* FanControl.m */; };
 		894A494B0ADBEEF4008785F3 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 894A494A0ADBEEF4008785F3 /* IOKit.framework */; };
 		89559A840BAC338500DBA37E /* smcover.png in Resources */ = {isa = PBXBuildFile; fileRef = 89559A830BAC338400DBA37E /* smcover.png */; };
-		895BDA3A0B8F8F42003CD894 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 895BDA390B8F8F42003CD894 /* Sparkle.framework */; };
 		8985F1590ADD0B5500F9EC46 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8985F1580ADD0B5500F9EC46 /* Security.framework */; };
 		8987FBD20B878B3900A5ED8E /* smc.png in Resources */ = {isa = PBXBuildFile; fileRef = 8987FBD00B878B3900A5ED8E /* smc.png */; };
 		89949E8D0AEEA37700077E93 /* Power.m in Sources */ = {isa = PBXBuildFile; fileRef = 89949E8C0AEEA37700077E93 /* Power.m */; };
@@ -135,11 +135,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				893356001CA0328900388D5D /* Sparkle.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				894A494B0ADBEEF4008785F3 /* IOKit.framework in Frameworks */,
 				8985F1590ADD0B5500F9EC46 /* Security.framework in Frameworks */,
 				891DEF110B40736D001A7C32 /* WebKit.framework in Frameworks */,
-				895BDA3A0B8F8F42003CD894 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -491,6 +491,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					".//**",
 					"$(inherited)",
+					"$(PROJECT_DIR)",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_MODEL_PPC64 = NO;
@@ -501,6 +502,7 @@
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SDKROOT)/usr/lib/system\"",
@@ -527,6 +529,7 @@
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_2)",
+					"$(PROJECT_DIR)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)\"";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
@@ -536,6 +539,7 @@
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SDKROOT)/usr/lib/system\"",
