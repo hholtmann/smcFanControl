@@ -9,53 +9,35 @@
 #ifndef SUAPPCASTITEM_H
 #define SUAPPCASTITEM_H
 
-@interface SUAppcastItem : NSObject
-{
-@private
-	NSString *title;
-	NSDate *date;
-	NSString *itemDescription;
-	
-	NSURL *releaseNotesURL;
-	
-	NSString *DSASignature;	
-	NSString *minimumSystemVersion;
-    NSString *maximumSystemVersion;
-	
-	NSURL *fileURL;
-	NSString *versionString;
-	NSString *displayVersionString;
+#import <Foundation/Foundation.h>
+#import "SUExport.h"
 
-	NSDictionary *deltaUpdates;
-
-	NSDictionary *propertiesDictionary;
-
-	NSURL *infoURL;	// UK 2007-08-31
-}
+SU_EXPORT @interface SUAppcastItem : NSObject
 @property (copy, readonly) NSString *title;
 @property (copy, readonly) NSDate *date;
 @property (copy, readonly) NSString *itemDescription;
-@property (retain, readonly) NSURL *releaseNotesURL;
+@property (strong, readonly) NSURL *releaseNotesURL;
 @property (copy, readonly) NSString *DSASignature;
 @property (copy, readonly) NSString *minimumSystemVersion;
 @property (copy, readonly) NSString *maximumSystemVersion;
-@property (retain, readonly) NSURL *fileURL;
+@property (strong, readonly) NSURL *fileURL;
 @property (copy, readonly) NSString *versionString;
 @property (copy, readonly) NSString *displayVersionString;
 @property (copy, readonly) NSDictionary *deltaUpdates;
-@property (retain, readonly) NSURL *infoURL;
+@property (strong, readonly) NSURL *infoURL;
 
 // Initializes with data from a dictionary provided by the RSS class.
-- (id)initWithDictionary:(NSDictionary *)dict;
-- (id)initWithDictionary:(NSDictionary *)dict failureReason:(NSString**)error;
+- (instancetype)initWithDictionary:(NSDictionary *)dict;
+- (instancetype)initWithDictionary:(NSDictionary *)dict failureReason:(NSString **)error;
 
-- (BOOL)isDeltaUpdate;
-- (BOOL)isCriticalUpdate;
+@property (getter=isDeltaUpdate, readonly) BOOL deltaUpdate;
+@property (getter=isCriticalUpdate, readonly) BOOL criticalUpdate;
+@property (getter=isInformationOnlyUpdate, readonly) BOOL informationOnlyUpdate;
 
 // Returns the dictionary provided in initWithDictionary; this might be useful later for extensions.
-- (NSDictionary *)propertiesDictionary;
+@property (readonly, copy) NSDictionary *propertiesDictionary;
 
-- (NSURL *)infoURL;						// UK 2007-08-31
+- (NSURL *)infoURL;
 
 @end
 

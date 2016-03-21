@@ -17,6 +17,7 @@
 		8924ECFE15AC98880031730C /* smc.c in Sources */ = {isa = PBXBuildFile; fileRef = 89C053BC0ADAB7630037CA16 /* smc.c */; };
 		892A7F450B10B7700041B493 /* MachineDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 892A7F440B10B7700041B493 /* MachineDefaults.m */; };
 		8932CF2413D08551008BC447 /* SystemVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 8932CF2313D08551008BC447 /* SystemVersion.m */; };
+		893355FF1CA02F1A00388D5D /* smc.c in Sources */ = {isa = PBXBuildFile; fileRef = 89C053BC0ADAB7630037CA16 /* smc.c */; };
 		893506180B440255001BFBA5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 893506170B440255001BFBA5 /* Localizable.strings */; };
 		894A46610ADBD6CF008785F3 /* FanControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 894A46600ADBD6CF008785F3 /* FanControl.m */; };
 		894A494B0ADBEEF4008785F3 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 894A494A0ADBEEF4008785F3 /* IOKit.framework */; };
@@ -28,7 +29,6 @@
 		899D59DC15E1CF60003E322D /* smc in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8924ECEE15AC96E70031730C /* smc */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		899D59DD15E1CFFF003E322D /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 895BDA390B8F8F42003CD894 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		89B243200B7E351000CAD103 /* smcfancontrol_v2.icns in Resources */ = {isa = PBXBuildFile; fileRef = 89B2431F0B7E351000CAD103 /* smcfancontrol_v2.icns */; };
-		89C053BE0ADAB7630037CA16 /* smc.c in Sources */ = {isa = PBXBuildFile; fileRef = 89C053BC0ADAB7630037CA16 /* smc.c */; };
 		89E7D3650ADE819B000F67AB /* Machines.plist in Resources */ = {isa = PBXBuildFile; fileRef = 89E7D3640ADE819B000F67AB /* Machines.plist */; };
 		89FE24230B7F4CD300D2713C /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 89FE24210B7F4CD300D2713C /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
@@ -368,9 +368,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
-				89C053BE0ADAB7630037CA16 /* smc.c in Sources */,
 				894A46610ADBD6CF008785F3 /* FanControl.m in Sources */,
 				8916827A0AEBB14F00888535 /* StatusItemWindow.m in Sources */,
+				893355FF1CA02F1A00388D5D /* smc.c in Sources */,
 				891683E90AEBD95B00888535 /* smcWrapper.m in Sources */,
 				89949E8D0AEEA37700077E93 /* Power.m in Sources */,
 				892A7F450B10B7700041B493 /* MachineDefaults.m in Sources */,
@@ -448,7 +448,7 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -473,7 +473,7 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
@@ -505,7 +505,7 @@
 					"$(inherited)",
 					"\"$(SDKROOT)/usr/lib/system\"",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CODE_SIGN_FLAGS = "--deep";
 				PRODUCT_NAME = smcFanControl;
@@ -540,7 +540,7 @@
 					"$(inherited)",
 					"\"$(SDKROOT)/usr/lib/system\"",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CODE_SIGN_FLAGS = "--deep";
 				PRODUCT_NAME = smcFanControl;
@@ -558,7 +558,7 @@
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-fnested-functions";
 				OTHER_LDFLAGS = "";
@@ -574,7 +574,7 @@
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CFLAGS = "-fnested-functions";
 				OTHER_LDFLAGS = "";
