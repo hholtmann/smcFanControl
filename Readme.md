@@ -15,7 +15,7 @@ After installing Homebrew and Cask, run:
 $ brew cask install smsfancontrol
 ```
 
-After that you'll be able to use Spotilight to launch smcFanControl normally. :-)
+After that you'll be able to use Spotlight to launch smcFanControl normally. :-)
 
 
 Requirements: Intel Mac / OS X 10.6 or higher 
