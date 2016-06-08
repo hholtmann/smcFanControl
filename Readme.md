@@ -12,7 +12,7 @@ Make sure you have both [Homebrew](http://brew.sh/) and [Cask](http://caskroom.i
 After installing Homebrew and Cask, run:
 
 ```
-$ brew cask install smsfancontrol
+$ brew cask install smcfancontrol
 ```
 
 After that you'll be able to use Spotilight to launch smcFanControl normally. :-)
