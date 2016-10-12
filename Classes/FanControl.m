@@ -228,6 +228,9 @@ NSUserDefaults *defaults;
     if (numLaunches != 0 && (numLaunches % 5 == 0) && ![[[NSUserDefaults standardUserDefaults] objectForKey:@"DonationMessageShown"] boolValue]) {
         [self displayDonationMessage];
     }
+    
+    [[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(readFanData:) name:@"AppleInterfaceThemeChangedNotification" object:nil];
+
 }
 
 -(void)displayDonationMessage
@@ -415,6 +418,14 @@ NSUserDefaults *defaults;
     if (!([[menuColor colorUsingColorSpaceName:
               NSCalibratedWhiteColorSpace] whiteComponent] == 0.0) || ![statusItem respondsToSelector:@selector(button)]) setColor = YES;
     
+    
+    NSString *osxMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
+    
+    if (osxMode && !setColor) {
+        menuColor = [NSColor whiteColor];
+        setColor = YES;
+    }
+    
     switch (menuBarSetting) {
         default:
         case 1: {
@@ -438,6 +449,7 @@ NSUserDefaults *defaults;
          
             if (setColor) [s_status addAttribute:NSForegroundColorAttributeName value:menuColor  range:NSMakeRange(0,[s_status length])];
             
+           
             if ([statusItem respondsToSelector:@selector(button)]) {
                 [statusItem.button setAttributedTitle:s_status];
                 [statusItem.button setImage:nil];
@@ -872,6 +884,11 @@ NSUserDefaults *defaults;
     [self checkRightStatus:status];
 }
 
+
+-(void)dealloc
+{
+    [[NSDistributedNotificationCenter defaultCenter] removeObserver:self];
+}
 
 @end
 

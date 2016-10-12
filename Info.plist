@@ -11,7 +11,7 @@
 	<key>CFBundleIconFile</key>
 	<string>smcfancontrol_v2</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.eidac.smcFanControl2</string>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
