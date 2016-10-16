@@ -41,7 +41,7 @@ NSArray *allSensors;
 {
     float retValue;
     SMCVal_t      val;
-    NSString *sensor = [[NSUserDefaults standardUserDefaults] objectForKey:@"TSensor"];
+    NSString *sensor = [[NSUserDefaults standardUserDefaults] objectForKey:PREF_TEMPERATURE_SENSOR];
     SMCReadKey2((char*)[sensor UTF8String], &val,conn);
     retValue= ((val.bytes[0] * 256 + val.bytes[1]) >> 2)/64;
     allSensors = [NSArray arrayWithObjects:@"TC0D",@"TC0P",@"TCAD",@"TC0H",@"TC0F",@"TCAH",@"TCBH",nil];
@@ -50,7 +50,7 @@ NSArray *allSensors;
             SMCReadKey2((char*)[sensor UTF8String], &val,conn);
             retValue= ((val.bytes[0] * 256 + val.bytes[1]) >> 2)/64;
             if (retValue>0 && floor(retValue) != 129 ) {
-                [[NSUserDefaults standardUserDefaults] setObject:sensor forKey:@"TSensor"];
+                [[NSUserDefaults standardUserDefaults] setObject:sensor forKey:PREF_TEMPERATURE_SENSOR];
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 break;
             }

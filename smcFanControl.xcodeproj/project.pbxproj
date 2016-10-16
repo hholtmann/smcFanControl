@@ -107,6 +107,7 @@
 		894DC9E60F8AA399006A046F /* Spanish */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Spanish; path = Spanish.lproj/Localizable.strings; sourceTree = "<group>"; };
 		89559A830BAC338400DBA37E /* smcover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = smcover.png; sourceTree = "<group>"; };
 		895BDA390B8F8F42003CD894 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
+		897753AB1DB3D89D00595411 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		8985F1580ADD0B5500F9EC46 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = /System/Library/Frameworks/Security.framework; sourceTree = "<absolute>"; };
 		8987FBD00B878B3900A5ED8E /* smc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = smc.png; sourceTree = "<group>"; };
 		89949E8B0AEEA37700077E93 /* Power.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Power.h; sourceTree = "<group>"; };
@@ -149,6 +150,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				897753AB1DB3D89D00595411 /* Constants.h */,
 				89148EA115E2543D00A073EE /* NSFileManager+DirectoryLocations.m */,
 				89148EA215E2543D00A073EE /* NSFileManager+DirectoryLocations.h */,
 				894A465F0ADBD6CF008785F3 /* FanControl.h */,
@@ -496,7 +498,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = H4G85G26BP;
 				FRAMEWORK_SEARCH_PATHS = (
-					".//**",
+					.,
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
@@ -575,7 +577,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CFLAGS = "-fnested-functions";
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				SDKROOT = macosx;
 				VALID_ARCHS = "i386 x86_64";
@@ -592,7 +594,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = NO;
-				OTHER_CFLAGS = "-fnested-functions";
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				SDKROOT = macosx;
 				SYMROOT = "~/builds";

@@ -80,14 +80,14 @@ NSUserDefaults *defaults;
 	for (i=0;i<[rfavorites count];i++)
 	{
 		BOOL selected = NO;
-		NSArray *fans = rfavorites[i][@"FanData"];
+		NSArray *fans = rfavorites[i][PREF_FAN_ARRAY];
 		for (j=0;j<[fans count];j++) {
-			if ([fans[j][@"menu"] boolValue] == YES ) {
+			if ([fans[j][PREF_FAN_SHOWMENU] boolValue] == YES ) {
 				selected = YES;
 			}
 		}
 		if (selected==NO) {
-			rfavorites[i][@"FanData"][0][@"menu"] = @YES;
+			rfavorites[i][PREF_FAN_ARRAY][0][PREF_FAN_SHOWMENU] = @YES;
 		}
 	}
 	
@@ -111,8 +111,8 @@ NSUserDefaults *defaults;
 
     NSMutableArray *favorites = [[NSMutableArray alloc] init];
     
-    NSMutableDictionary *defaultFav = [[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Default", @"Title",
-                                  [NSKeyedUnarchiver unarchiveObjectWithData:[NSKeyedArchiver archivedDataWithRootObject:[[mdefaults get_machine_defaults] objectForKey:@"Fans"]]], @"FanData",nil];
+    NSMutableDictionary *defaultFav = [[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Default", PREF_FAN_TITLE,
+                                  [NSKeyedUnarchiver unarchiveObjectWithData:[NSKeyedArchiver archivedDataWithRootObject:[[mdefaults get_machine_defaults] objectForKey:@"Fans"]]], PREF_FAN_ARRAY,nil];
 
     [favorites addObject:defaultFav];
     
@@ -120,12 +120,12 @@ NSUserDefaults *defaults;
 	NSRange range=[[MachineDefaults computerModel] rangeOfString:@"MacBook"];
 	if (range.length>0) {
 		//for macbooks add a second default
-		NSMutableDictionary *higherFav=[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Higher RPM", @"Title",
-                                        [NSKeyedUnarchiver unarchiveObjectWithData:[NSKeyedArchiver archivedDataWithRootObject:[[mdefaults get_machine_defaults] objectForKey:@"Fans"]]], @"FanData",nil];
+		NSMutableDictionary *higherFav=[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Higher RPM", PREF_FAN_TITLE,
+                                        [NSKeyedUnarchiver unarchiveObjectWithData:[NSKeyedArchiver archivedDataWithRootObject:[[mdefaults get_machine_defaults] objectForKey:@"Fans"]]], PREF_FAN_ARRAY,nil];
 		for (NSUInteger i=0;i<[_machineDefaultsDict[@"Fans"] count];i++) {
             
-            int min_value=([[[[_machineDefaultsDict objectForKey:@"Fans"] objectAtIndex:i] objectForKey:@"Minspeed"] intValue])*2;
-            [[[higherFav objectForKey:@"FanData"] objectAtIndex:i] setObject:[NSNumber numberWithInt:min_value] forKey:@"selspeed"];
+            int min_value=([[[[_machineDefaultsDict objectForKey:@"Fans"] objectAtIndex:i] objectForKey:PREF_FAN_MINSPEED] intValue])*2;
+            [[[higherFav objectForKey:PREF_FAN_ARRAY] objectAtIndex:i] setObject:[NSNumber numberWithInt:min_value] forKey:PREF_FAN_SELSPEED];
 		}
         [favorites addObject:higherFav];
 
@@ -141,19 +141,19 @@ NSUserDefaults *defaults;
 	defaults = [NSUserDefaults standardUserDefaults];
 	[defaults registerDefaults:
 		[NSMutableDictionary dictionaryWithObjectsAndKeys:
-			@0, @"Unit",
-			@0, @"SelDefault",
-			@NO, @"AutoStart",
-			@NO,@"AutomaticChange",
-			@0,@"selbatt",
-			@0,@"selac",
-			@0,@"selload",
-			@0,@"MenuBar",
-            @"TC0D",@"TSensor",
-            @0,@"NumLaunches",
-            @NO,@"DonationMessageShown",
-			[NSArchiver archivedDataWithRootObject:[NSColor blackColor]],@"MenuColor",
-			favorites,@"Favorites",
+			@0, PREF_TEMP_UNIT,
+			@0, PREF_SELECTION_DEFAULT,
+			@NO,PREF_AUTOSTART_ENABLED,
+			@NO,PREF_AUTOMATIC_CHANGE,
+			@0, PREF_BATTERY_SELECTION,
+			@0, PREF_AC_SELECTION,
+			@0, PREF_CHARGING_SELECTION,
+			@0, PREF_MENU_DISPLAYMODE,
+            @"TC0D",PREF_TEMPERATURE_SENSOR,
+            @0, PREF_NUMBEROF_LAUNCHES,
+            @NO,PREF_DONATIONMESSAGE_DISPLAY,
+			[NSArchiver archivedDataWithRootObject:[NSColor blackColor]],PREF_MENU_TEXTCOLOR,
+			favorites,PREF_FAVORITES_ARRAY,
 	nil]];
 	
 	
@@ -169,15 +169,15 @@ NSUserDefaults *defaults;
 	
 	[FavoritesController bind:@"content"
              toObject:[NSUserDefaultsController sharedUserDefaultsController]
-          withKeyPath:@"values.Favorites"
+          withKeyPath:[@"values." stringByAppendingString:PREF_FAVORITES_ARRAY]
               options:nil];
 	[FavoritesController setEditable:YES];
 	
 	// set slider sync - only for MBP
 	for (i=0;i<[[FavoritesController arrangedObjects] count];i++) {
-		if([[FavoritesController arrangedObjects][i][@"sync"] boolValue]==YES) {
+		if([[FavoritesController arrangedObjects][i][PREF_FAN_SYNC] boolValue]==YES) {
 			[FavoritesController setSelectionIndex:i];
-			[self syncBinder:[[FavoritesController arrangedObjects][i][@"sync"] boolValue]];
+			[self syncBinder:[[FavoritesController arrangedObjects][i][PREF_FAN_SYNC] boolValue]];
 		}
 	}
 
@@ -198,8 +198,8 @@ NSUserDefaults *defaults;
 		[autochange setEnabled:false];
 	}
 	[faqText replaceCharactersInRange:NSMakeRange(0,0) withRTF: [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"F.A.Q" ofType:@"rtf"]]];
-	[self apply_settings:nil controllerindex:[[defaults objectForKey:@"SelDefault"] intValue]];
-	[[[[theMenu itemWithTag:1] submenu] itemAtIndex:[[defaults objectForKey:@"SelDefault"] intValue]] setState:NSOnState];
+	[self apply_settings:nil controllerindex:[[defaults objectForKey:PREF_SELECTION_DEFAULT] intValue]];
+	[[[[theMenu itemWithTag:1] submenu] itemAtIndex:[[defaults objectForKey:PREF_SELECTION_DEFAULT] intValue]] setState:NSOnState];
 	[[sliderCell dataCell] setControlSize:NSSmallControlSize];
 	[self changeMenu:nil];
 	
@@ -222,10 +222,10 @@ NSUserDefaults *defaults;
 	[self upgradeFavorites];
     
     //autostart
-    [[NSUserDefaults standardUserDefaults] setValue:@([self isInAutoStart]) forKey:@"AutoStart"];
-     NSUInteger numLaunches = [[[NSUserDefaults standardUserDefaults] objectForKey:@"NumLaunches"] integerValue];
-    [[NSUserDefaults standardUserDefaults] setObject:@(numLaunches+1) forKey:@"NumLaunches"];
-    if (numLaunches != 0 && (numLaunches % 5 == 0) && ![[[NSUserDefaults standardUserDefaults] objectForKey:@"DonationMessageShown"] boolValue]) {
+    [[NSUserDefaults standardUserDefaults] setValue:@([self isInAutoStart]) forKey:PREF_AUTOSTART_ENABLED];
+     NSUInteger numLaunches = [[[NSUserDefaults standardUserDefaults] objectForKey:PREF_NUMBEROF_LAUNCHES] integerValue];
+    [[NSUserDefaults standardUserDefaults] setObject:@(numLaunches+1) forKey:PREF_NUMBEROF_LAUNCHES];
+    if (numLaunches != 0 && (numLaunches % 3 == 0) && ![[[NSUserDefaults standardUserDefaults] objectForKey:PREF_DONATIONMESSAGE_DISPLAY] boolValue]) {
         [self displayDonationMessage];
     }
     
@@ -241,9 +241,9 @@ NSUserDefaults *defaults;
     NSModalResponse code=[alert runModal];
     if (code == NSAlertDefaultReturn) {
         [self paypal:nil];
-        [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:@"DonationMessageShown"];
+        [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:PREF_DONATIONMESSAGE_DISPLAY];
     } else if (code == NSAlertAlternateReturn) {
-        [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:@"DonationMessageShown"];
+        [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:PREF_DONATIONMESSAGE_DISPLAY];
     }
 }
 
@@ -296,7 +296,7 @@ NSUserDefaults *defaults;
 - (IBAction)save_favorite:(id)sender{
 	MachineDefaults *msdefaults=[[MachineDefaults alloc] init:nil];
 	if ([[newfavorite_title stringValue] length]>0) {
-		NSMutableDictionary *toinsert=[[NSMutableDictionary alloc] initWithObjectsAndKeys:[newfavorite_title stringValue],@"Title",[msdefaults get_machine_defaults][@"Fans"],@"FanData",nil]; //default as template
+		NSMutableDictionary *toinsert=[[NSMutableDictionary alloc] initWithObjectsAndKeys:[newfavorite_title stringValue],@"Title",[msdefaults get_machine_defaults][@"Fans"],PREF_FAN_ARRAY,nil]; //default as template
 		[toinsert setValue:@0 forKey:@"Standard"];
 		[FavoritesController addObject:toinsert];
 		[newfavoritewindow close];
@@ -318,9 +318,9 @@ NSUserDefaults *defaults;
 {
     if (returnCode==0) {
 		//delete favorite, but resets presets before
-		[self check_deletion:@"selbatt"];
-		[self check_deletion:@"selac"];
-		[self check_deletion:@"selload"];
+		[self check_deletion:PREF_BATTERY_SELECTION];
+		[self check_deletion:PREF_AC_SELECTION];
+		[self check_deletion:PREF_CHARGING_SELECTION];
         [FavoritesController removeObjects:[FavoritesController selectedObjects]];
 	}
 }
@@ -349,7 +349,7 @@ NSUserDefaults *defaults;
     // as low as possible.
     bool bNeedTemp = false;
     bool bNeedRpm = false;
-    const int menuBarSetting = [[defaults objectForKey:@"MenuBar"] intValue];
+    const int menuBarSetting = [[defaults objectForKey:PREF_MENU_DISPLAYMODE] intValue];
     switch (menuBarSetting) {
         default:
         case 1:
@@ -380,10 +380,10 @@ NSUserDefaults *defaults;
     
     if (bNeedRpm == true) {
         // Read the current fan speed for the desired fan and format text for display in the menubar.
-        NSArray *fans = [FavoritesController arrangedObjects][[FavoritesController selectionIndex]][@"FanData"];
+        NSArray *fans = [FavoritesController arrangedObjects][[FavoritesController selectionIndex]][PREF_FAN_ARRAY];
         for (i=0; i<g_numFans && i<[fans count]; i++)
         {
-            if ([fans[i][@"menu"] boolValue]==YES) {
+            if ([fans[i][PREF_FAN_SHOWMENU] boolValue]==YES) {
                 selectedRpm = [smcWrapper get_fan_rpm:i];
                 break;
             }
@@ -400,7 +400,7 @@ NSUserDefaults *defaults;
         // Read current temperature and format text for the menubar.
         c_temp = [smcWrapper get_maintemp];
         
-        if ([[defaults objectForKey:@"Unit"] intValue]==0) {
+        if ([[defaults objectForKey:PREF_TEMP_UNIT] intValue]==0) {
             temp = [NSString stringWithFormat:@"%@%CC",@(c_temp),(unsigned short)0xb0];
         } else {
             NSNumberFormatter *ncf=[[NSNumberFormatter alloc] init];
@@ -413,7 +413,7 @@ NSUserDefaults *defaults;
     NSMutableAttributedString *s_status = nil;
     NSMutableParagraphStyle *paragraphStyle = nil;
     
-    NSColor *menuColor = (NSColor*)[NSUnarchiver unarchiveObjectWithData:[defaults objectForKey:@"MenuColor"]];
+    NSColor *menuColor = (NSColor*)[NSUnarchiver unarchiveObjectWithData:[defaults objectForKey:PREF_MENU_TEXTCOLOR]];
     BOOL setColor = NO;
     if (!([[menuColor colorUsingColorSpaceName:
               NSCalibratedWhiteColorSpace] whiteComponent] == 0.0) || ![statusItem respondsToSelector:@selector(button)]) setColor = YES;
@@ -517,7 +517,7 @@ NSUserDefaults *defaults;
 
 - (IBAction)savePreferences:(id)sender{
 	[(NSUserDefaultsController *)DefaultsController save:sender];
-	[defaults setValue:[FavoritesController content] forKey:@"Favorites"];
+	[defaults setValue:[FavoritesController content] forKey:PREF_FAVORITES_ARRAY];
 	[defaults synchronize];
 	[mainwindow close];
 	[self apply_settings:sender controllerindex:[FavoritesController selectionIndex]];
@@ -538,8 +538,8 @@ NSUserDefaults *defaults;
 	int i;
 	[FanControl setRights];
 	[FavoritesController setSelectionIndex:cIndex];
-	for (i=0;i<[[FavoritesController arrangedObjects][cIndex][@"FanData"] count];i++) {
-		[smcWrapper setKey_external:[NSString stringWithFormat:@"F%dMn",i] value:[[FanController arrangedObjects][i][@"selspeed"] tohex]];
+	for (i=0;i<[[FavoritesController arrangedObjects][cIndex][PREF_FAN_ARRAY] count];i++) {
+		[smcWrapper setKey_external:[NSString stringWithFormat:@"F%dMn",i] value:[[FanController arrangedObjects][i][PREF_FAN_SELSPEED] tohex]];
 	}
 	NSMenu *submenu = [[NSMenu alloc] init];
 	
@@ -557,9 +557,9 @@ NSUserDefaults *defaults;
 		[[[[theMenu itemWithTag:1] submenu] itemAtIndex:i] setState:NSOffState];
 	}
 	[[[[theMenu itemWithTag:1] submenu] itemAtIndex:cIndex] setState:NSOnState];
-	[defaults setObject:@(cIndex) forKey:@"SelDefault"];
+	[defaults setObject:@(cIndex) forKey:PREF_SELECTION_DEFAULT];
 	//change active setting display
-	[[theMenu itemWithTag:1] setTitle:[NSString stringWithFormat:@"%@: %@",NSLocalizedString(@"Active Setting",nil),[FavoritesController arrangedObjects][[FavoritesController selectionIndex]][@"Title"] ]];
+	[[theMenu itemWithTag:1] setTitle:[NSString stringWithFormat:@"%@: %@",NSLocalizedString(@"Active Setting",nil),[FavoritesController arrangedObjects][[FavoritesController selectionIndex]][PREF_FAN_TITLE] ]];
 }
 
 
@@ -599,7 +599,7 @@ NSUserDefaults *defaults;
 
 
 - (IBAction) changeMenu:(id)sender{
-	if ([[[[NSUserDefaultsController sharedUserDefaultsController] values] valueForKey:@"MenuBar"] intValue]==2) {
+	if ([[[[NSUserDefaultsController sharedUserDefaultsController] values] valueForKey:PREF_MENU_DISPLAYMODE] intValue]==2) {
 		[colorSelector setEnabled:NO];
 	} else {
 		[colorSelector setEnabled:YES];
@@ -612,7 +612,7 @@ NSUserDefaults *defaults;
 	int i;
 	for (i=0;i<[[FanController arrangedObjects] count];i++) {
 		if (i!=[sender selectedRow]) {
-			[[FanController arrangedObjects][i] setValue:@NO forKey:@"menu"];
+			[[FanController arrangedObjects][i] setValue:@NO forKey:PREF_FAN_SHOWMENU];
 		}	
 	}
 }
@@ -700,11 +700,11 @@ NSUserDefaults *defaults;
 	//in case plist is corrupt, don't bind
 	if ([[FanController arrangedObjects] count]>1 ) {
 		if (bind==YES) {
-			[[FanController arrangedObjects][1] bind:@"selspeed" toObject:[FanController arrangedObjects][0] withKeyPath:@"selspeed" options:nil];
-			[[FanController arrangedObjects][0] bind:@"selspeed" toObject:[FanController arrangedObjects][1] withKeyPath:@"selspeed" options:nil];
+			[[FanController arrangedObjects][1] bind:PREF_FAN_SELSPEED toObject:[FanController arrangedObjects][0] withKeyPath:PREF_FAN_SELSPEED options:nil];
+			[[FanController arrangedObjects][0] bind:PREF_FAN_SELSPEED toObject:[FanController arrangedObjects][1] withKeyPath:PREF_FAN_SELSPEED options:nil];
 		} else {
-			[[FanController arrangedObjects][1] unbind:@"selspeed"];
-			[[FanController arrangedObjects][0] unbind:@"selspeed"];
+			[[FanController arrangedObjects][1] unbind:PREF_FAN_SELSPEED];
+			[[FanController arrangedObjects][0] unbind:PREF_FAN_SELSPEED];
 		}
 	}	
 }
@@ -713,27 +713,27 @@ NSUserDefaults *defaults;
 #pragma mark **Power Watchdog-Methods**
 
 - (void)systemDidWakeFromSleep:(id)sender{
-	[self apply_settings:nil controllerindex:[[defaults objectForKey:@"SelDefault"] intValue]];
+	[self apply_settings:nil controllerindex:[[defaults objectForKey:PREF_SELECTION_DEFAULT] intValue]];
 }
 
 
 - (void)powerChangeToBattery:(id)sender{
 
 	if ([[defaults objectForKey:@"AutomaticChange"] boolValue]==YES) {
-		[self apply_settings:nil controllerindex:[[defaults objectForKey:@"selbatt"] intValue]];
+		[self apply_settings:nil controllerindex:[[defaults objectForKey:PREF_BATTERY_SELECTION] intValue]];
 	}
 }
 
 - (void)powerChangeToAC:(id)sender{
 	if ([[defaults objectForKey:@"AutomaticChange"] boolValue]==YES) {
-		[self apply_settings:nil controllerindex:[[defaults objectForKey:@"selac"] intValue]];
+		[self apply_settings:nil controllerindex:[[defaults objectForKey:PREF_AC_SELECTION] intValue]];
 
 	}
 }
 
 - (void)powerChangeToACLoading:(id)sender{
 	if ([[defaults objectForKey:@"AutomaticChange"] boolValue]==YES) {
-		[self apply_settings:nil controllerindex:[[defaults objectForKey:@"selload"] intValue]];
+		[self apply_settings:nil controllerindex:[[defaults objectForKey:PREF_CHARGING_SELECTION] intValue]];
 
 	}	
 }

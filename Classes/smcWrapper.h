@@ -24,6 +24,7 @@
 #import <Cocoa/Cocoa.h>
 #import <smc.h>
 #import <MachineDefaults.h>
+#import "Constants.h"
 
 @interface smcWrapper : NSObject {
 }

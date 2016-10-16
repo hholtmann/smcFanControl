@@ -34,6 +34,7 @@
 
 #include <IOKit/pwr_mgt/IOPMLib.h>
 #include <IOKit/IOMessage.h>
+#import "Constants.h"
 
 
 #define kMenuBarHeight				22
