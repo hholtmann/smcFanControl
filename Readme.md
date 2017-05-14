@@ -18,10 +18,10 @@ $ brew cask install smcfancontrol
 After that you'll be able to use Spotlight to launch smcFanControl normally. :-)
 
 
-Requirements: Intel Mac / OS X 10.6 or higher 
+Requirements: Intel Mac / OS X 10.7 or higher 
 
 
-Compiled version: http://www.eidac.de/smcfancontrol/smcfancontrol_2_5_2.zip
+Compiled version: https://www.eidac.de/smcfancontrol/smcfancontrol_2_6.zip
 
 FAQ / More info: Found in project under "Ressources/*.lproj/F.A.Q.rtf" or included in above .zip
 
