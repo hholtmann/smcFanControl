@@ -7,7 +7,7 @@ smcFanControl lets the user set a minimum speed for built-in fans. It allows you
 
 ## Installing it using Homebrew & Cask
 
-Make sure you have both [Homebrew](http://brew.sh/) and [Cask](http://caskroom.io/) installed. You'll find intructions to install both tools on their respective websites.
+Make sure you have both [Homebrew](http://brew.sh/) and [Cask](https://caskroom.github.io/) installed. You'll find intructions to install both tools on their respective websites.
 
 After installing Homebrew and Cask, run:
 
