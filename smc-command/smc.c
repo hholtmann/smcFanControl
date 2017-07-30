@@ -549,12 +549,53 @@ kern_return_t SMCPrintFans(void)
     return kIOReturnSuccess;
 }
 
+kern_return_t SMCPrintTemps(void)
+{
+    kern_return_t result;
+    SMCKeyData_t  inputStructure;
+    SMCKeyData_t  outputStructure;
+
+    int           totalKeys, i;
+    UInt32Char_t  key;
+    SMCVal_t      val;
+
+    totalKeys = SMCReadIndexCount();
+    for (i = 0; i < totalKeys; i++)
+    {
+        memset(&inputStructure, 0, sizeof(SMCKeyData_t));
+        memset(&outputStructure, 0, sizeof(SMCKeyData_t));
+        memset(&val, 0, sizeof(SMCVal_t));
+
+        inputStructure.data8 = SMC_CMD_READ_INDEX;
+        inputStructure.data32 = i;
+
+        result = SMCCall(KERNEL_INDEX_SMC, &inputStructure, &outputStructure);
+        if (result != kIOReturnSuccess)
+            continue;
+
+        _ultostr(key, outputStructure.key);
+        if ( key[0] != 'T' )
+            continue;
+
+        SMCReadKey(key, &val);
+        //printVal(val);
+        if (strcmp(val.dataType, DATATYPE_SP78) == 0 && val.dataSize == 2) {
+          printf("%-4s ", val.key);
+          printSP78(val);
+          printf("\n");
+        }
+    }
+
+    return kIOReturnSuccess;
+}
+
 void usage(char* prog)
 {
     printf("Apple System Management Control (SMC) tool %s\n", VERSION);
     printf("Usage:\n");
     printf("%s [options]\n", prog);
     printf("    -f         : fan info decoded\n");
+    printf("    -t         : list all temperatures\n");
     printf("    -h         : help\n");
     printf("    -k <key>   : key to manipulate\n");
     printf("    -l         : list all keys and values\n");
@@ -595,12 +636,15 @@ int main(int argc, char *argv[])
     UInt32Char_t  key = { 0 };
     SMCVal_t      val;
     
-    while ((c = getopt(argc, argv, "fhk:lrw:v")) != -1)
+    while ((c = getopt(argc, argv, "fthk:lrw:v")) != -1)
     {
         switch(c)
         {
             case 'f':
                 op = OP_READ_FAN;
+                break;
+            case 't':
+                op = OP_READ_TEMPS;
                 break;
             case 'k':
                 strncpy(key, optarg, sizeof(key));   //fix for buffer overflow
@@ -672,6 +716,11 @@ int main(int argc, char *argv[])
             break;
         case OP_READ_FAN:
             result = SMCPrintFans();
+            if (result != kIOReturnSuccess)
+                printf("Error: SMCPrintFans() = %08x\n", result);
+            break;
+        case OP_READ_TEMPS:
+            result = SMCPrintTemps();
             if (result != kIOReturnSuccess)
                 printf("Error: SMCPrintFans() = %08x\n", result);
             break;
