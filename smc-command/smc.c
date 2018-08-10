@@ -529,6 +529,9 @@ float getFloatFromVal(SMCVal_t val)
         else if (strcmp(val.dataType, DATATYPE_UINT16) == 0 && val.dataSize == 2) {
     	     fval = (float)_strtoul((char *)val.bytes, val.dataSize, 10);
         }
+        else if (strcmp(val.dataType, DATATYPE_UINT8) == 0 && val.dataSize == 1) {
+    	     fval = (float)_strtoul((char *)val.bytes, val.dataSize, 10);
+        }
     }
 
     return fval;
@@ -572,10 +575,20 @@ kern_return_t SMCPrintFans(void)
         SMCReadKey(key, &val);
         printf("    Target speed : %.0f\n", getFloatFromVal(val));
         SMCReadKey("FS! ", &val);
-        if ((_strtoul((char *)val.bytes, 2, 16) & (1 << i)) == 0)
-            printf("    Mode         : auto\n");
-        else
-            printf("    Mode         : forced\n");
+        if(val.dataSize > 0) {
+            if ((_strtoul((char *)val.bytes, 2, 16) & (1 << i)) == 0)
+                printf("    Mode         : auto\n");
+            else
+                printf("    Mode         : forced\n");
+        }
+        else {
+            sprintf(key, "F%dMd", i);
+            SMCReadKey(key, &val);
+            if (getFloatFromVal(val))
+                printf("    Mode         : forced\n");
+            else
+                printf("    Mode         : auto\n");
+        }
     }
     
     return kIOReturnSuccess;
