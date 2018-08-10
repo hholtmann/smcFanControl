@@ -42,6 +42,7 @@
 // Number of fans reported by the hardware.
 int g_numFans = 0;
 
+
 NSUserDefaults *defaults;
 
 #pragma mark **Init-Methods**
@@ -538,9 +539,22 @@ NSUserDefaults *defaults;
 	int i;
 	[FanControl setRights];
 	[FavoritesController setSelectionIndex:cIndex];
-	for (i=0;i<[[FavoritesController arrangedObjects][cIndex][PREF_FAN_ARRAY] count];i++) {
-		[smcWrapper setKey_external:[NSString stringWithFormat:@"F%dMn",i] value:[[FanController arrangedObjects][i][PREF_FAN_SELSPEED] tohex]];
-	}
+    
+    if ([[MachineDefaults computerModel] rangeOfString:@"MacBookPro15"].location != NSNotFound) {
+        for (i=0;i<[[FavoritesController arrangedObjects][cIndex][PREF_FAN_ARRAY] count];i++) {
+            [smcWrapper setKey_external:[NSString stringWithFormat:@"F%dMd",i] value:@"01"];
+            float f_val = [[FanController arrangedObjects][i][PREF_FAN_SELSPEED] floatValue];
+            uint8 *vals = (uint8*)&f_val;
+            //NSString str_val = ;
+            [smcWrapper setKey_external:[NSString stringWithFormat:@"F%dTg",i] value:[NSString stringWithFormat:@"%02x%02x%02x%02x",vals[0],vals[1],vals[2],vals[3]]];
+        }
+    }
+    else {
+        for (i=0;i<[[FavoritesController arrangedObjects][cIndex][PREF_FAN_ARRAY] count];i++) {
+            [smcWrapper setKey_external:[NSString stringWithFormat:@"F%dMn",i] value:[[FanController arrangedObjects][i][PREF_FAN_SELSPEED] tohex]];
+        }
+    }
+    
 	NSMenu *submenu = [[NSMenu alloc] init];
 	
 	for(i=0;i<[[FavoritesController arrangedObjects] count];i++){
@@ -659,7 +673,12 @@ NSUserDefaults *defaults;
         NSLog(@"Error deleting %@",machinesPath);
     }
     error = nil;
-    
+    if ([[MachineDefaults computerModel] rangeOfString:@"MacBookPro15"].location != NSNotFound) {
+        for (int i=0;i<[[FavoritesController arrangedObjects][0][PREF_FAN_ARRAY] count];i++) {
+            [smcWrapper setKey_external:[NSString stringWithFormat:@"F%dMd",i] value:@"00"];
+        }
+    }
+
     NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
     [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
     
