@@ -305,7 +305,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 1000;
 				TargetAttributes = {
 					8924ECED15AC96E70031730C = {
 						DevelopmentTeam = H4G85G26BP;
@@ -443,7 +443,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = H4G85G26BP;
@@ -472,7 +472,7 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -558,12 +558,14 @@
 					"\"$(SDKROOT)/usr/lib/system\"",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OBJROOT = "$(HOME)/builds";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CODE_SIGN_FLAGS = "--deep";
 				PRODUCT_BUNDLE_IDENTIFIER = com.eidac.smcFanControl2;
 				PRODUCT_NAME = smcFanControl;
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
+				SYMROOT = "$(HOME)/builds";
 				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = app;
 			};
@@ -573,7 +575,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application: Hendrik Holtmann";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				ENABLE_TESTABILITY = YES;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -591,7 +593,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application: Hendrik Holtmann";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;

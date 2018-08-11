@@ -23,11 +23,11 @@
 
 #import <Cocoa/Cocoa.h>
 #import "NSFileManager+DirectoryLocations.h"
-#import <smc.h>
-#import <smcWrapper.h>
-#import <MachineDefaults.h>
+#import "smc.h"
+#import "smcWrapper.h"
+#import "MachineDefaults.h"
 
-#import <Power.h>
+#import "Power.h"
 #include <mach/mach_port.h>
 #include <mach/mach_interface.h>
 #include <mach/mach_init.h>

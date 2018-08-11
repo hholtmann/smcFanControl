@@ -44,12 +44,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Classes/smcWrapper.m"
-            timestampString = "555718380.442687"
+            timestampString = "555720499.446066"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "237"
-            endingLineNumber = "237"
-            landmarkName = "+createCheckSum:"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
+            landmarkName = "+convertToNumber:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
