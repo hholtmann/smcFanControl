@@ -2,7 +2,7 @@
 
 smcFanControl lets the user set a minimum speed for built-in fans. It allows you to increase your minimum fan speed to make your Intel Mac run cooler. In order to not damage your machine, smcFanControl does not let you set a minimum speed to a value below Apple's defaults.
 
-![My image](https://dl.dropbox.com/u/363242/screenshots/smc_screenshot.png)
+![My image](https://www.dropbox.com/s/4nccq5pf4t1q2hs/smc_screenshot.png?dl=0)
 
 
 ## Installing it using Homebrew & Cask
