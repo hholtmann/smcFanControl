@@ -69,6 +69,8 @@
 #define DATATYPE_SI8          "si8 "
 #define DATATYPE_SI16         "si16"
 
+#define DATATYPE_FLT          "flt "
+
 #define DATATYPE_PWM          "{pwm"
 
 typedef struct {
