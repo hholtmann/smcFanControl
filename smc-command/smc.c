@@ -1,6 +1,6 @@
 /*
- * Apple System Management Control (SMC) Tool 
- * Copyright (C) 2006 devnull 
+ * Apple System Management Control (SMC) Tool
+ * Copyright (C) 2006 devnull
  * Portions Copyright (C) 2013 Michael Wilber
  *
  * This program is free software; you can redistribute it and/or
@@ -58,7 +58,7 @@ UInt32 _strtoul(char *str, int size, int base)
 void _ultostr(char *str, UInt32 val)
 {
     str[0] = '\0';
-    sprintf(str, "%c%c%c%c", 
+    sprintf(str, "%c%c%c%c",
             (unsigned int) val >> 24,
             (unsigned int) val >> 16,
             (unsigned int) val >> 8,
@@ -83,6 +83,12 @@ float _strtof(unsigned char *str, int size, int e)
     return total;
 }
 
+void printFLT(SMCVal_t val)
+{
+    float fval;
+    memcpy(&fval,val.bytes,sizeof(float));
+    printf("%.0f ", fval);
+}
 
 void printFP1F(SMCVal_t val)
 {
@@ -218,6 +224,8 @@ void printVal(SMCVal_t val)
             (strcmp(val.dataType, DATATYPE_UINT16) == 0) ||
             (strcmp(val.dataType, DATATYPE_UINT32) == 0))
             printUInt(val);
+        else if (strcmp(val.dataType, DATATYPE_FLT) == 0 && val.dataSize == 4)
+            printFLT(val);
         else if (strcmp(val.dataType, DATATYPE_FP1F) == 0 && val.dataSize == 2)
             printFP1F(val);
         else if (strcmp(val.dataType, DATATYPE_FP4C) == 0 && val.dataSize == 2)
@@ -504,6 +512,31 @@ kern_return_t SMCPrintAll(void)
     return kIOReturnSuccess;
 }
 
+
+//Fix me with other types
+float getFloatFromVal(SMCVal_t val)
+{
+    float fval = -1.0f;
+
+    if (val.dataSize > 0)
+    {
+        if (strcmp(val.dataType, DATATYPE_FLT) == 0 && val.dataSize == 4) {
+	         memcpy(&fval,val.bytes,sizeof(float));
+        }
+        else if (strcmp(val.dataType, DATATYPE_FPE2) == 0 && val.dataSize == 2) {
+    	     fval = _strtof(val.bytes, val.dataSize, 2);
+        }
+        else if (strcmp(val.dataType, DATATYPE_UINT16) == 0 && val.dataSize == 2) {
+    	     fval = (float)_strtoul((char *)val.bytes, val.dataSize, 10);
+        }
+        else if (strcmp(val.dataType, DATATYPE_UINT8) == 0 && val.dataSize == 1) {
+    	     fval = (float)_strtoul((char *)val.bytes, val.dataSize, 10);
+        }
+    }
+
+    return fval;
+}
+
 kern_return_t SMCPrintFans(void)
 {
     kern_return_t result;
@@ -523,27 +556,39 @@ kern_return_t SMCPrintFans(void)
         printf("\nFan #%d:\n", i);
         sprintf(key, "F%dID", i);
         SMCReadKey(key, &val);
-        printf("    Fan ID       : %s\n", val.bytes+4);
-        sprintf(key, "F%dAc", i); 
-        SMCReadKey(key, &val); 
-        printf("    Actual speed : %.0f\n", _strtof(val.bytes, val.dataSize, 2));
+        if(val.dataSize > 0) {
+            printf("    Fan ID       : %s\n", val.bytes+4);
+        }
+        sprintf(key, "F%dAc", i);
+        SMCReadKey(key, &val);
+        printf("    Actual speed : %.0f\n", getFloatFromVal(val));
         sprintf(key, "F%dMn", i);
         SMCReadKey(key, &val);
-        printf("    Minimum speed: %.0f\n", _strtof(val.bytes, val.dataSize, 2));
+        printf("    Minimum speed: %.0f\n", getFloatFromVal(val));
         sprintf(key, "F%dMx", i);
         SMCReadKey(key, &val);
-        printf("    Maximum speed: %.0f\n", _strtof(val.bytes, val.dataSize, 2));
+        printf("    Maximum speed: %.0f\n", getFloatFromVal(val));
         sprintf(key, "F%dSf", i);
         SMCReadKey(key, &val);
-        printf("    Safe speed   : %.0f\n", _strtof(val.bytes, val.dataSize, 2));
+        printf("    Safe speed   : %.0f\n", getFloatFromVal(val));
         sprintf(key, "F%dTg", i);
         SMCReadKey(key, &val);
-        printf("    Target speed : %.0f\n", _strtof(val.bytes, val.dataSize, 2));
+        printf("    Target speed : %.0f\n", getFloatFromVal(val));
         SMCReadKey("FS! ", &val);
-        if ((_strtoul((char *)val.bytes, 2, 16) & (1 << i)) == 0)
-            printf("    Mode         : auto\n");
-        else
-            printf("    Mode         : forced\n");
+        if(val.dataSize > 0) {
+            if ((_strtoul((char *)val.bytes, 2, 16) & (1 << i)) == 0)
+                printf("    Mode         : auto\n");
+            else
+                printf("    Mode         : forced\n");
+        }
+        else {
+            sprintf(key, "F%dMd", i);
+            SMCReadKey(key, &val);
+            if (getFloatFromVal(val))
+                printf("    Mode         : forced\n");
+            else
+                printf("    Mode         : auto\n");
+        }
     }
     
     return kIOReturnSuccess;

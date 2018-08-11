@@ -37,18 +37,44 @@ NSArray *allSensors;
     SMCClose(conn);
 }
 
++(int)convertToNumber:(SMCVal_t) val
+{
+    float fval = -1.0f;
+
+    if (strcmp(val.dataType, DATATYPE_FLT) == 0 && val.dataSize == 4) {
+        memcpy(&fval,val.bytes,sizeof(float));
+    }
+    else if (strcmp(val.dataType, DATATYPE_FPE2) == 0 && val.dataSize == 2) {
+        fval = _strtof(val.bytes, val.dataSize, 2);
+    }
+    else if (strcmp(val.dataType, DATATYPE_UINT16) == 0 && val.dataSize == 2) {
+        fval = (float)_strtoul((char *)val.bytes, val.dataSize, 10);
+    }
+    else if (strcmp(val.dataType, DATATYPE_UINT8) == 0 && val.dataSize == 1) {
+        fval = (float)val.bytes[0];
+    }
+    else if (strcmp(val.dataType, DATATYPE_SP78) == 0 && val.dataSize == 2) {
+        fval = ((val.bytes[0] * 256 + val.bytes[1]) >> 2)/64;
+    }
+    else {
+        NSLog(@"%@", [NSString stringWithFormat:@"Unknown val:%s size-%d",val.dataType,val.dataSize]);
+    }
+
+    return (int)fval;
+}
+
 +(float)readTempSensors
 {
     float retValue;
     SMCVal_t      val;
     NSString *sensor = [[NSUserDefaults standardUserDefaults] objectForKey:PREF_TEMPERATURE_SENSOR];
     SMCReadKey2((char*)[sensor UTF8String], &val,conn);
-    retValue= ((val.bytes[0] * 256 + val.bytes[1]) >> 2)/64;
+    retValue = [self convertToNumber:val];
     allSensors = [NSArray arrayWithObjects:@"TC0D",@"TC0P",@"TCAD",@"TC0H",@"TC0F",@"TCAH",@"TCBH",nil];
     if (retValue<=0 || floor(retValue) == 129 ) { //workaround for some iMac Models
         for (NSString *sensor in allSensors) {
             SMCReadKey2((char*)[sensor UTF8String], &val,conn);
-            retValue= ((val.bytes[0] * 256 + val.bytes[1]) >> 2)/64;
+            retValue= [self convertToNumber:val];
             if (retValue>0 && floor(retValue) != 129 ) {
                 [[NSUserDefaults standardUserDefaults] setObject:sensor forKey:PREF_TEMPERATURE_SENSOR];
                 [[NSUserDefaults standardUserDefaults] synchronize];
@@ -86,8 +112,8 @@ NSArray *allSensors;
 	SMCReadKey2(keyA, &valA,conn);
     sprintf(keyB, "TCBH");
 	SMCReadKey2(keyB, &valB,conn);
-    float c_tempA= ((valA.bytes[0] * 256 + valA.bytes[1]) >> 2)/64.0;
-    float c_tempB= ((valB.bytes[0] * 256 + valB.bytes[1]) >> 2)/64.0;
+    float c_tempA= [self convertToNumber:valA];
+    float c_tempB= [self convertToNumber:valB];
     int i_tempA, i_tempB;
     if (c_tempA < c_tempB)
     {
@@ -107,7 +133,7 @@ NSArray *allSensors;
 	//kern_return_t result;
 	sprintf(key, "F%dAc", fan_number);
 	SMCReadKey2(key, &val,conn);
-	int running= _strtof(val.bytes, val.dataSize, 2);
+	int running= [self convertToNumber:val];
 	return running;
 }	
 
@@ -116,7 +142,7 @@ NSArray *allSensors;
     SMCVal_t      val;
     int           totalFans;
 	SMCReadKey2("FNum", &val,conn);
-    totalFans = _strtoul((char *)val.bytes, val.dataSize, 10);
+    totalFans = [self convertToNumber:val];
 	return totalFans;
 }
 
@@ -126,17 +152,24 @@ NSArray *allSensors;
 	SMCVal_t      val;
 	//kern_return_t result;
 	NSMutableString *desc;
-//	desc=[[NSMutableString alloc] initWithFormat:@"Fan #%d: ",fan_number+1];
-	desc=[[NSMutableString alloc]init];
-	sprintf(key, "F%dID", fan_number);
-	SMCReadKey2(key, &val,conn);
-	int i;
-	for (i = 0; i < val.dataSize; i++) {
-		if ((int)val.bytes[i]>32) {
-			temp=(unsigned char)val.bytes[i];
-			[desc appendFormat:@"%c",temp];
-		}
-	}	
+
+    sprintf(key, "F%dID", fan_number);
+    SMCReadKey2(key, &val,conn);
+
+    if(val.dataSize>0){
+        desc=[[NSMutableString alloc]init];
+        int i;
+        for (i = 0; i < val.dataSize; i++) {
+            if ((int)val.bytes[i]>32) {
+                temp=(unsigned char)val.bytes[i];
+                [desc appendFormat:@"%c",temp];
+            }
+        }
+    }
+    else {
+        //On MacBookPro 15.1 descriptions aren't available
+        desc=[[NSMutableString alloc] initWithFormat:@"Fan #%d: ",fan_number+1];
+    }
 	return desc;
 }	
 
@@ -147,7 +180,7 @@ NSArray *allSensors;
 	//kern_return_t result;
 	sprintf(key, "F%dMn", fan_number);
 	SMCReadKey2(key, &val,conn);
-	int min= _strtof(val.bytes, val.dataSize, 2);
+	int min= [self convertToNumber:val];
 	return min;
 }	
 
@@ -157,7 +190,7 @@ NSArray *allSensors;
 	//kern_return_t result;
 	sprintf(key, "F%dMx", fan_number);
 	SMCReadKey2(key, &val,conn);
-	int max= _strtof(val.bytes, val.dataSize, 2);
+	int max= [self convertToNumber:val];
 	return max;
 }	
 

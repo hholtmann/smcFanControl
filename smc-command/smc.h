@@ -40,6 +40,7 @@
 #define SMC_CMD_READ_PLIMIT   11
 #define SMC_CMD_READ_VERS     12
 
+#define DATATYPE_FLT          "flt "
 #define DATATYPE_FP1F         "fp1f"
 #define DATATYPE_FP4C         "fp4c"
 #define DATATYPE_FP5B         "fp5b"
