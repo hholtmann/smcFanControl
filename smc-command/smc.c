@@ -205,10 +205,6 @@ void printPWM(SMCVal_t val)
     printf("%.1f%% ", ntohs(*(UInt16*)val.bytes) * 100 / 65536.0);
 }
 
-void printFLT(SMCVal_t val)
-{
-    printf("%f ", *(float*)val.bytes);
-}
 
 void printBytesHex(SMCVal_t val)
 {

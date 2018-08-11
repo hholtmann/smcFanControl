@@ -23,7 +23,7 @@
 
 #import "smcWrapper.h"
 #import <CommonCrypto/CommonDigest.h>
-NSString * const smc_checksum=@"b8e7e0f50c1d837cedd91d9af54b167f";
+NSString * const smc_checksum=@"c1c93f148c80e7ab466f83dabe011a6e";
 
 NSArray *allSensors;
 
