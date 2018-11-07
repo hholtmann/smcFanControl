@@ -542,7 +542,8 @@ NSUserDefaults *defaults;
     
     if ([[MachineDefaults computerModel] rangeOfString:@"MacBookPro15"].location != NSNotFound) {
         for (i=0;i<[[FavoritesController arrangedObjects][cIndex][PREF_FAN_ARRAY] count];i++) {
-            [smcWrapper setKey_external:[NSString stringWithFormat:@"F%dMd",i] value:@"01"];
+            bool is_auto = [[FanController arrangedObjects][i][PREF_FAN_AUTO] boolValue];
+            [smcWrapper setKey_external:[NSString stringWithFormat:@"F%dMd",i] value:is_auto ? @"00" : @"01"];
             float f_val = [[FanController arrangedObjects][i][PREF_FAN_SELSPEED] floatValue];
             uint8 *vals = (uint8*)&f_val;
             //NSString str_val = ;

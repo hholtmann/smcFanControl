@@ -572,5 +572,38 @@
 		<key>NumFans</key>
 		<integer>4</integer>
 	</dict>
+	<dict>
+		<key>Fans</key>
+		<array>
+			<dict>
+				<key>Description</key>
+				<string>Left Fan</string>
+				<key>Maxspeed</key>
+				<integer>5927</integer>
+				<key>Minspeed</key>
+				<real>2160</real>
+				<key>selspeed</key>
+				<integer>2160</integer>
+			</dict>
+			<dict>
+				<key>Description</key>
+				<string>Right Fan</string>
+				<key>Maxspeed</key>
+				<integer>5489</integer>
+				<key>Minspeed</key>
+				<real>2000</real>
+				<key>selspeed</key>
+				<integer>2000</integer>
+			</dict>
+		</array>
+		<key>Machine</key>
+		<string>MacBookPro15,1</string>
+		<key>Maxspeed</key>
+		<integer>5927</integer>
+		<key>Minspeed</key>
+		<integer>2000</integer>
+		<key>NumFans</key>
+		<integer>2</integer>
+	</dict>
 </array>
 </plist>

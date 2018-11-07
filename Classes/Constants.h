@@ -26,3 +26,4 @@
 #define PREF_FAN_SELSPEED @"selspeed"
 #define PREF_FAN_SYNC @"sync"
 #define PREF_FAN_SHOWMENU @"menu"
+#define PREF_FAN_AUTO @"auto"
