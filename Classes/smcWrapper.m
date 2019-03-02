@@ -131,7 +131,7 @@ NSArray *allSensors;
 	UInt32Char_t  key;
 	SMCVal_t      val;
 	//kern_return_t result;
-	sprintf(key, "F%dAc", fan_number);
+	sprintf(key, "F%cAc", fannum[fan_number]);
 	SMCReadKey2(key, &val,conn);
 	int running= [self convertToNumber:val];
 	return running;
@@ -153,7 +153,7 @@ NSArray *allSensors;
 	//kern_return_t result;
 	NSMutableString *desc;
 
-    sprintf(key, "F%dID", fan_number);
+    sprintf(key, "F%cID", fannum[fan_number]);
     SMCReadKey2(key, &val,conn);
 
     if(val.dataSize>0){
@@ -178,7 +178,7 @@ NSArray *allSensors;
 	UInt32Char_t  key;
 	SMCVal_t      val;
 	//kern_return_t result;
-	sprintf(key, "F%dMn", fan_number);
+	sprintf(key, "F%cMn", fannum[fan_number]);
 	SMCReadKey2(key, &val,conn);
 	int min= [self convertToNumber:val];
 	return min;
@@ -188,7 +188,7 @@ NSArray *allSensors;
 	UInt32Char_t  key;
 	SMCVal_t      val;
 	//kern_return_t result;
-	sprintf(key, "F%dMx", fan_number);
+	sprintf(key, "F%cMx", fannum[fan_number]);
 	SMCReadKey2(key, &val,conn);
 	int max= [self convertToNumber:val];
 	return max;
