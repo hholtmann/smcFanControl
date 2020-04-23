@@ -101,7 +101,7 @@
     if (!supported) {
         NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Alert!",nil)
 						  defaultButton:NSLocalizedString(@"Continue",nil) alternateButton:NSLocalizedString(@"Quit",nil) otherButton:nil
-						informativeTextWithFormat:NSLocalizedString(@"smcFanControl has not been tested on this machine yet, but it should run if you follow the instructions. \n\nIf you choose to continue, please make you have no other FanControl-software running. Otherwise please quit, deinstall the other software, restart your machine and rerun smcFanControl!",nil)];
+						informativeTextWithFormat:NSLocalizedString(@"smcFanControl has not been tested on this machine yet, but it should run if you follow the instructions. \n\nIf you choose to continue, please make sure you have no other FanControl-software running. Otherwise please quit, deinstall the other software, restart your machine and rerun smcFanControl!",nil)];
 		NSModalResponse code=[alert runModal];
 		if (code == NSAlertDefaultReturn) {
 			[self readFromSMC];
