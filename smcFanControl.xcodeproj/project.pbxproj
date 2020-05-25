@@ -13,7 +13,6 @@
 		891683E90AEBD95B00888535 /* smcWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 891683E80AEBD95B00888535 /* smcWrapper.m */; };
 		8917FB860ADEECAD00443DA1 /* paypal.gif in Resources */ = {isa = PBXBuildFile; fileRef = 8917FB850ADEECAD00443DA1 /* paypal.gif */; };
 		891DEF110B40736D001A7C32 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 891DEF100B40736D001A7C32 /* WebKit.framework */; };
-		8924ECFD15AC98380031730C /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8924ECFC15AC98380031730C /* IOKit.framework */; };
 		8924ECFE15AC98880031730C /* smc.c in Sources */ = {isa = PBXBuildFile; fileRef = 89C053BC0ADAB7630037CA16 /* smc.c */; };
 		892A7F450B10B7700041B493 /* MachineDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 892A7F440B10B7700041B493 /* MachineDefaults.m */; };
 		8932CF2413D08551008BC447 /* SystemVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 8932CF2313D08551008BC447 /* SystemVersion.m */; };
@@ -34,6 +33,10 @@
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		AFD3F21F247B41340086D29E /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 894A494A0ADBEEF4008785F3 /* IOKit.framework */; };
+		AFD3F221247B41B30086D29E /* DisableTurboBoost.32bits.kext in Resources */ = {isa = PBXBuildFile; fileRef = AFD3F220247B41B30086D29E /* DisableTurboBoost.32bits.kext */; };
+		AFD3F223247B41BC0086D29E /* DisableTurboBoost.64bits.kext in Resources */ = {isa = PBXBuildFile; fileRef = AFD3F222247B41BB0086D29E /* DisableTurboBoost.64bits.kext */; };
+		AFD3F22C247B58CB0086D29E /* Privilege.m in Sources */ = {isa = PBXBuildFile; fileRef = AFD3F22B247B58CB0086D29E /* Privilege.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -89,7 +92,6 @@
 		8917FB850ADEECAD00443DA1 /* paypal.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = paypal.gif; sourceTree = "<group>"; };
 		891DEF100B40736D001A7C32 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
 		8924ECEE15AC96E70031730C /* smc */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = smc; sourceTree = BUILT_PRODUCTS_DIR; };
-		8924ECFC15AC98380031730C /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
 		892A7F430B10B7700041B493 /* MachineDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MachineDefaults.h; sourceTree = "<group>"; };
 		892A7F440B10B7700041B493 /* MachineDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MachineDefaults.m; sourceTree = "<group>"; };
 		8932CF2213D0850F008BC447 /* SystemVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemVersion.h; sourceTree = "<group>"; };
@@ -121,6 +123,10 @@
 		89FE24280B7F4CE900D2713C /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* smcFanControl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = smcFanControl.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AFD3F220247B41B30086D29E /* DisableTurboBoost.32bits.kext */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.kernel-extension"; path = DisableTurboBoost.32bits.kext; sourceTree = "<group>"; };
+		AFD3F222247B41BB0086D29E /* DisableTurboBoost.64bits.kext */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.kernel-extension"; path = DisableTurboBoost.64bits.kext; sourceTree = "<group>"; };
+		AFD3F22B247B58CB0086D29E /* Privilege.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Privilege.m; sourceTree = "<group>"; };
+		AFD3F22D247B591A0086D29E /* Privilege.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Privilege.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,7 +134,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8924ECFD15AC98380031730C /* IOKit.framework in Frameworks */,
+				AFD3F21F247B41340086D29E /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,6 +156,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				AFD3F22D247B591A0086D29E /* Privilege.h */,
+				AFD3F22B247B58CB0086D29E /* Privilege.m */,
 				897753AB1DB3D89D00595411 /* Constants.h */,
 				89148EA115E2543D00A073EE /* NSFileManager+DirectoryLocations.m */,
 				89148EA215E2543D00A073EE /* NSFileManager+DirectoryLocations.h */,
@@ -181,7 +189,6 @@
 		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8924ECFC15AC98380031730C /* IOKit.framework */,
 				891DEF100B40736D001A7C32 /* WebKit.framework */,
 				8985F1580ADD0B5500F9EC46 /* Security.framework */,
 				894A494A0ADBEEF4008785F3 /* IOKit.framework */,
@@ -226,6 +233,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				AFD3F222247B41BB0086D29E /* DisableTurboBoost.64bits.kext */,
+				AFD3F220247B41B30086D29E /* DisableTurboBoost.32bits.kext */,
 				89559A830BAC338400DBA37E /* smcover.png */,
 				8987FBD00B878B3900A5ED8E /* smc.png */,
 				89033CA60B80E1EB00FDAF43 /* F.A.Q.rtf */,
@@ -308,12 +317,10 @@
 				LastUpgradeCheck = 1000;
 				TargetAttributes = {
 					8924ECED15AC96E70031730C = {
-						DevelopmentTeam = H4G85G26BP;
-						ProvisioningStyle = Manual;
+						DevelopmentTeam = YKS755N9YR;
 					};
 					8D1107260486CEB800E47090 = {
-						DevelopmentTeam = H4G85G26BP;
-						ProvisioningStyle = Manual;
+						DevelopmentTeam = YKS755N9YR;
 					};
 				};
 			};
@@ -352,10 +359,12 @@
 				8917FB860ADEECAD00443DA1 /* paypal.gif in Resources */,
 				893506180B440255001BFBA5 /* Localizable.strings in Resources */,
 				89B243200B7E351000CAD103 /* smcfancontrol_v2.icns in Resources */,
-				89FE24230B7F4CD300D2713C /* MainMenu.nib in Resources */,
 				89033CA70B80E1EB00FDAF43 /* F.A.Q.rtf in Resources */,
 				8987FBD20B878B3900A5ED8E /* smc.png in Resources */,
 				89559A840BAC338500DBA37E /* smcover.png in Resources */,
+				89FE24230B7F4CD300D2713C /* MainMenu.nib in Resources */,
+				AFD3F221247B41B30086D29E /* DisableTurboBoost.32bits.kext in Resources */,
+				AFD3F223247B41BC0086D29E /* DisableTurboBoost.64bits.kext in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -377,6 +386,7 @@
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				894A46610ADBD6CF008785F3 /* FanControl.m in Sources */,
 				8916827A0AEBB14F00888535 /* StatusItemWindow.m in Sources */,
+				AFD3F22C247B58CB0086D29E /* Privilege.m in Sources */,
 				893355FF1CA02F1A00388D5D /* smc.c in Sources */,
 				891683E90AEBD95B00888535 /* smcWrapper.m in Sources */,
 				89949E8D0AEEA37700077E93 /* Power.m in Sources */,
@@ -444,9 +454,9 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Mac Developer";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = H4G85G26BP;
+				DEVELOPMENT_TEAM = YKS755N9YR;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -472,11 +482,12 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = H4G85G26BP;
+				DEVELOPMENT_TEAM = YKS755N9YR;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = CMD_TOOL_BUILD;
@@ -487,6 +498,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -495,10 +507,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = H4G85G26BP;
+				CURRENT_PROJECT_VERSION = 2.7.0;
+				DEVELOPMENT_TEAM = YKS755N9YR;
 				FRAMEWORK_SEARCH_PATHS = (
 					.,
 					"$(inherited)",
@@ -519,6 +532,7 @@
 					"\"$(SDKROOT)/usr/lib/system\"",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MARKETING_VERSION = 2.7.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CODE_SIGN_FLAGS = "--deep";
 				PRODUCT_BUNDLE_IDENTIFIER = com.eidac.smcFanControl2;
@@ -535,9 +549,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = H4G85G26BP;
+				CURRENT_PROJECT_VERSION = 2.7.0;
+				DEVELOPMENT_TEAM = YKS755N9YR;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
@@ -547,6 +563,7 @@
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)\"";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = "";
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = "RELEASE=1";
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
@@ -558,12 +575,14 @@
 					"\"$(SDKROOT)/usr/lib/system\"",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MARKETING_VERSION = 2.7.0;
 				OBJROOT = "$(HOME)/builds";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CODE_SIGN_FLAGS = "--deep";
 				PRODUCT_BUNDLE_IDENTIFIER = com.eidac.smcFanControl2;
 				PRODUCT_NAME = smcFanControl;
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
 				SYMROOT = "$(HOME)/builds";
 				VALID_ARCHS = "i386 x86_64";

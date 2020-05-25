@@ -23,15 +23,17 @@
 
 #import "smcWrapper.h"
 #import <CommonCrypto/CommonDigest.h>
-NSString * const smc_checksum=@"4fc00a0979970ee8b55f078a0c793c4d";
+#import "Privilege.h"
+
+NSString * const smc_checksum=@"8ab515dbd0f83731306041d96eaff0ac";
 
 NSArray *allSensors;
 
 @implementation smcWrapper
-	io_connect_t conn;
+io_connect_t conn;
 
 +(void)init{
-	SMCOpen(&conn);
+    SMCOpen(&conn);
 }
 +(void)cleanUp{
     SMCClose(conn);
@@ -40,7 +42,7 @@ NSArray *allSensors;
 +(int)convertToNumber:(SMCVal_t) val
 {
     float fval = -1.0f;
-
+    
     if (strcmp(val.dataType, DATATYPE_FLT) == 0 && val.dataSize == 4) {
         memcpy(&fval,val.bytes,sizeof(float));
     }
@@ -59,7 +61,7 @@ NSArray *allSensors;
     else {
         NSLog(@"%@", [NSString stringWithFormat:@"Unknown val:%s size-%d",val.dataType,val.dataSize]);
     }
-
+    
     return (int)fval;
 }
 
@@ -106,12 +108,12 @@ NSArray *allSensors;
     UInt32Char_t  keyB;
     SMCVal_t      valA;
     SMCVal_t      valB;
-   // kern_return_t resultA;
-   // kern_return_t resultB;
+    // kern_return_t resultA;
+    // kern_return_t resultB;
     sprintf(keyA, "TCAH");
-	SMCReadKey2(keyA, &valA,conn);
+    SMCReadKey2(keyA, &valA,conn);
     sprintf(keyB, "TCBH");
-	SMCReadKey2(keyB, &valB,conn);
+    SMCReadKey2(keyB, &valB,conn);
     float c_tempA= [self convertToNumber:valA];
     float c_tempB= [self convertToNumber:valB];
     int i_tempA, i_tempB;
@@ -128,34 +130,34 @@ NSArray *allSensors;
 }
 
 +(int) get_fan_rpm:(int)fan_number{
-	UInt32Char_t  key;
-	SMCVal_t      val;
-	//kern_return_t result;
-	sprintf(key, "F%dAc", fan_number);
-	SMCReadKey2(key, &val,conn);
-	int running= [self convertToNumber:val];
-	return running;
+    UInt32Char_t  key;
+    SMCVal_t      val;
+    //kern_return_t result;
+    sprintf(key, "F%dAc", fan_number);
+    SMCReadKey2(key, &val,conn);
+    int running= [self convertToNumber:val];
+    return running;
 }	
 
 +(int) get_fan_num{
-//	kern_return_t result;
+    //	kern_return_t result;
     SMCVal_t      val;
     int           totalFans;
-	SMCReadKey2("FNum", &val,conn);
+    SMCReadKey2("FNum", &val,conn);
     totalFans = [self convertToNumber:val];
-	return totalFans;
+    return totalFans;
 }
 
 +(NSString*) get_fan_descr:(int)fan_number{
-	UInt32Char_t  key;
-	char temp;
-	SMCVal_t      val;
-	//kern_return_t result;
-	NSMutableString *desc;
-
+    UInt32Char_t  key;
+    char temp;
+    SMCVal_t      val;
+    //kern_return_t result;
+    NSMutableString *desc;
+    
     sprintf(key, "F%dID", fan_number);
     SMCReadKey2(key, &val,conn);
-
+    
     if(val.dataSize>0){
         desc=[[NSMutableString alloc]init];
         int i;
@@ -170,28 +172,28 @@ NSArray *allSensors;
         //On MacBookPro 15.1 descriptions aren't available
         desc=[[NSMutableString alloc] initWithFormat:@"Fan #%d: ",fan_number+1];
     }
-	return desc;
+    return desc;
 }	
 
 
 +(int) get_min_speed:(int)fan_number{
-	UInt32Char_t  key;
-	SMCVal_t      val;
-	//kern_return_t result;
-	sprintf(key, "F%dMn", fan_number);
-	SMCReadKey2(key, &val,conn);
-	int min= [self convertToNumber:val];
-	return min;
+    UInt32Char_t  key;
+    SMCVal_t      val;
+    //kern_return_t result;
+    sprintf(key, "F%dMn", fan_number);
+    SMCReadKey2(key, &val,conn);
+    int min= [self convertToNumber:val];
+    return min;
 }	
 
 +(int) get_max_speed:(int)fan_number{
-	UInt32Char_t  key;
-	SMCVal_t      val;
-	//kern_return_t result;
-	sprintf(key, "F%dMx", fan_number);
-	SMCReadKey2(key, &val,conn);
-	int max= [self convertToNumber:val];
-	return max;
+    UInt32Char_t  key;
+    SMCVal_t      val;
+    //kern_return_t result;
+    sprintf(key, "F%dMx", fan_number);
+    SMCReadKey2(key, &val,conn);
+    int max= [self convertToNumber:val];
+    return max;
 }	
 
 
@@ -237,22 +239,23 @@ NSArray *allSensors;
     return ret;
 }
 
-//call smc binary with setuid rights and apply
+// call smc binary with setuid rights and apply
 // The smc binary is given root permissions in FanControl.m with the setRights method.
 +(void)setKey_external:(NSString *)key value:(NSString *)value{
-	NSString *launchPath = [[NSBundle mainBundle]   pathForResource:@"smc" ofType:@""];
+    NSString *launchPath = [[NSBundle mainBundle]   pathForResource:@"smc" ofType:@""];
     
-   	NSString *checksum=[smcWrapper createCheckSum:launchPath];
+    NSString *checksum=[smcWrapper createCheckSum:launchPath];
     if (![checksum  isEqualToString:smc_checksum]) {
         NSLog(@"smcFanControl: Security Error: smc-binary is not the distributed one");
+#ifdef RELEASE
         return;
+#endif
     }
     NSArray *argsArray = @[@"-k",key,@"-w",value];
-	NSTask *task;
+    NSTask *task;
     task = [[NSTask alloc] init];
-	[task setLaunchPath: launchPath];
-	[task setArguments: argsArray];
-	[task launch];
+    [task setLaunchPath: launchPath];
+    [task setArguments: argsArray];
+    [task launch];
 }
-
 @end
