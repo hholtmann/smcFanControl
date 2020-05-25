@@ -42,7 +42,8 @@
 // Number of fans reported by the hardware.
 int g_numFans = 0;
 
-NSString *moduleDstPath = @"/Library/Extensions/DisableTurboBoost.64bits.kext";
+NSString *moduleDstPath =
+@"/Library/Application Support/smcFanControl2/DisableTurboBoost.64bits.kext";
 
 NSUserDefaults *defaults;
 
@@ -897,11 +898,10 @@ NSUserDefaults *defaults;
     
     
     NSString *modulePath = [[NSBundle mainBundle] pathForResource:@"DisableTurboBoost.64bits" ofType:@"kext"];
-    NSString *moduleDstPath = @"/Library/Extensions/DisableTurboBoost.64bits.kext";
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if (![fileManager fileExistsAtPath:moduleDstPath]){
         NSString *tool=@"/bin/sh";
-        NSArray *argsArray = @[@"-c", [NSString stringWithFormat:@"cp -R \"%@\" \"%@\"", modulePath, moduleDstPath]];
+        NSArray *argsArray = @[@"-c", [NSString stringWithFormat:@"mkdir -p \"%@\" && cp -Rf \"%@\" \"%@\"",moduleDstPath, modulePath, moduleDstPath]];
         [Privilege runTaskAsAdmin:tool andArgs:argsArray];
     }
     NSDictionary *fdicKext = [fmanage attributesOfItemAtPath:moduleDstPath error:nil];
