@@ -764,6 +764,12 @@ NSUserDefaults *defaults;
 
 - (void)systemDidWakeFromSleep:(id)sender{
     [self apply_settings:nil controllerindex:[[defaults objectForKey:PREF_SELECTION_DEFAULT] intValue]];
+    
+    if ([[theMenu itemWithTitle:@"Turbo Boost"] state] == NSOnState){
+        [self enableTurboBoost];
+    }else{
+        [self disableTurboBoost];
+    }
 }
 
 
