@@ -901,7 +901,7 @@ NSUserDefaults *defaults;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     if (![fileManager fileExistsAtPath:moduleDstPath]){
         NSString *tool=@"/bin/sh";
-        NSArray *argsArray = @[@"-c", [NSString stringWithFormat:@"mkdir -p \"%@\" && cp -Rf \"%@\" \"%@\"",moduleDstPath, modulePath, moduleDstPath]];
+        NSArray *argsArray = @[@"-c", [NSString stringWithFormat:@"mkdir -p \"%@\" && cp -Rf \"%@/\" \"%@\"",moduleDstPath, modulePath, moduleDstPath]];
         [Privilege runTaskAsAdmin:tool andArgs:argsArray];
     }
     NSDictionary *fdicKext = [fmanage attributesOfItemAtPath:moduleDstPath error:nil];
