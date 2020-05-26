@@ -10,9 +10,10 @@
 
 #import <Security/Authorization.h>
 
-@interface Privilege:NSObject
-+(AuthorizationRef) Get;
-+(BOOL) runTaskAsAdmin:(NSString *) path andArgs:(NSArray *) args;
+@interface Privilege : NSObject
++ (AuthorizationRef)Get;
+
++ (BOOL)runTaskAsAdmin:(NSString *)path andArgs:(NSArray *)args;
 @end
 
 #endif /* Privilege_h */

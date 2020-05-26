@@ -29,26 +29,29 @@
 
 
 @interface Power : NSObject {
-	
-	io_connect_t root_port;
-	io_object_t notifier;
-	IONotificationPortRef notificationPort;
-	id _delegate;
-	
+
+    io_connect_t root_port;
+    io_object_t notifier;
+    IONotificationPortRef notificationPort;
+    id _delegate;
+
 }
 
 - (instancetype)init NS_DESIGNATED_INITIALIZER;
 
-@property (NS_NONATOMIC_IOSONLY, unsafe_unretained) id delegate;
+@property(NS_NONATOMIC_IOSONLY, unsafe_unretained) id delegate;
 
 - (void)registerForSleepWakeNotification;
+
 - (void)deregisterForSleepWakeNotification;
 
 - (void)registerForPowerChange;
+
 - (void)deregisterForPowerChange;
 
 //internal
-- (void)powerMessageReceived:(natural_t)messageType withArgument:(void *) messageArgument;
+- (void)powerMessageReceived:(natural_t)messageType withArgument:(void *)messageArgument;
+
 - (void)powerSourceMesssageReceived:(NSDictionary *)n_description;
 
 

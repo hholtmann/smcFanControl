@@ -37,111 +37,125 @@
 #import "Constants.h"
 
 
-#define kMenuBarHeight				22
+#define kMenuBarHeight                22
 
 
-@interface FanControl : NSObject <NSMenuDelegate>
-
-{
+@interface FanControl : NSObject <NSMenuDelegate> {
     IBOutlet id currentSpeed;
-	IBOutlet id currentSpeed1;
-	
-	IBOutlet id slider1;
-	IBOutlet id slider2;
-	
-	IBOutlet id field1;
-	IBOutlet id field2;
+    IBOutlet id currentSpeed1;
 
-	IBOutlet id mainwindow;
+    IBOutlet id slider1;
+    IBOutlet id slider2;
 
-	IBOutlet id tabview;
+    IBOutlet id field1;
+    IBOutlet id field2;
 
-	IBOutlet id applybutton;
+    IBOutlet id mainwindow;
 
-	IBOutlet id programinfo;
+    IBOutlet id tabview;
 
-	IBOutlet id copyright;
+    IBOutlet id applybutton;
 
-	IBOutlet id syncslider;
+    IBOutlet id programinfo;
 
-	IBOutlet id TemperatureController;
+    IBOutlet id copyright;
 
-	IBOutlet id levelIndicator;
+    IBOutlet id syncslider;
 
-	IBOutlet id newfavoritewindow;
+    IBOutlet id TemperatureController;
 
-	IBOutlet id newfavorite_title;
+    IBOutlet id levelIndicator;
 
-	IBOutlet id autochange;
+    IBOutlet id newfavoritewindow;
+
+    IBOutlet id newfavorite_title;
+
+    IBOutlet id autochange;
 
 
-	IBOutlet NSMenu *theMenu;
-	
-	IBOutlet id faqWindow;
+    IBOutlet NSMenu *theMenu;
 
-	IBOutlet id faqText;
-	
-	IBOutlet id sliderCell;
-	
-	IBOutlet id sync;
+    IBOutlet id faqWindow;
 
-	IBOutlet id colorSelector;
-		
-	NSStatusItem *statusItem;
-	
-	NSMutableArray* s_menus;
-	
-	NSTimer *_readTimer;
-	
-	Power *pw;
-	
-	IBOutlet id FavoritesController;
-	IBOutlet id FanController;
-	IBOutlet id DefaultsController;
-	
-	MachineDefaults *mdefaults;
+    IBOutlet id faqText;
 
-	NSDictionary *undo_dic;
-	 
-	NSImage *menu_image;
-	NSImage *menu_image_alt;
+    IBOutlet id sliderCell;
+
+    IBOutlet id sync;
+
+    IBOutlet id colorSelector;
+
+    NSStatusItem *statusItem;
+
+    NSMutableArray *s_menus;
+
+    NSTimer *_readTimer;
+
+    Power *pw;
+
+    IBOutlet id FavoritesController;
+    IBOutlet id FanController;
+    IBOutlet id DefaultsController;
+
+    MachineDefaults *mdefaults;
+
+    NSDictionary *undo_dic;
+
+    NSImage *menu_image;
+    NSImage *menu_image_alt;
 }
 
-@property (nonatomic, strong ) 	NSMutableDictionary *machineDefaultsDict;
+@property(nonatomic, strong) NSMutableDictionary *machineDefaultsDict;
 
 
--(void)terminate:(id)sender;
+- (void)terminate:(id)sender;
 
 - (IBAction)paypal:(id)sender;
+
 - (IBAction)visitHomepage:(id)sender;
 
 - (IBAction)closePreferences:(id)sender;
+
 - (IBAction)savePreferences:(id)sender;
+
 - (IBAction)updateCheck:(id)sender;
+
 - (IBAction)resetSettings:(id)sender;
 
 - (void)init_statusitem;
 
 //new ones, check old later
 - (IBAction)loginItem:(id)sender;
+
 - (IBAction)add_favorite:(id)sender;
+
 - (IBAction)close_favorite:(id)sender;
+
 - (IBAction)save_favorite:(id)sender;
+
 - (IBAction)delete_favorite:(id)sender;
+
 - (IBAction)syncSliders:(id)sender;
+
 - (void)apply_quickselect:(id)sender;
+
 - (void)apply_settings:(id)sender controllerindex:(int)cIndex;
+
 + (void)setRights;
-- (void) syncBinder:(Boolean)bind;
+
+- (void)syncBinder:(Boolean)bind;
+
 - (IBAction) changeMenu:(id)sender;
+
 - (IBAction)menuSelect:(id)sender;
-- (void)menuNeedsUpdate:(NSMenu*)menu;
+
+- (void)menuNeedsUpdate:(NSMenu *)menu;
 @end
 
 
 @interface NSNumber (NumberAdditions)
-@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString *tohex;
-@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSNumber *celsius_fahrenheit;
+@property(NS_NONATOMIC_IOSONLY, readonly, copy) NSString *tohex;
+@property(NS_NONATOMIC_IOSONLY, readonly, copy) NSNumber *celsius_fahrenheit;
 
 @end
 

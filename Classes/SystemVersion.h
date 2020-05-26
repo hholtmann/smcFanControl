@@ -22,19 +22,23 @@
 @interface SystemVersion : NSObject
 
 // Returns the current system version major.minor.bugFix
-+ (void)getMajor:(SInt32*)major minor:(SInt32*)minor bugFix:(SInt32*)bugFix;
++ (void)getMajor:(SInt32 *)major minor:(SInt32 *)minor bugFix:(SInt32 *)bugFix;
 
 // Returns the build number of the OS. Useful when looking for bug fixes
 // in new OSes which all have a set system version.
 // eg 10.5.5's build number is 9F33. Easy way to check the build number
 // is to choose "About this Mac" from the Apple menu and click on the version
 // number.
-+ (NSString*)build;
++ (NSString *)build;
 
-+ (BOOL)isBuildLessThan:(NSString*)build;
-+ (BOOL)isBuildLessThanOrEqualTo:(NSString*)build;
-+ (BOOL)isBuildGreaterThan:(NSString*)build;
-+ (BOOL)isBuildGreaterThanOrEqualTo:(NSString*)build;
++ (BOOL)isBuildLessThan:(NSString *)build;
+
++ (BOOL)isBuildLessThanOrEqualTo:(NSString *)build;
+
++ (BOOL)isBuildGreaterThan:(NSString *)build;
+
++ (BOOL)isBuildGreaterThanOrEqualTo:(NSString *)build;
+
 + (BOOL)isBuildEqualTo:(NSString *)build;
 
 // Returns YES if running on 10.3, NO otherwise.
@@ -60,7 +64,7 @@
 
 // Returns a YES/NO if the system is 10.6 or better
 + (BOOL)isSnowLeopardOrGreater;
- // GTM_MACOS_SDK
+// GTM_MACOS_SDK
 
 // Returns one of the achitecture strings below. Note that this is the
 // architecture that we are currently running as, not the hardware architecture.
