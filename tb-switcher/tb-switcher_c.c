@@ -13,68 +13,50 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <errno.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <sys/un.h>
 #include <unistd.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
 
 #include "tb-switcher.h"
 
 #undef    sock_errno
 #define sock_errno()    errno
 
-int client() {
-    int client_socket;
-    ssize_t rc;
-    struct sockaddr_un remote;
-    char buf[256];
-    memset(&remote, 0, sizeof(struct sockaddr_un));
+int send_cmd(char *cmd) {
+    int fd_sock;
+    char buffer[MAX_LEN];
+    strcpy(buffer, cmd);
+    struct sockaddr_in serv_addr;
 
-    /****************************************/
-    /* Create a UNIX domain datagram socket */
-    /****************************************/
-    client_socket = socket(AF_UNIX, SOCK_DGRAM, 0);
-    if (client_socket == -1) {
-        printf("SOCKET ERROR = %d\n", sock_errno());
-        exit(1);
+    // Creating socket file descriptor
+    if ((fd_sock = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+        perror("socket creation failed");
+        exit(EXIT_FAILURE);
     }
 
-    /***************************************/
-    /* Set up the UNIX sockaddr structure  */
-    /* by using AF_UNIX for the family and */
-    /* giving it a filepath to send to.    */
-    /***************************************/
-    remote.sun_family = AF_UNIX;
-    strcpy(remote.sun_path, SOCK_PATH);
+    memset(&serv_addr, 0, sizeof(serv_addr));
 
-    /***************************************/
-    /* Copy the data to be sent to the     */
-    /* buffer and send it to the server.   */
-    /***************************************/
-    strcpy(buf, "DATA");
-    printf("Sending data...\n");
-    rc = sendto(client_socket, buf, strlen(buf), 0, (struct sockaddr *) &remote, sizeof(remote));
-    if (rc == -1) {
-        printf("SENDTO ERROR = %d\n", sock_errno());
-        close(client_socket);
-        exit(1);
-    } else {
-        printf("Data sent!\n");
-    }
+    // Filling server information
+    serv_addr.sin_family = AF_INET; // IPv4
+    inet_pton(AF_INET, SOCK_ADDR, &serv_addr.sin_addr);
+    serv_addr.sin_port = htons(SOCK_PORT);
 
-    /*****************************/
-    /* Close the socket and exit */
-    /*****************************/
-    rc = close(client_socket);
+    sendto(fd_sock, (const char *) buffer, strlen(buffer),
+        0, (const struct sockaddr *) &serv_addr,
+        sizeof(serv_addr));
 
+    close(fd_sock);
     return 0;
 }
 
 int enable_tb() {
+    send_cmd(ENABLE_TB_CMD);
     return 0;
 };
 
 int disable_tb() {
+    send_cmd(DISABLE_TB_CMD);
     return 0;
 };

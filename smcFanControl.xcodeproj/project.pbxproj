@@ -25,7 +25,6 @@
 		8985F1590ADD0B5500F9EC46 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8985F1580ADD0B5500F9EC46 /* Security.framework */; };
 		8987FBD20B878B3900A5ED8E /* smc.png in Resources */ = {isa = PBXBuildFile; fileRef = 8987FBD00B878B3900A5ED8E /* smc.png */; };
 		89949E8D0AEEA37700077E93 /* Power.m in Sources */ = {isa = PBXBuildFile; fileRef = 89949E8C0AEEA37700077E93 /* Power.m */; };
-		899D59DC15E1CF60003E322D /* smc in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8924ECEE15AC96E70031730C /* smc */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		899D59DD15E1CFFF003E322D /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 895BDA390B8F8F42003CD894 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		89B243200B7E351000CAD103 /* smcfancontrol_v2.icns in Resources */ = {isa = PBXBuildFile; fileRef = 89B2431F0B7E351000CAD103 /* smcfancontrol_v2.icns */; };
 		89E7D3650ADE819B000F67AB /* Machines.plist in Resources */ = {isa = PBXBuildFile; fileRef = 89E7D3640ADE819B000F67AB /* Machines.plist */; };
@@ -37,8 +36,9 @@
 		AFD3F221247B41B30086D29E /* DisableTurboBoost.32bits.kext in Resources */ = {isa = PBXBuildFile; fileRef = AFD3F220247B41B30086D29E /* DisableTurboBoost.32bits.kext */; };
 		AFD3F223247B41BC0086D29E /* DisableTurboBoost.64bits.kext in Resources */ = {isa = PBXBuildFile; fileRef = AFD3F222247B41BB0086D29E /* DisableTurboBoost.64bits.kext */; };
 		AFD3F22C247B58CB0086D29E /* Privilege.m in Sources */ = {isa = PBXBuildFile; fileRef = AFD3F22B247B58CB0086D29E /* Privilege.m */; };
+		AFED6518247E2E4800BEDCB5 /* smc in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8924ECEE15AC96E70031730C /* smc */; };
+		AFED6519247E2E4B00BEDCB5 /* tb-switcher in CopyFiles */ = {isa = PBXBuildFile; fileRef = AFF28EC8247D987C00B47C72 /* tb-switcher */; };
 		AFF28ECB247D987C00B47C72 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = AFF28ECA247D987C00B47C72 /* main.c */; };
-		AFF28ECF247D9A3B00B47C72 /* tb-switcher in CopyFiles */ = {isa = PBXBuildFile; fileRef = AFF28EC8247D987C00B47C72 /* tb-switcher */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		AFF28ED2247D9B0600B47C72 /* com.tinkernels.tb-switcher.plist in Resources */ = {isa = PBXBuildFile; fileRef = AFF28ED0247D9A9500B47C72 /* com.tinkernels.tb-switcher.plist */; };
 		AFF28ED5247DAE4F00B47C72 /* tb-switcher_s.c in Sources */ = {isa = PBXBuildFile; fileRef = AFF28ED4247DAE4F00B47C72 /* tb-switcher_s.c */; };
 		AFF28ED7247DAE7A00B47C72 /* tb-switcher_c.c in Sources */ = {isa = PBXBuildFile; fileRef = AFF28ED6247DAE7A00B47C72 /* tb-switcher_c.c */; };
@@ -61,8 +61,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
-				AFF28ECF247D9A3B00B47C72 /* tb-switcher in CopyFiles */,
-				899D59DC15E1CF60003E322D /* smc in CopyFiles */,
+				AFED6519247E2E4B00BEDCB5 /* tb-switcher in CopyFiles */,
+				AFED6518247E2E4800BEDCB5 /* smc in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

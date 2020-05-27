@@ -25,6 +25,7 @@
 #import "FanControl.h"
 #import <Sparkle/SUUpdater.h>
 #import "Privilege.h"
+#import "tb-switcher.h"
 
 @interface FanControl ()
 + (void)copyMachinesIfNecessary;
@@ -38,9 +39,6 @@
 
 // Number of fans reported by the hardware.
 int g_numFans = 0;
-
-NSString *moduleDstPath =
-    @"/Library/Application Support/smcFanControl2/DisableTurboBoost.64bits.kext";
 
 NSUserDefaults *defaults;
 
@@ -242,23 +240,14 @@ NSUserDefaults *defaults;
     }
 }
 
-- (void)enableTurboBoost {
-    [Privilege runTaskAsAdmin:@"/sbin/kextunload" andArgs:@[moduleDstPath]];
-}
-
-- (void)disableTurboBoost {
-    NSArray *argsArrayLoadKext = @[@"-v", moduleDstPath];
-    [Privilege runTaskAsAdmin:@"/usr/bin/kextutil" andArgs:argsArrayLoadKext];
-}
-
 - (void)applyTurboBoost:(id)sender {
     NSControlStateValue state = [sender state];
     if (state == NSOffState) {
         [sender setState:NSOnState];
-        [self enableTurboBoost];
+        enable_tb();
     } else {
         [sender setState:NSOffState];
-        [self disableTurboBoost];
+        disable_tb();
     }
 }
 
@@ -278,7 +267,7 @@ NSUserDefaults *defaults;
         [theMenu insertItem:s_menus[i] atIndex:i];
     };
 
-    [self disableTurboBoost];
+    disable_tb();
     NSMenuItem *fan1Item = [theMenu itemWithTitle:@"Fan: 1"];
     int fan1ItemIdx = [theMenu indexOfItem:fan1Item];
     NSMenuItem *turboBoostItem = [[NSMenuItem alloc]
@@ -295,7 +284,6 @@ NSUserDefaults *defaults;
     // only when needed.
     [theMenu setDelegate:self];
 }
-
 
 #pragma mark **Action-Methods**
 
@@ -617,7 +605,7 @@ NSUserDefaults *defaults;
     [_readTimer invalidate];
     [pw deregisterForSleepWakeNotification];
     [pw deregisterForPowerChange];
-    [self enableTurboBoost];
+    enable_tb();
     [[NSApplication sharedApplication] terminate:self];
 }
 
@@ -750,9 +738,9 @@ NSUserDefaults *defaults;
     [self apply_settings:nil controllerindex:[[defaults objectForKey:PREF_SELECTION_DEFAULT] intValue]];
 
     if ([[theMenu itemWithTitle:@"Turbo Boost"] state] == NSOnState) {
-        [self enableTurboBoost];
+        enable_tb();
     } else {
-        [self disableTurboBoost];
+        disable_tb();
     }
 }
 
@@ -866,46 +854,85 @@ NSUserDefaults *defaults;
 
 #pragma mark **SMC-Binary Owner/Right Check**
 
++ (void) ensureService {
+    NSString *tool = @"/bin/launchctl";
+    NSArray *argsArray = @[@"load", @LAUNCH_DAEMON_PLIST_PATH];
+    NSString *output;
+    NSString *error;
+
+    if([Privilege runProcessAsAdministrator:tool withArguments:argsArray output:&output errorDescription:&error]){
+        NSLog(@"output: %@", output);
+    }else{
+        NSLog(@"error: %@", error);
+    }
+}
+
 //TODO: It looks like this function is called inefficiently.
 //call smc binary with sudo rights and apply
 + (void)setRights {
-    NSString *smcpath = [[NSBundle mainBundle] pathForResource:@"smc" ofType:@""];
-    NSFileManager *fmanage = [NSFileManager defaultManager];
-    NSDictionary *fdic = [fmanage attributesOfItemAtPath:smcpath error:nil];
-    if ([[fdic valueForKey:@"NSFileOwnerAccountName"] isEqualToString:@"root"] && [[fdic valueForKey:@"NSFileGroupOwnerAccountName"] isEqualToString:@"admin"] && ([[fdic valueForKey:@"NSFilePosixPermissions"] intValue] == 3437)) {
+    NSString *smcPath = [[NSBundle mainBundle] pathForResource:@"smc" ofType:@""];
+    NSFileManager *fManger = [NSFileManager defaultManager];
+    NSDictionary *fdic = [fManger attributesOfItemAtPath:smcPath error:nil];
+    if ([[fdic valueForKey:@"NSFileOwnerAccountName"] isEqualToString:@"root"] &&
+        [[fdic valueForKey:@"NSFileGroupOwnerAccountName"] isEqualToString:@"admin"] &&
+        ([[fdic valueForKey:@"NSFilePosixPermissions"] intValue] == 3437)) {
         // If the SMC binary has already been modified to run as root, then do nothing.
 
     } else {
         NSString *tool = @"/usr/sbin/chown";
-        NSArray *argsArray = @[@"root:admin", smcpath];
+        NSArray *argsArray = @[@"root:admin", smcPath];
         [Privilege runTaskAsAdmin:tool andArgs:argsArray];
 
         //second call for suid-bit
         tool = @"/bin/chmod";
-        argsArray = @[@"6555", smcpath];
+        argsArray = @[@"6555", smcPath];
         [Privilege runTaskAsAdmin:tool andArgs:argsArray];
     }
-
 
     NSString *modulePath = [[NSBundle mainBundle] pathForResource:@"DisableTurboBoost.64bits" ofType:@"kext"];
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    if (![fileManager fileExistsAtPath:moduleDstPath]) {
+    if (![fManger fileExistsAtPath:@MODULE_PATH]) {
         NSString *tool = @"/bin/sh";
-        NSArray *argsArray = @[@"-c", [NSString stringWithFormat:@"mkdir -p \"%@\" && cp -Rf \"%@/\" \"%@\"", moduleDstPath, modulePath, moduleDstPath]];
+        NSArray *argsArray = @[@"-c", [NSString stringWithFormat:@"mkdir -p \"%@\" && cp -Rf \"%@/\" \"%@\"",
+            @MODULE_PATH, modulePath, @MODULE_PATH]];
         [Privilege runTaskAsAdmin:tool andArgs:argsArray];
+        [self setOwnAndMod:@MODULE_PATH user:@"root" group:@"wheel" mod:@"755"];
     }
-    NSDictionary *fdicKext = [fmanage attributesOfItemAtPath:moduleDstPath error:nil];
-    if ([[fdicKext valueForKey:@"NSFileOwnerAccountName"] isEqualToString:@"root"] && [[fdicKext valueForKey:@"NSFileGroupOwnerAccountName"] isEqualToString:@"wheel"]) {
-        // If the SMC binary has already been modified to run as root, then do nothing.
+
+    NSString *binPath = [[NSBundle mainBundle] pathForResource:@"tb-switcher" ofType:@""];
+    if (![fManger fileExistsAtPath:@TB_SWITCHER_BIN_PATH]) {
+        NSString *tool = @"/bin/sh";
+        NSArray *argsArray = @[@"-c", [NSString stringWithFormat:@"cp -f \"%@\" \"%@\"",
+                                                                 binPath, @TB_SWITCHER_BIN_PATH]];
+        [Privilege runTaskAsAdmin:tool andArgs:argsArray];
+        [self setOwnAndMod:@TB_SWITCHER_BIN_PATH user:@"root" group:@"wheel" mod:@"755"];
+    }
+
+    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"com.tinkernels.tb-switcher" ofType:@"plist"];
+    if (![fManger fileExistsAtPath:@LAUNCH_DAEMON_PLIST_PATH]) {
+        NSString *tool = @"/bin/sh";
+        NSArray *argsArray = @[@"-c", [NSString stringWithFormat:@"cp -f \"%@\" \"%@\"",
+            plistPath, @LAUNCH_DAEMON_PLIST_PATH]];
+        [Privilege runTaskAsAdmin:tool andArgs:argsArray];
+
+        [self setOwnAndMod:@LAUNCH_DAEMON_PLIST_PATH user:@"root" group:@"wheel" mod:@"644"];
+        [self ensureService];
+    }
+}
+
++ (void)setOwnAndMod:(NSString *)path user:(NSString *)user group:(NSString *)group mod:(NSString *)mod {
+    NSFileManager *fManger = [NSFileManager defaultManager];
+    NSDictionary *fdict = [fManger attributesOfItemAtPath:path error:nil];
+    if ([[fdict valueForKey:@"NSFileOwnerAccountName"] isEqualToString:user] &&
+        [[fdict valueForKey:@"NSFileGroupOwnerAccountName"] isEqualToString:group]) {
 
     } else {
         NSString *tool = @"/usr/sbin/chown";
-        NSArray *argsArray = @[@"-R", @"root:wheel", moduleDstPath];
+        NSArray *argsArray = @[@"-R", [NSString stringWithFormat:@"%@:%@", user, group], path];
 
         [Privilege runTaskAsAdmin:tool andArgs:argsArray];
 
         tool = @"/bin/chmod";
-        argsArray = @[@"-Rf", @"755", moduleDstPath];
+        argsArray = @[@"-Rf", mod, path];
         [Privilege runTaskAsAdmin:tool andArgs:argsArray];
     }
 }

@@ -3,12 +3,12 @@
 <plist version="1.0">
     <dict>
         <key>Label</key>
-        <string>com.github.tinkernels.tb-switcher.plist</string>
+        <string>com.tinkernels.tb-switcher.plist</string>
         <key>ProgramArguments</key>
         <array>
-            <string>/Library/Application Support/smcFanControl2/tb-switcher</string>
-            <string>-l</string>
-            <string>/var/run/tb-switcher.socket=</string>
+            <string>/bin/sh</string>
+            <string>-c</string>
+            <string>"/Library/Application Support/smcFanControl2/tb-switcher"</string>
         </array>
         <key>RunAtLoad</key>
         <true/>

@@ -10,69 +10,93 @@
 #include <errno.h>
 #include <string.h>
 #include <sys/socket.h>
-#include <sys/un.h>
 #include <unistd.h>
+#include <arpa/inet.h>
+#include<signal.h>
 #include "tb-switcher.h"
 
 #undef    sock_errno
 #define sock_errno()    errno
 
+int fd_sock;
+
+void handle_sig_before_exit(int sig) {
+    printf("Caught signal %d\n", sig);
+    close(fd_sock);
+    exit(0);
+}
+
+int exec_enable_tb(){
+    printf("start enable turbo boost.\n");
+    char cmd_enable_tb[512];
+    sprintf(cmd_enable_tb, "kextunload \"%s\"", MODULE_PATH);
+    printf("enable turboot command: %s\n", cmd_enable_tb);
+    system(cmd_enable_tb);
+    return 0;
+}
+
+int exec_disable_tb(){
+    printf("start disable turbo boost.\n");
+    char cmd_disable_tb[512];
+    sprintf(cmd_disable_tb, "kextutil -v \"%s\"", MODULE_PATH);
+    printf("enable turboot command: %s\n", cmd_disable_tb);
+    system(cmd_disable_tb);
+    return 0;
+}
+
+
 int start_server() {
-    int server_sock, rc;
-    socklen_t len;
-    ssize_t bytes_rec = 0;
-    struct sockaddr_un server_sockaddr, peer_sock;
-    char buf[256];
-    memset(&server_sockaddr, 0, sizeof(struct sockaddr_un));
-    memset(buf, 0, 256);
+    char buffer[MAX_LEN];
 
-    /****************************************/
-    /* Create a UNIX domain datagram socket */
-    /****************************************/
-    server_sock = socket(AF_UNIX, SOCK_DGRAM, 0);
-    if (server_sock == -1) {
-        printf("SOCKET ERROR = %d\n", sock_errno());
-        exit(1);
+    struct sockaddr_in serv_addr, cli_addr;
+    ssize_t len_rc_data;
+    socklen_t len_cli_addr;
+
+    // Creating socket file descriptor
+    if ((fd_sock = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+        printf("CREATE ERROR = %d\n", sock_errno());
+        exit(EXIT_FAILURE);
     }
 
-    /***************************************/
-    /* Set up the UNIX sockaddr structure  */
-    /* by using AF_UNIX for the family and */
-    /* giving it a filepath to bind to.    */
-    /*                                     */
-    /* Unlink the file so the bind will    */
-    /* succeed, then bind to that file.    */
-    /***************************************/
-    server_sockaddr.sun_family = AF_UNIX;
-    strcpy(server_sockaddr.sun_path, SOCK_PATH);
-    // len = sizeof(server_sockaddr);
-    len = (socklen_t) SUN_LEN(&server_sockaddr);
-    unlink(SOCK_PATH);
-    rc = bind(server_sock, (struct sockaddr *) &server_sockaddr, len);
-    if (rc == -1) {
+    memset(&serv_addr, 0, sizeof(serv_addr));
+    memset(&cli_addr, 0, sizeof(cli_addr));
+
+    // Filling server information
+    serv_addr.sin_family = AF_INET; // IPv4
+    inet_pton(AF_INET, SOCK_ADDR, &serv_addr.sin_addr);
+    serv_addr.sin_port = htons(SOCK_PORT);
+
+    // Bind the socket with the server address
+    if (bind(fd_sock, (const struct sockaddr *) &serv_addr,
+        sizeof(serv_addr)) < 0) {
         printf("BIND ERROR = %d\n", sock_errno());
-        close(server_sock);
-        exit(1);
+        exit(EXIT_FAILURE);
     }
+    printf("LISTEN ON UDP: %s:%i\n", SOCK_ADDR, SOCK_PORT);
+    signal(SIGINT, handle_sig_before_exit);
+    signal(SIGQUIT, handle_sig_before_exit);
 
-    /****************************************/
-    /* Read data on the server from clients */
-    /* and print the data that was read.    */
-    /****************************************/
-    printf("waiting to recvfrom...\n");
-    bytes_rec = recvfrom(server_sock, buf, 256, 0, (struct sockaddr *) &peer_sock, &len);
-    if (bytes_rec == -1) {
-        printf("RECVFROM ERROR = %d\n", sock_errno());
-        close(server_sock);
-        exit(1);
-    } else {
-        printf("DATA RECEIVED = %s\n", buf);
+    len_cli_addr = sizeof(cli_addr);
+
+    while(fd_sock >= 0) {
+        len_rc_data = recvfrom(fd_sock, (char *) buffer, MAX_LEN,
+            MSG_WAITALL, (struct sockaddr *) &cli_addr,
+            &len_cli_addr);
+        buffer[len_rc_data] = '\0';
+        printf("Client CMD: %s", buffer);
+
+        if (strncasecmp(buffer, ENABLE_TB_CMD, strlen(ENABLE_TB_CMD)) == 0){
+            exec_enable_tb();
+        }else if (strncasecmp(buffer, DISABLE_TB_CMD, strlen(DISABLE_TB_CMD)) == 0){
+            exec_disable_tb();
+        }
     }
-
     /*****************************/
     /* Close the socket and exit */
     /*****************************/
-    close(server_sock);
+    close(fd_sock);
 
     return 0;
 }
+
+
