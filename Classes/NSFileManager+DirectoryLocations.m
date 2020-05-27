@@ -21,13 +21,12 @@
 
 #import "NSFileManager+DirectoryLocations.h"
 
-enum
-{
-	DirectoryLocationErrorNoPathFound,
-	DirectoryLocationErrorFileExistsAtLocation
+enum {
+    DirectoryLocationErrorNoPathFound,
+    DirectoryLocationErrorFileExistsAtLocation
 };
-	
-NSString * const DirectoryLocationDomain = @"DirectoryLocationDomain";
+
+NSString *const DirectoryLocationDomain = @"DirectoryLocationDomain";
 
 @implementation NSFileManager (DirectoryLocations)
 
@@ -47,57 +46,53 @@ NSString * const DirectoryLocationDomain = @"DirectoryLocationDomain";
 * \returns returns the path to the directory (if path found and exists), nil otherwise
 */
 - (NSString *)findOrCreateDirectory:(NSSearchPathDirectory)searchPathDirectory
-	inDomain:(NSSearchPathDomainMask)domainMask
-	appendPathComponent:(NSString *)appendComponent
-	error:(NSError **)errorOut
-{
+                           inDomain:(NSSearchPathDomainMask)domainMask
+                appendPathComponent:(NSString *)appendComponent
+                              error:(NSError **)errorOut {
     // Declare an NSError first, so we don't need to check errorOut again and again
     NSError *error;
-    
+
     if (errorOut) {
         error = *errorOut;
-    }
-    else {
+    } else {
         error = nil;
     }
 
-	//
-	// Search for the path
-	//
-	NSArray* paths = NSSearchPathForDirectoriesInDomains(searchPathDirectory,domainMask,YES);
-    
-	if ([paths count] == 0)
-	{
-        NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedStringFromTable(@"No path found for directory in domain.",@"Errors",nil),
-                                    @"NSSearchPathDirectory":@(searchPathDirectory),
-                                    @"NSSearchPathDomainMask":@(domainMask)};
-				
-        error = [NSError errorWithDomain:DirectoryLocationDomain
-                                        code:DirectoryLocationErrorNoPathFound
-                                    userInfo:userInfo];
-		return nil;
-	}
-	
-	//
-	// Normally only need the first path returned
-	//
-	NSString *resolvedPath = paths[0];
+    //
+    // Search for the path
+    //
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(searchPathDirectory, domainMask, YES);
 
-	//
-	// Append the extra path component
-	//
-	if (appendComponent)
-	{
-		resolvedPath = [resolvedPath stringByAppendingPathComponent:appendComponent];
-	}
-	
-	//
-	// Create the path if it doesn't exist
-	//
-    
-    
-	if ([self createDirectoryAtPath:resolvedPath withIntermediateDirectories:YES
-                          attributes:nil error:&error])
+    if ([paths count] == 0) {
+        NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedStringFromTable(@"No path found for directory in domain.", @"Errors", nil),
+            @"NSSearchPathDirectory": @(searchPathDirectory),
+            @"NSSearchPathDomainMask": @(domainMask)};
+
+        error = [NSError errorWithDomain:DirectoryLocationDomain
+                                    code:DirectoryLocationErrorNoPathFound
+                                userInfo:userInfo];
+        return nil;
+    }
+
+    //
+    // Normally only need the first path returned
+    //
+    NSString *resolvedPath = paths[0];
+
+    //
+    // Append the extra path component
+    //
+    if (appendComponent) {
+        resolvedPath = [resolvedPath stringByAppendingPathComponent:appendComponent];
+    }
+
+    //
+    // Create the path if it doesn't exist
+    //
+
+
+    if ([self createDirectoryAtPath:resolvedPath withIntermediateDirectories:YES
+                         attributes:nil error:&error])
         return resolvedPath;
     else
         return nil;
@@ -108,21 +103,19 @@ NSString * const DirectoryLocationDomain = @"DirectoryLocationDomain";
 
 * \returns The path to the applicationSupportDirectory (creating it if it doesn't exist).
 */
-- (NSString *)applicationSupportDirectory
-{
-	NSString *executableName = [[NSBundle mainBundle] infoDictionary][@"CFBundleExecutable"];
-    
-	NSError *error = nil;
-    
-	NSString *result = [self findOrCreateDirectory:NSApplicationSupportDirectory
+- (NSString *)applicationSupportDirectory {
+    NSString *executableName = [[NSBundle mainBundle] infoDictionary][@"CFBundleExecutable"];
+
+    NSError *error = nil;
+
+    NSString *result = [self findOrCreateDirectory:NSApplicationSupportDirectory
                                           inDomain:NSUserDomainMask
                                appendPathComponent:executableName
                                              error:&error];
-	if (!result)
-	{
-		NSLog(@"Unable to find or create application support directory:\n%@", error);
-	}
-	return result;
+    if (!result) {
+        NSLog(@"Unable to find or create application support directory:\n%@", error);
+    }
+    return result;
 }
 
 @end

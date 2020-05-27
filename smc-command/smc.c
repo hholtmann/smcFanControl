@@ -40,174 +40,144 @@ kern_return_t SMCCall2(int index, SMCKeyData_t *inputStructure, SMCKeyData_t *ou
 
 #pragma mark C Helpers
 
-UInt32 _strtoul(char *str, int size, int base)
-{
+UInt32 _strtoul(char *str, int size, int base) {
     UInt32 total = 0;
     int i;
 
-    for (i = 0; i < size; i++)
-    {
+    for (i = 0; i < size; i++) {
         if (base == 16)
             total += str[i] << (size - 1 - i) * 8;
         else
-           total += ((unsigned char) (str[i]) << (size - 1 - i) * 8);
+            total += ((unsigned char) (str[i]) << (size - 1 - i) * 8);
     }
     return total;
 }
 
-void _ultostr(char *str, UInt32 val)
-{
+void _ultostr(char *str, UInt32 val) {
     str[0] = '\0';
     sprintf(str, "%c%c%c%c",
-            (unsigned int) val >> 24,
-            (unsigned int) val >> 16,
-            (unsigned int) val >> 8,
-            (unsigned int) val);
+        (unsigned int) val >> 24,
+        (unsigned int) val >> 16,
+        (unsigned int) val >> 8,
+        (unsigned int) val);
 }
 
-float _strtof(unsigned char *str, int size, int e)
-{
+float _strtof(unsigned char *str, int size, int e) {
     float total = 0;
     int i;
-    
-    for (i = 0; i < size; i++)
-    {
+
+    for (i = 0; i < size; i++) {
         if (i == (size - 1))
             total += (str[i] & 0xff) >> e;
         else
             total += str[i] << (size - 1 - i) * (8 - e);
     }
-    
-	total += (str[size-1] & 0x03) * 0.25;
-    
+
+    total += (str[size - 1] & 0x03) * 0.25;
+
     return total;
 }
 
-void printFLT(SMCVal_t val)
-{
+void printFLT(SMCVal_t val) {
     float fval;
-    memcpy(&fval,val.bytes,sizeof(float));
+    memcpy(&fval, val.bytes, sizeof(float));
     printf("%.0f ", fval);
 }
 
-void printFP1F(SMCVal_t val)
-{
-    printf("%.5f ", ntohs(*(UInt16*)val.bytes) / 32768.0);
+void printFP1F(SMCVal_t val) {
+    printf("%.5f ", ntohs(*(UInt16 *) val.bytes) / 32768.0);
 }
 
-void printFP4C(SMCVal_t val)
-{
-    printf("%.5f ", ntohs(*(UInt16*)val.bytes) / 4096.0);
+void printFP4C(SMCVal_t val) {
+    printf("%.5f ", ntohs(*(UInt16 *) val.bytes) / 4096.0);
 }
 
-void printFP5B(SMCVal_t val)
-{
-    printf("%.5f ", ntohs(*(UInt16*)val.bytes) / 2048.0);
+void printFP5B(SMCVal_t val) {
+    printf("%.5f ", ntohs(*(UInt16 *) val.bytes) / 2048.0);
 }
 
-void printFP6A(SMCVal_t val)
-{
-    printf("%.4f ", ntohs(*(UInt16*)val.bytes) / 1024.0);
+void printFP6A(SMCVal_t val) {
+    printf("%.4f ", ntohs(*(UInt16 *) val.bytes) / 1024.0);
 }
 
-void printFP79(SMCVal_t val)
-{
-    printf("%.4f ", ntohs(*(UInt16*)val.bytes) / 512.0);
+void printFP79(SMCVal_t val) {
+    printf("%.4f ", ntohs(*(UInt16 *) val.bytes) / 512.0);
 }
 
-void printFP88(SMCVal_t val)
-{
-    printf("%.3f ", ntohs(*(UInt16*)val.bytes) / 256.0);
+void printFP88(SMCVal_t val) {
+    printf("%.3f ", ntohs(*(UInt16 *) val.bytes) / 256.0);
 }
 
-void printFPA6(SMCVal_t val)
-{
-    printf("%.2f ", ntohs(*(UInt16*)val.bytes) / 64.0);
+void printFPA6(SMCVal_t val) {
+    printf("%.2f ", ntohs(*(UInt16 *) val.bytes) / 64.0);
 }
 
-void printFPC4(SMCVal_t val)
-{
-    printf("%.2f ", ntohs(*(UInt16*)val.bytes) / 16.0);
+void printFPC4(SMCVal_t val) {
+    printf("%.2f ", ntohs(*(UInt16 *) val.bytes) / 16.0);
 }
 
-void printFPE2(SMCVal_t val)
-{
-    printf("%.2f ", ntohs(*(UInt16*)val.bytes) / 4.0);
+void printFPE2(SMCVal_t val) {
+    printf("%.2f ", ntohs(*(UInt16 *) val.bytes) / 4.0);
 }
 
-void printUInt(SMCVal_t val)
-{
-    printf("%u ", (unsigned int) _strtoul((char *)val.bytes, val.dataSize, 10));
+void printUInt(SMCVal_t val) {
+    printf("%u ", (unsigned int) _strtoul((char *) val.bytes, val.dataSize, 10));
 }
 
-void printSP1E(SMCVal_t val)
-{
-    printf("%.5f ", ((SInt16)ntohs(*(UInt16*)val.bytes)) / 16384.0);
+void printSP1E(SMCVal_t val) {
+    printf("%.5f ", ((SInt16) ntohs(*(UInt16 *) val.bytes)) / 16384.0);
 }
 
-void printSP3C(SMCVal_t val)
-{
-    printf("%.5f ", ((SInt16)ntohs(*(UInt16*)val.bytes)) / 4096.0);
+void printSP3C(SMCVal_t val) {
+    printf("%.5f ", ((SInt16) ntohs(*(UInt16 *) val.bytes)) / 4096.0);
 }
 
-void printSP4B(SMCVal_t val)
-{
-    printf("%.4f ", ((SInt16)ntohs(*(UInt16*)val.bytes)) / 2048.0);
+void printSP4B(SMCVal_t val) {
+    printf("%.4f ", ((SInt16) ntohs(*(UInt16 *) val.bytes)) / 2048.0);
 }
 
-void printSP5A(SMCVal_t val)
-{
-    printf("%.4f ", ((SInt16)ntohs(*(UInt16*)val.bytes)) / 1024.0);
+void printSP5A(SMCVal_t val) {
+    printf("%.4f ", ((SInt16) ntohs(*(UInt16 *) val.bytes)) / 1024.0);
 }
 
-void printSP69(SMCVal_t val)
-{
-    printf("%.3f ", ((SInt16)ntohs(*(UInt16*)val.bytes)) / 512.0);
+void printSP69(SMCVal_t val) {
+    printf("%.3f ", ((SInt16) ntohs(*(UInt16 *) val.bytes)) / 512.0);
 }
 
-void printSP78(SMCVal_t val)
-{
-    printf("%.3f ", ((SInt16)ntohs(*(UInt16*)val.bytes)) / 256.0);
+void printSP78(SMCVal_t val) {
+    printf("%.3f ", ((SInt16) ntohs(*(UInt16 *) val.bytes)) / 256.0);
 }
 
-void printSP87(SMCVal_t val)
-{
-    printf("%.3f ", ((SInt16)ntohs(*(UInt16*)val.bytes)) / 128.0);
+void printSP87(SMCVal_t val) {
+    printf("%.3f ", ((SInt16) ntohs(*(UInt16 *) val.bytes)) / 128.0);
 }
 
-void printSP96(SMCVal_t val)
-{
-    printf("%.2f ", ((SInt16)ntohs(*(UInt16*)val.bytes)) / 64.0);
+void printSP96(SMCVal_t val) {
+    printf("%.2f ", ((SInt16) ntohs(*(UInt16 *) val.bytes)) / 64.0);
 }
 
-void printSPB4(SMCVal_t val)
-{
-    printf("%.2f ", ((SInt16)ntohs(*(UInt16*)val.bytes)) / 16.0);
+void printSPB4(SMCVal_t val) {
+    printf("%.2f ", ((SInt16) ntohs(*(UInt16 *) val.bytes)) / 16.0);
 }
 
-void printSPF0(SMCVal_t val)
-{
-    printf("%.0f ", (float)ntohs(*(UInt16*)val.bytes));
+void printSPF0(SMCVal_t val) {
+    printf("%.0f ", (float) ntohs(*(UInt16 *) val.bytes));
 }
 
-void printSI8(SMCVal_t val)
-{
-    printf("%d ", (signed char)*val.bytes);
+void printSI8(SMCVal_t val) {
+    printf("%d ", (signed char) *val.bytes);
 }
 
-void printSI16(SMCVal_t val)
-{
-    printf("%d ", ntohs(*(SInt16*)val.bytes));
+void printSI16(SMCVal_t val) {
+    printf("%d ", ntohs(*(SInt16 *) val.bytes));
 }
 
-void printPWM(SMCVal_t val)
-{
-    printf("%.1f%% ", ntohs(*(UInt16*)val.bytes) * 100 / 65536.0);
+void printPWM(SMCVal_t val) {
+    printf("%.1f%% ", ntohs(*(UInt16 *) val.bytes) * 100 / 65536.0);
 }
 
 
-void printBytesHex(SMCVal_t val)
-{
+void printBytesHex(SMCVal_t val) {
     int i;
 
     printf("(bytes");
@@ -216,11 +186,9 @@ void printBytesHex(SMCVal_t val)
     printf(")\n");
 }
 
-void printVal(SMCVal_t val)
-{
+void printVal(SMCVal_t val) {
     printf("  %-4s  [%-4s]  ", val.key, val.dataType);
-    if (val.dataSize > 0)
-    {
+    if (val.dataSize > 0) {
         if ((strcmp(val.dataType, DATATYPE_UINT8) == 0) ||
             (strcmp(val.dataType, DATATYPE_UINT16) == 0) ||
             (strcmp(val.dataType, DATATYPE_UINT32) == 0))
@@ -245,174 +213,157 @@ void printVal(SMCVal_t val)
             printFPC4(val);
         else if (strcmp(val.dataType, DATATYPE_FPE2) == 0 && val.dataSize == 2)
             printFPE2(val);
-		else if (strcmp(val.dataType, DATATYPE_SP1E) == 0 && val.dataSize == 2)
-			printSP1E(val);
-		else if (strcmp(val.dataType, DATATYPE_SP3C) == 0 && val.dataSize == 2)
-			printSP3C(val);
-		else if (strcmp(val.dataType, DATATYPE_SP4B) == 0 && val.dataSize == 2)
-			printSP4B(val);
-		else if (strcmp(val.dataType, DATATYPE_SP5A) == 0 && val.dataSize == 2)
-			printSP5A(val);
-		else if (strcmp(val.dataType, DATATYPE_SP69) == 0 && val.dataSize == 2)
-			printSP69(val);
-		else if (strcmp(val.dataType, DATATYPE_SP78) == 0 && val.dataSize == 2)
-			printSP78(val);
-		else if (strcmp(val.dataType, DATATYPE_SP87) == 0 && val.dataSize == 2)
-			printSP87(val);
-		else if (strcmp(val.dataType, DATATYPE_SP96) == 0 && val.dataSize == 2)
-			printSP96(val);
-		else if (strcmp(val.dataType, DATATYPE_SPB4) == 0 && val.dataSize == 2)
-			printSPB4(val);
-		else if (strcmp(val.dataType, DATATYPE_SPF0) == 0 && val.dataSize == 2)
-			printSPF0(val);
-		else if (strcmp(val.dataType, DATATYPE_SI8) == 0 && val.dataSize == 1)
-			printSI8(val);
-		else if (strcmp(val.dataType, DATATYPE_SI16) == 0 && val.dataSize == 2)
-			printSI16(val);
-		else if (strcmp(val.dataType, DATATYPE_PWM) == 0 && val.dataSize == 2)
-			printPWM(val);
-		else if (strcmp(val.dataType, DATATYPE_FLT) == 0 && val.dataSize == 4)
-			printFLT(val);
+        else if (strcmp(val.dataType, DATATYPE_SP1E) == 0 && val.dataSize == 2)
+            printSP1E(val);
+        else if (strcmp(val.dataType, DATATYPE_SP3C) == 0 && val.dataSize == 2)
+            printSP3C(val);
+        else if (strcmp(val.dataType, DATATYPE_SP4B) == 0 && val.dataSize == 2)
+            printSP4B(val);
+        else if (strcmp(val.dataType, DATATYPE_SP5A) == 0 && val.dataSize == 2)
+            printSP5A(val);
+        else if (strcmp(val.dataType, DATATYPE_SP69) == 0 && val.dataSize == 2)
+            printSP69(val);
+        else if (strcmp(val.dataType, DATATYPE_SP78) == 0 && val.dataSize == 2)
+            printSP78(val);
+        else if (strcmp(val.dataType, DATATYPE_SP87) == 0 && val.dataSize == 2)
+            printSP87(val);
+        else if (strcmp(val.dataType, DATATYPE_SP96) == 0 && val.dataSize == 2)
+            printSP96(val);
+        else if (strcmp(val.dataType, DATATYPE_SPB4) == 0 && val.dataSize == 2)
+            printSPB4(val);
+        else if (strcmp(val.dataType, DATATYPE_SPF0) == 0 && val.dataSize == 2)
+            printSPF0(val);
+        else if (strcmp(val.dataType, DATATYPE_SI8) == 0 && val.dataSize == 1)
+            printSI8(val);
+        else if (strcmp(val.dataType, DATATYPE_SI16) == 0 && val.dataSize == 2)
+            printSI16(val);
+        else if (strcmp(val.dataType, DATATYPE_PWM) == 0 && val.dataSize == 2)
+            printPWM(val);
+        else if (strcmp(val.dataType, DATATYPE_FLT) == 0 && val.dataSize == 4)
+            printFLT(val);
 
         printBytesHex(val);
-    }
-    else
-    {
-            printf("no data\n");
+    } else {
+        printf("no data\n");
     }
 }
 
 #pragma mark Shared SMC functions
 
-kern_return_t SMCOpen(io_connect_t *conn)
-{
+kern_return_t SMCOpen(io_connect_t *conn) {
     kern_return_t result;
-    mach_port_t   masterPort;
+    mach_port_t masterPort;
     io_iterator_t iterator;
-    io_object_t   device;
-    
-	IOMasterPort(MACH_PORT_NULL, &masterPort);
-    
+    io_object_t device;
+
+    IOMasterPort(MACH_PORT_NULL, &masterPort);
+
     CFMutableDictionaryRef matchingDictionary = IOServiceMatching("AppleSMC");
     result = IOServiceGetMatchingServices(masterPort, matchingDictionary, &iterator);
-    if (result != kIOReturnSuccess)
-    {
+    if (result != kIOReturnSuccess) {
         printf("Error: IOServiceGetMatchingServices() = %08x\n", result);
         return 1;
     }
-    
+
     device = IOIteratorNext(iterator);
     IOObjectRelease(iterator);
-    if (device == 0)
-    {
+    if (device == 0) {
         printf("Error: no SMC found\n");
         return 1;
     }
-    
+
     result = IOServiceOpen(device, mach_task_self(), 0, conn);
     IOObjectRelease(device);
-    if (result != kIOReturnSuccess)
-    {
+    if (result != kIOReturnSuccess) {
         printf("Error: IOServiceOpen() = %08x\n", result);
         return 1;
     }
-    
+
     return kIOReturnSuccess;
 }
 
-kern_return_t SMCClose(io_connect_t conn)
-{
+kern_return_t SMCClose(io_connect_t conn) {
     return IOServiceClose(conn);
 }
 
-kern_return_t SMCCall2(int index, SMCKeyData_t *inputStructure, SMCKeyData_t *outputStructure,io_connect_t conn)
-{
-    size_t   structureInputSize;
-    size_t   structureOutputSize;
+kern_return_t SMCCall2(int index, SMCKeyData_t *inputStructure, SMCKeyData_t *outputStructure, io_connect_t conn) {
+    size_t structureInputSize;
+    size_t structureOutputSize;
     structureInputSize = sizeof(SMCKeyData_t);
     structureOutputSize = sizeof(SMCKeyData_t);
-    
+
     return IOConnectCallStructMethod(conn, index, inputStructure, structureInputSize, outputStructure, &structureOutputSize);
 }
 
 // Provides key info, using a cache to dramatically improve the energy impact of smcFanControl
-kern_return_t SMCGetKeyInfo(UInt32 key, SMCKeyData_keyInfo_t* keyInfo, io_connect_t conn)
-{
+kern_return_t SMCGetKeyInfo(UInt32 key, SMCKeyData_keyInfo_t *keyInfo, io_connect_t conn) {
     SMCKeyData_t inputStructure;
     SMCKeyData_t outputStructure;
     kern_return_t result = kIOReturnSuccess;
     int i = 0;
-    
+
     OSSpinLockLock(&g_keyInfoSpinLock);
-    
-    for (; i < g_keyInfoCacheCount; ++i)
-    {
-        if (key == g_keyInfoCache[i].key)
-        {
+
+    for (; i < g_keyInfoCacheCount; ++i) {
+        if (key == g_keyInfoCache[i].key) {
             *keyInfo = g_keyInfoCache[i].keyInfo;
             break;
         }
     }
-    
-    if (i == g_keyInfoCacheCount)
-    {
+
+    if (i == g_keyInfoCacheCount) {
         // Not in cache, must look it up.
         memset(&inputStructure, 0, sizeof(inputStructure));
         memset(&outputStructure, 0, sizeof(outputStructure));
-        
+
         inputStructure.key = key;
         inputStructure.data8 = SMC_CMD_READ_KEYINFO;
-        
+
         result = SMCCall2(KERNEL_INDEX_SMC, &inputStructure, &outputStructure, conn);
-        if (result == kIOReturnSuccess)
-        {
+        if (result == kIOReturnSuccess) {
             *keyInfo = outputStructure.keyInfo;
-            if (g_keyInfoCacheCount < KEY_INFO_CACHE_SIZE)
-            {
+            if (g_keyInfoCacheCount < KEY_INFO_CACHE_SIZE) {
                 g_keyInfoCache[g_keyInfoCacheCount].key = key;
                 g_keyInfoCache[g_keyInfoCacheCount].keyInfo = outputStructure.keyInfo;
                 ++g_keyInfoCacheCount;
             }
         }
     }
-    
+
     OSSpinLockUnlock(&g_keyInfoSpinLock);
-    
+
     return result;
 }
 
-kern_return_t SMCReadKey2(UInt32Char_t key, SMCVal_t *val,io_connect_t conn)
-{
+kern_return_t SMCReadKey2(UInt32Char_t key, SMCVal_t *val, io_connect_t conn) {
     kern_return_t result;
-    SMCKeyData_t  inputStructure;
-    SMCKeyData_t  outputStructure;
-    
+    SMCKeyData_t inputStructure;
+    SMCKeyData_t outputStructure;
+
     memset(&inputStructure, 0, sizeof(SMCKeyData_t));
     memset(&outputStructure, 0, sizeof(SMCKeyData_t));
     memset(val, 0, sizeof(SMCVal_t));
-    
+
     inputStructure.key = _strtoul(key, 4, 16);
     sprintf(val->key, key);
-    
+
     result = SMCGetKeyInfo(inputStructure.key, &outputStructure.keyInfo, conn);
-    if (result != kIOReturnSuccess)
-    {
+    if (result != kIOReturnSuccess) {
         return result;
     }
-    
+
     val->dataSize = outputStructure.keyInfo.dataSize;
     _ultostr(val->dataType, outputStructure.keyInfo.dataType);
     inputStructure.keyInfo.dataSize = val->dataSize;
     inputStructure.data8 = SMC_CMD_READ_BYTES;
-    
-    result = SMCCall2(KERNEL_INDEX_SMC, &inputStructure, &outputStructure,conn);
-    if (result != kIOReturnSuccess)
-    {
+
+    result = SMCCall2(KERNEL_INDEX_SMC, &inputStructure, &outputStructure, conn);
+    if (result != kIOReturnSuccess) {
         return result;
     }
-    
+
     memcpy(val->bytes, outputStructure.bytes, sizeof(outputStructure.bytes));
-    
+
     return kIOReturnSuccess;
 }
 
@@ -423,11 +374,11 @@ kern_return_t SMCReadKey2(UInt32Char_t key, SMCVal_t *val,io_connect_t conn)
 io_connect_t g_conn = 0;
 
 void smc_init(){
-	SMCOpen(&g_conn);
+    SMCOpen(&g_conn);
 }
 
 void smc_close(){
-	SMCClose(g_conn);
+    SMCClose(g_conn);
 }
 
 kern_return_t SMCCall(int index, SMCKeyData_t *inputStructure, SMCKeyData_t *outputStructure)
@@ -445,25 +396,25 @@ kern_return_t SMCWriteKey2(SMCVal_t writeVal, io_connect_t conn)
     kern_return_t result;
     SMCKeyData_t  inputStructure;
     SMCKeyData_t  outputStructure;
-    
+
     SMCVal_t      readVal;
-    
+
     result = SMCReadKey2(writeVal.key, &readVal,conn);
     if (result != kIOReturnSuccess)
         return result;
-    
+
     if (readVal.dataSize != writeVal.dataSize)
         return kIOReturnError;
-    
+
     memset(&inputStructure, 0, sizeof(SMCKeyData_t));
     memset(&outputStructure, 0, sizeof(SMCKeyData_t));
-    
+
     inputStructure.key = _strtoul(writeVal.key, 4, 16);
     inputStructure.data8 = SMC_CMD_WRITE_BYTES;
     inputStructure.keyInfo.dataSize = writeVal.dataSize;
     memcpy(inputStructure.bytes, writeVal.bytes, sizeof(writeVal.bytes));
     result = SMCCall2(KERNEL_INDEX_SMC, &inputStructure, &outputStructure,conn);
-    
+
     if (result != kIOReturnSuccess)
         return result;
     return kIOReturnSuccess;
@@ -477,7 +428,7 @@ kern_return_t SMCWriteKey(SMCVal_t writeVal)
 UInt32 SMCReadIndexCount(void)
 {
     SMCVal_t val;
-    
+
     SMCReadKey("#KEY", &val);
     return _strtoul((char *)val.bytes, val.dataSize, 10);
 }
@@ -487,31 +438,31 @@ kern_return_t SMCPrintAll(void)
     kern_return_t result;
     SMCKeyData_t  inputStructure;
     SMCKeyData_t  outputStructure;
-    
+
     int           totalKeys, i;
     UInt32Char_t  key;
     SMCVal_t      val;
-    
+
     totalKeys = SMCReadIndexCount();
     for (i = 0; i < totalKeys; i++)
     {
         memset(&inputStructure, 0, sizeof(SMCKeyData_t));
         memset(&outputStructure, 0, sizeof(SMCKeyData_t));
         memset(&val, 0, sizeof(SMCVal_t));
-        
+
         inputStructure.data8 = SMC_CMD_READ_INDEX;
         inputStructure.data32 = i;
-        
+
         result = SMCCall(KERNEL_INDEX_SMC, &inputStructure, &outputStructure);
         if (result != kIOReturnSuccess)
             continue;
-        
+
         _ultostr(key, outputStructure.key);
-        
-		SMCReadKey(key, &val);
+
+        SMCReadKey(key, &val);
         printVal(val);
     }
-    
+
     return kIOReturnSuccess;
 }
 
@@ -524,16 +475,16 @@ float getFloatFromVal(SMCVal_t val)
     if (val.dataSize > 0)
     {
         if (strcmp(val.dataType, DATATYPE_FLT) == 0 && val.dataSize == 4) {
-	         memcpy(&fval,val.bytes,sizeof(float));
+             memcpy(&fval,val.bytes,sizeof(float));
         }
         else if (strcmp(val.dataType, DATATYPE_FPE2) == 0 && val.dataSize == 2) {
-    	     fval = _strtof(val.bytes, val.dataSize, 2);
+             fval = _strtof(val.bytes, val.dataSize, 2);
         }
         else if (strcmp(val.dataType, DATATYPE_UINT16) == 0 && val.dataSize == 2) {
-    	     fval = (float)_strtoul((char *)val.bytes, val.dataSize, 10);
+             fval = (float)_strtoul((char *)val.bytes, val.dataSize, 10);
         }
         else if (strcmp(val.dataType, DATATYPE_UINT8) == 0 && val.dataSize == 1) {
-    	     fval = (float)_strtoul((char *)val.bytes, val.dataSize, 10);
+             fval = (float)_strtoul((char *)val.bytes, val.dataSize, 10);
         }
     }
 
@@ -546,14 +497,14 @@ kern_return_t SMCPrintFans(void)
     SMCVal_t      val;
     UInt32Char_t  key;
     int           totalFans, i;
-    
+
     result = SMCReadKey("FNum", &val);
     if (result != kIOReturnSuccess)
         return kIOReturnError;
-    
+
     totalFans = _strtoul((char *)val.bytes, val.dataSize, 10);
     printf("Total fans in system: %d\n", totalFans);
-    
+
     for (i = 0; i < totalFans; i++)
     {
         printf("\nFan #%d:\n", i);
@@ -593,7 +544,7 @@ kern_return_t SMCPrintFans(void)
                 printf("    Mode         : auto\n");
         }
     }
-    
+
     return kIOReturnSuccess;
 }
 
@@ -669,7 +620,7 @@ kern_return_t SMCWriteSimple(UInt32Char_t key, char *wvalue, io_connect_t conn)
     result = SMCWriteKey2(val, conn);
     if (result != kIOReturnSuccess)
         printf("Error: SMCWriteKey() = %08x\n", result);
-	
+
     
     return result;
 }

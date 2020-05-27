@@ -13,7 +13,6 @@
 		891683E90AEBD95B00888535 /* smcWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 891683E80AEBD95B00888535 /* smcWrapper.m */; };
 		8917FB860ADEECAD00443DA1 /* paypal.gif in Resources */ = {isa = PBXBuildFile; fileRef = 8917FB850ADEECAD00443DA1 /* paypal.gif */; };
 		891DEF110B40736D001A7C32 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 891DEF100B40736D001A7C32 /* WebKit.framework */; };
-		8924ECFD15AC98380031730C /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8924ECFC15AC98380031730C /* IOKit.framework */; };
 		8924ECFE15AC98880031730C /* smc.c in Sources */ = {isa = PBXBuildFile; fileRef = 89C053BC0ADAB7630037CA16 /* smc.c */; };
 		892A7F450B10B7700041B493 /* MachineDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 892A7F440B10B7700041B493 /* MachineDefaults.m */; };
 		8932CF2413D08551008BC447 /* SystemVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 8932CF2313D08551008BC447 /* SystemVersion.m */; };
@@ -26,7 +25,6 @@
 		8985F1590ADD0B5500F9EC46 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8985F1580ADD0B5500F9EC46 /* Security.framework */; };
 		8987FBD20B878B3900A5ED8E /* smc.png in Resources */ = {isa = PBXBuildFile; fileRef = 8987FBD00B878B3900A5ED8E /* smc.png */; };
 		89949E8D0AEEA37700077E93 /* Power.m in Sources */ = {isa = PBXBuildFile; fileRef = 89949E8C0AEEA37700077E93 /* Power.m */; };
-		899D59DC15E1CF60003E322D /* smc in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8924ECEE15AC96E70031730C /* smc */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		899D59DD15E1CFFF003E322D /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 895BDA390B8F8F42003CD894 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		89B243200B7E351000CAD103 /* smcfancontrol_v2.icns in Resources */ = {isa = PBXBuildFile; fileRef = 89B2431F0B7E351000CAD103 /* smcfancontrol_v2.icns */; };
 		89E7D3650ADE819B000F67AB /* Machines.plist in Resources */ = {isa = PBXBuildFile; fileRef = 89E7D3640ADE819B000F67AB /* Machines.plist */; };
@@ -34,6 +32,17 @@
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		AFD3F21F247B41340086D29E /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 894A494A0ADBEEF4008785F3 /* IOKit.framework */; };
+		AFD3F221247B41B30086D29E /* DisableTurboBoost.32bits.kext in Resources */ = {isa = PBXBuildFile; fileRef = AFD3F220247B41B30086D29E /* DisableTurboBoost.32bits.kext */; };
+		AFD3F223247B41BC0086D29E /* DisableTurboBoost.64bits.kext in Resources */ = {isa = PBXBuildFile; fileRef = AFD3F222247B41BB0086D29E /* DisableTurboBoost.64bits.kext */; };
+		AFD3F22C247B58CB0086D29E /* Privilege.m in Sources */ = {isa = PBXBuildFile; fileRef = AFD3F22B247B58CB0086D29E /* Privilege.m */; };
+		AFED6518247E2E4800BEDCB5 /* smc in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8924ECEE15AC96E70031730C /* smc */; };
+		AFED6519247E2E4B00BEDCB5 /* tb-switcher in CopyFiles */ = {isa = PBXBuildFile; fileRef = AFF28EC8247D987C00B47C72 /* tb-switcher */; };
+		AFF28ECB247D987C00B47C72 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = AFF28ECA247D987C00B47C72 /* main.c */; };
+		AFF28ED2247D9B0600B47C72 /* com.tinkernels.tb-switcher.plist in Resources */ = {isa = PBXBuildFile; fileRef = AFF28ED0247D9A9500B47C72 /* com.tinkernels.tb-switcher.plist */; };
+		AFF28ED5247DAE4F00B47C72 /* tb-switcher_s.c in Sources */ = {isa = PBXBuildFile; fileRef = AFF28ED4247DAE4F00B47C72 /* tb-switcher_s.c */; };
+		AFF28ED7247DAE7A00B47C72 /* tb-switcher_c.c in Sources */ = {isa = PBXBuildFile; fileRef = AFF28ED6247DAE7A00B47C72 /* tb-switcher_c.c */; };
+		AFF28ED8247DAE7A00B47C72 /* tb-switcher_c.c in Sources */ = {isa = PBXBuildFile; fileRef = AFF28ED6247DAE7A00B47C72 /* tb-switcher_c.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -52,7 +61,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
-				899D59DC15E1CF60003E322D /* smc in CopyFiles */,
+				AFED6519247E2E4B00BEDCB5 /* tb-switcher in CopyFiles */,
+				AFED6518247E2E4800BEDCB5 /* smc in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,16 +76,25 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AFF28EC6247D987C00B47C72 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 2483028224; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		4C65C0201AC83BED006E760F /* French */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/Localizable.strings; sourceTree = "<group>"; };
+		4C65C0201AC83BED006E760F /* French */ = {isa = PBXFileReference; fileEncoding = 2483028224; lastKnownFileType = text.plist.strings; name = French; path = French.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4C65C0211AC83BF2006E760F /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		4C65C0221AC83BF7006E760F /* French */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = French; path = French.lproj/F.A.Q.rtf; sourceTree = "<group>"; };
 		89033CA10B80E1DF00FDAF43 /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/F.A.Q.rtf; sourceTree = "<group>"; };
@@ -89,7 +108,6 @@
 		8917FB850ADEECAD00443DA1 /* paypal.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = paypal.gif; sourceTree = "<group>"; };
 		891DEF100B40736D001A7C32 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
 		8924ECEE15AC96E70031730C /* smc */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = smc; sourceTree = BUILT_PRODUCTS_DIR; };
-		8924ECFC15AC98380031730C /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk/System/Library/Frameworks/IOKit.framework; sourceTree = DEVELOPER_DIR; };
 		892A7F430B10B7700041B493 /* MachineDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MachineDefaults.h; sourceTree = "<group>"; };
 		892A7F440B10B7700041B493 /* MachineDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MachineDefaults.m; sourceTree = "<group>"; };
 		8932CF2213D0850F008BC447 /* SystemVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemVersion.h; sourceTree = "<group>"; };
@@ -97,7 +115,7 @@
 		8932CFF813D08DC4008BC447 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = Dutch; path = Dutch.lproj/F.A.Q.rtf; sourceTree = "<group>"; };
 		8932CFF913D08DD7008BC447 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Dutch; path = Dutch.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8932CFFA13D08DDF008BC447 /* Dutch */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Dutch; path = Dutch.lproj/MainMenu.nib; sourceTree = "<group>"; };
-		893506130B440249001BFBA5 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
+		893506130B440249001BFBA5 /* English */ = {isa = PBXFileReference; fileEncoding = 2483028224; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8935061B0B440264001BFBA5 /* German */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = German; path = German.lproj/Localizable.strings; sourceTree = "<group>"; };
 		894A465F0ADBD6CF008785F3 /* FanControl.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FanControl.h; sourceTree = "<group>"; };
 		894A46600ADBD6CF008785F3 /* FanControl.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FanControl.m; sourceTree = "<group>"; };
@@ -121,6 +139,16 @@
 		89FE24280B7F4CE900D2713C /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* smcFanControl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = smcFanControl.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AFD3F220247B41B30086D29E /* DisableTurboBoost.32bits.kext */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.kernel-extension"; path = DisableTurboBoost.32bits.kext; sourceTree = "<group>"; };
+		AFD3F222247B41BB0086D29E /* DisableTurboBoost.64bits.kext */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.kernel-extension"; path = DisableTurboBoost.64bits.kext; sourceTree = "<group>"; };
+		AFD3F22B247B58CB0086D29E /* Privilege.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Privilege.m; sourceTree = "<group>"; };
+		AFD3F22D247B591A0086D29E /* Privilege.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Privilege.h; sourceTree = "<group>"; };
+		AFF28EC8247D987C00B47C72 /* tb-switcher */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "tb-switcher"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AFF28ECA247D987C00B47C72 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		AFF28ED0247D9A9500B47C72 /* com.tinkernels.tb-switcher.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "com.tinkernels.tb-switcher.plist"; sourceTree = "<group>"; };
+		AFF28ED3247DA41A00B47C72 /* tb-switcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "tb-switcher.h"; sourceTree = "<group>"; };
+		AFF28ED4247DAE4F00B47C72 /* tb-switcher_s.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "tb-switcher_s.c"; sourceTree = "<group>"; };
+		AFF28ED6247DAE7A00B47C72 /* tb-switcher_c.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "tb-switcher_c.c"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,7 +156,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8924ECFD15AC98380031730C /* IOKit.framework in Frameworks */,
+				AFD3F21F247B41340086D29E /* IOKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -144,12 +172,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AFF28EC5247D987C00B47C72 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				AFD3F22D247B591A0086D29E /* Privilege.h */,
+				AFD3F22B247B58CB0086D29E /* Privilege.m */,
 				897753AB1DB3D89D00595411 /* Constants.h */,
 				89148EA115E2543D00A073EE /* NSFileManager+DirectoryLocations.m */,
 				89148EA215E2543D00A073EE /* NSFileManager+DirectoryLocations.h */,
@@ -181,7 +218,6 @@
 		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8924ECFC15AC98380031730C /* IOKit.framework */,
 				891DEF100B40736D001A7C32 /* WebKit.framework */,
 				8985F1580ADD0B5500F9EC46 /* Security.framework */,
 				894A494A0ADBEEF4008785F3 /* IOKit.framework */,
@@ -197,6 +233,7 @@
 			children = (
 				8D1107320486CEB800E47090 /* smcFanControl.app */,
 				8924ECEE15AC96E70031730C /* smc */,
+				AFF28EC8247D987C00B47C72 /* tb-switcher */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -204,6 +241,7 @@
 		29B97314FDCFA39411CA2CEA /* FanControl */ = {
 			isa = PBXGroup;
 			children = (
+				AFF28EC9247D987C00B47C72 /* tb-switcher */,
 				898C281A15E2B6E30044EEC3 /* smc-command */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -226,6 +264,9 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				AFF28ED0247D9A9500B47C72 /* com.tinkernels.tb-switcher.plist */,
+				AFD3F222247B41BB0086D29E /* DisableTurboBoost.64bits.kext */,
+				AFD3F220247B41B30086D29E /* DisableTurboBoost.32bits.kext */,
 				89559A830BAC338400DBA37E /* smcover.png */,
 				8987FBD00B878B3900A5ED8E /* smc.png */,
 				89033CA60B80E1EB00FDAF43 /* F.A.Q.rtf */,
@@ -257,6 +298,17 @@
 				89C053BD0ADAB7630037CA16 /* smc.h */,
 			);
 			path = "smc-command";
+			sourceTree = "<group>";
+		};
+		AFF28EC9247D987C00B47C72 /* tb-switcher */ = {
+			isa = PBXGroup;
+			children = (
+				AFF28ECA247D987C00B47C72 /* main.c */,
+				AFF28ED3247DA41A00B47C72 /* tb-switcher.h */,
+				AFF28ED4247DAE4F00B47C72 /* tb-switcher_s.c */,
+				AFF28ED6247DAE7A00B47C72 /* tb-switcher_c.c */,
+			);
+			path = "tb-switcher";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -299,6 +351,23 @@
 			productReference = 8D1107320486CEB800E47090 /* smcFanControl.app */;
 			productType = "com.apple.product-type.application";
 		};
+		AFF28EC7247D987C00B47C72 /* tb-switcher */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AFF28ECE247D987C00B47C72 /* Build configuration list for PBXNativeTarget "tb-switcher" */;
+			buildPhases = (
+				AFF28EC4247D987C00B47C72 /* Sources */,
+				AFF28EC5247D987C00B47C72 /* Frameworks */,
+				AFF28EC6247D987C00B47C72 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "tb-switcher";
+			productName = "tb-switcher";
+			productReference = AFF28EC8247D987C00B47C72 /* tb-switcher */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -308,12 +377,15 @@
 				LastUpgradeCheck = 1000;
 				TargetAttributes = {
 					8924ECED15AC96E70031730C = {
-						DevelopmentTeam = H4G85G26BP;
-						ProvisioningStyle = Manual;
+						DevelopmentTeam = YKS755N9YR;
 					};
 					8D1107260486CEB800E47090 = {
-						DevelopmentTeam = H4G85G26BP;
-						ProvisioningStyle = Manual;
+						DevelopmentTeam = YKS755N9YR;
+					};
+					AFF28EC7247D987C00B47C72 = {
+						CreatedOnToolsVersion = 11.5;
+						DevelopmentTeam = YKS755N9YR;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -338,6 +410,7 @@
 			targets = (
 				8D1107260486CEB800E47090 /* smcFanControl */,
 				8924ECED15AC96E70031730C /* smc */,
+				AFF28EC7247D987C00B47C72 /* tb-switcher */,
 			);
 		};
 /* End PBXProject section */
@@ -352,10 +425,13 @@
 				8917FB860ADEECAD00443DA1 /* paypal.gif in Resources */,
 				893506180B440255001BFBA5 /* Localizable.strings in Resources */,
 				89B243200B7E351000CAD103 /* smcfancontrol_v2.icns in Resources */,
-				89FE24230B7F4CD300D2713C /* MainMenu.nib in Resources */,
 				89033CA70B80E1EB00FDAF43 /* F.A.Q.rtf in Resources */,
 				8987FBD20B878B3900A5ED8E /* smc.png in Resources */,
 				89559A840BAC338500DBA37E /* smcover.png in Resources */,
+				AFF28ED2247D9B0600B47C72 /* com.tinkernels.tb-switcher.plist in Resources */,
+				89FE24230B7F4CD300D2713C /* MainMenu.nib in Resources */,
+				AFD3F221247B41B30086D29E /* DisableTurboBoost.32bits.kext in Resources */,
+				AFD3F223247B41BC0086D29E /* DisableTurboBoost.64bits.kext in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -377,12 +453,24 @@
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				894A46610ADBD6CF008785F3 /* FanControl.m in Sources */,
 				8916827A0AEBB14F00888535 /* StatusItemWindow.m in Sources */,
+				AFD3F22C247B58CB0086D29E /* Privilege.m in Sources */,
 				893355FF1CA02F1A00388D5D /* smc.c in Sources */,
 				891683E90AEBD95B00888535 /* smcWrapper.m in Sources */,
 				89949E8D0AEEA37700077E93 /* Power.m in Sources */,
+				AFF28ED7247DAE7A00B47C72 /* tb-switcher_c.c in Sources */,
 				892A7F450B10B7700041B493 /* MachineDefaults.m in Sources */,
 				8932CF2413D08551008BC447 /* SystemVersion.m in Sources */,
 				89148EA315E2543D00A073EE /* NSFileManager+DirectoryLocations.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AFF28EC4247D987C00B47C72 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AFF28ED5247DAE4F00B47C72 /* tb-switcher_s.c in Sources */,
+				AFF28ECB247D987C00B47C72 /* main.c in Sources */,
+				AFF28ED8247DAE7A00B47C72 /* tb-switcher_c.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -444,9 +532,9 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Mac Developer";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = H4G85G26BP;
+				DEVELOPMENT_TEAM = YKS755N9YR;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -472,11 +560,12 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = H4G85G26BP;
+				DEVELOPMENT_TEAM = YKS755N9YR;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = CMD_TOOL_BUILD;
@@ -487,18 +576,134 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		AFF28ECC247D987C00B47C72 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = YKS755N9YR;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		AFF28ECD247D987C00B47C72 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = YKS755N9YR;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = H4G85G26BP;
+				CURRENT_PROJECT_VERSION = 2.7.0;
+				DEVELOPMENT_TEAM = YKS755N9YR;
 				FRAMEWORK_SEARCH_PATHS = (
 					.,
 					"$(inherited)",
@@ -519,6 +724,7 @@
 					"\"$(SDKROOT)/usr/lib/system\"",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MARKETING_VERSION = 2.7.0;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CODE_SIGN_FLAGS = "--deep";
 				PRODUCT_BUNDLE_IDENTIFIER = com.eidac.smcFanControl2;
@@ -534,10 +740,13 @@
 		C01FCF4C08A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = H4G85G26BP;
+				CURRENT_PROJECT_VERSION = 2.7.0;
+				DEVELOPMENT_TEAM = YKS755N9YR;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
@@ -547,6 +756,7 @@
 				FRAMEWORK_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)\"";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = "";
+				"GCC_PREPROCESSOR_DEFINITIONS[arch=*]" = "RELEASE=1";
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
@@ -558,14 +768,16 @@
 					"\"$(SDKROOT)/usr/lib/system\"",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				OBJROOT = "$(HOME)/builds";
+				MARKETING_VERSION = 2.7.0;
+				OBJROOT = "build-release";
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_CODE_SIGN_FLAGS = "--deep";
 				PRODUCT_BUNDLE_IDENTIFIER = com.eidac.smcFanControl2;
 				PRODUCT_NAME = smcFanControl;
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
-				SYMROOT = "$(HOME)/builds";
+				SYMROOT = "build-release";
 				VALID_ARCHS = "i386 x86_64";
 				WRAPPER_EXTENSION = app;
 			};
@@ -602,7 +814,7 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				SDKROOT = macosx;
-				SYMROOT = "~/builds";
+				SYMROOT = "build-release";
 				VALID_ARCHS = "i386 x86_64";
 			};
 			name = Release;
@@ -615,6 +827,15 @@
 			buildConfigurations = (
 				8924ECF615AC96E70031730C /* Debug */,
 				8924ECF715AC96E70031730C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AFF28ECE247D987C00B47C72 /* Build configuration list for PBXNativeTarget "tb-switcher" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AFF28ECC247D987C00B47C72 /* Debug */,
+				AFF28ECD247D987C00B47C72 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

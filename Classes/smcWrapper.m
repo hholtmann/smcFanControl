@@ -23,59 +23,54 @@
 
 #import "smcWrapper.h"
 #import <CommonCrypto/CommonDigest.h>
-NSString * const smc_checksum=@"4fc00a0979970ee8b55f078a0c793c4d";
+
+NSString *const smc_checksum = @"8ab515dbd0f83731306041d96eaff0ac";
 
 NSArray *allSensors;
 
 @implementation smcWrapper
-	io_connect_t conn;
+io_connect_t conn;
 
-+(void)init{
-	SMCOpen(&conn);
++ (void)init {
+    SMCOpen(&conn);
 }
-+(void)cleanUp{
+
++ (void)cleanUp {
     SMCClose(conn);
 }
 
-+(int)convertToNumber:(SMCVal_t) val
-{
++ (int)convertToNumber:(SMCVal_t)val {
     float fval = -1.0f;
 
     if (strcmp(val.dataType, DATATYPE_FLT) == 0 && val.dataSize == 4) {
-        memcpy(&fval,val.bytes,sizeof(float));
-    }
-    else if (strcmp(val.dataType, DATATYPE_FPE2) == 0 && val.dataSize == 2) {
+        memcpy(&fval, val.bytes, sizeof(float));
+    } else if (strcmp(val.dataType, DATATYPE_FPE2) == 0 && val.dataSize == 2) {
         fval = _strtof(val.bytes, val.dataSize, 2);
-    }
-    else if (strcmp(val.dataType, DATATYPE_UINT16) == 0 && val.dataSize == 2) {
-        fval = (float)_strtoul((char *)val.bytes, val.dataSize, 10);
-    }
-    else if (strcmp(val.dataType, DATATYPE_UINT8) == 0 && val.dataSize == 1) {
-        fval = (float)val.bytes[0];
-    }
-    else if (strcmp(val.dataType, DATATYPE_SP78) == 0 && val.dataSize == 2) {
-        fval = ((val.bytes[0] * 256 + val.bytes[1]) >> 2)/64;
-    }
-    else {
-        NSLog(@"%@", [NSString stringWithFormat:@"Unknown val:%s size-%d",val.dataType,val.dataSize]);
+    } else if (strcmp(val.dataType, DATATYPE_UINT16) == 0 && val.dataSize == 2) {
+        fval = (float) _strtoul((char *) val.bytes, val.dataSize, 10);
+    } else if (strcmp(val.dataType, DATATYPE_UINT8) == 0 && val.dataSize == 1) {
+        fval = (float) val.bytes[0];
+    } else if (strcmp(val.dataType, DATATYPE_SP78) == 0 && val.dataSize == 2) {
+        fval = ((val.bytes[0] * 256 + val.bytes[1]) >> 2) / 64;
+    } else {
+        NSLog(@"%@", [NSString stringWithFormat:@"Unknown val:%s size-%d", val.dataType, val.dataSize]);
     }
 
-    return (int)fval;
+    return (int) fval;
 }
 
-+(float)readTempSensors
-{
++ (float)readTempSensors {
     float retValue;
-    SMCVal_t      val;
+    SMCVal_t val;
     NSString *sensor = [[NSUserDefaults standardUserDefaults] objectForKey:PREF_TEMPERATURE_SENSOR];
-    SMCReadKey2((char*)[sensor UTF8String], &val,conn);
+    SMCReadKey2((char *) [sensor UTF8String], &val, conn);
     retValue = [self convertToNumber:val];
-    allSensors = [NSArray arrayWithObjects:@"TC0D",@"TC0P",@"TCAD",@"TC0H",@"TC0F",@"TCAH",@"TCBH",nil];
-    if (retValue<=0 || floor(retValue) == 129 ) { //workaround for some iMac Models
+    allSensors = [NSArray arrayWithObjects:@"TC0D", @"TC0P", @"TCAD", @"TC0H", @"TC0F", @"TCAH", @"TCBH", nil];
+    if (retValue <= 0 || floor(retValue) == 129) { //workaround for some iMac Models
         for (NSString *sensor in allSensors) {
-            SMCReadKey2((char*)[sensor UTF8String], &val,conn);
-            retValue= [self convertToNumber:val];
-            if (retValue>0 && floor(retValue) != 129 ) {
+            SMCReadKey2((char *) [sensor UTF8String], &val, conn);
+            retValue = [self convertToNumber:val];
+            if (retValue > 0 && floor(retValue) != 129) {
                 [[NSUserDefaults standardUserDefaults] setObject:sensor forKey:PREF_TEMPERATURE_SENSOR];
                 [[NSUserDefaults standardUserDefaults] synchronize];
                 break;
@@ -85,12 +80,12 @@ NSArray *allSensors;
     return retValue;
 }
 
-+(float) get_maintemp{
++ (float)get_maintemp {
     float retValue;
-    NSRange range_pro=[[MachineDefaults computerModel] rangeOfString:@"MacPro"];
+    NSRange range_pro = [[MachineDefaults computerModel] rangeOfString:@"MacPro"];
     if (range_pro.length > 0) {
         retValue = [smcWrapper get_mptemp];
-        if (retValue<=0 || floor(retValue) == 129 ) {
+        if (retValue <= 0 || floor(retValue) == 129) {
             retValue = [smcWrapper readTempSensors];
         }
     } else {
@@ -101,158 +96,154 @@ NSArray *allSensors;
 
 
 //temperature-readout for MacPro contributed by Victor Boyer
-+(float) get_mptemp{
-    UInt32Char_t  keyA;
-    UInt32Char_t  keyB;
-    SMCVal_t      valA;
-    SMCVal_t      valB;
-   // kern_return_t resultA;
-   // kern_return_t resultB;
++ (float)get_mptemp {
+    UInt32Char_t keyA;
+    UInt32Char_t keyB;
+    SMCVal_t valA;
+    SMCVal_t valB;
+    // kern_return_t resultA;
+    // kern_return_t resultB;
     sprintf(keyA, "TCAH");
-	SMCReadKey2(keyA, &valA,conn);
+    SMCReadKey2(keyA, &valA, conn);
     sprintf(keyB, "TCBH");
-	SMCReadKey2(keyB, &valB,conn);
-    float c_tempA= [self convertToNumber:valA];
-    float c_tempB= [self convertToNumber:valB];
+    SMCReadKey2(keyB, &valB, conn);
+    float c_tempA = [self convertToNumber:valA];
+    float c_tempB = [self convertToNumber:valB];
     int i_tempA, i_tempB;
-    if (c_tempA < c_tempB)
-    {
+    if (c_tempA < c_tempB) {
         i_tempB = round(c_tempB);
         return i_tempB;
-    }
-    else
-    {
+    } else {
         i_tempA = round(c_tempA);
         return i_tempA;
     }
 }
 
-+(int) get_fan_rpm:(int)fan_number{
-	UInt32Char_t  key;
-	SMCVal_t      val;
-	//kern_return_t result;
-	sprintf(key, "F%dAc", fan_number);
-	SMCReadKey2(key, &val,conn);
-	int running= [self convertToNumber:val];
-	return running;
-}	
-
-+(int) get_fan_num{
-//	kern_return_t result;
-    SMCVal_t      val;
-    int           totalFans;
-	SMCReadKey2("FNum", &val,conn);
-    totalFans = [self convertToNumber:val];
-	return totalFans;
++ (int)get_fan_rpm:(int)fan_number {
+    UInt32Char_t key;
+    SMCVal_t val;
+    //kern_return_t result;
+    sprintf(key, "F%dAc", fan_number);
+    SMCReadKey2(key, &val, conn);
+    int running = [self convertToNumber:val];
+    return running;
 }
 
-+(NSString*) get_fan_descr:(int)fan_number{
-	UInt32Char_t  key;
-	char temp;
-	SMCVal_t      val;
-	//kern_return_t result;
-	NSMutableString *desc;
++ (int)get_fan_num {
+    //	kern_return_t result;
+    SMCVal_t val;
+    int totalFans;
+    SMCReadKey2("FNum", &val, conn);
+    totalFans = [self convertToNumber:val];
+    return totalFans;
+}
+
++ (NSString *)get_fan_descr:(int)fan_number {
+    UInt32Char_t key;
+    char temp;
+    SMCVal_t val;
+    //kern_return_t result;
+    NSMutableString *desc;
 
     sprintf(key, "F%dID", fan_number);
-    SMCReadKey2(key, &val,conn);
+    SMCReadKey2(key, &val, conn);
 
-    if(val.dataSize>0){
-        desc=[[NSMutableString alloc]init];
+    if (val.dataSize > 0) {
+        desc = [[NSMutableString alloc] init];
         int i;
         for (i = 0; i < val.dataSize; i++) {
-            if ((int)val.bytes[i]>32) {
-                temp=(unsigned char)val.bytes[i];
-                [desc appendFormat:@"%c",temp];
+            if ((int) val.bytes[i] > 32) {
+                temp = (unsigned char) val.bytes[i];
+                [desc appendFormat:@"%c", temp];
             }
         }
-    }
-    else {
+    } else {
         //On MacBookPro 15.1 descriptions aren't available
-        desc=[[NSMutableString alloc] initWithFormat:@"Fan #%d: ",fan_number+1];
+        desc = [[NSMutableString alloc] initWithFormat:@"Fan #%d: ", fan_number + 1];
     }
-	return desc;
-}	
+    return desc;
+}
 
 
-+(int) get_min_speed:(int)fan_number{
-	UInt32Char_t  key;
-	SMCVal_t      val;
-	//kern_return_t result;
-	sprintf(key, "F%dMn", fan_number);
-	SMCReadKey2(key, &val,conn);
-	int min= [self convertToNumber:val];
-	return min;
-}	
++ (int)get_min_speed:(int)fan_number {
+    UInt32Char_t key;
+    SMCVal_t val;
+    //kern_return_t result;
+    sprintf(key, "F%dMn", fan_number);
+    SMCReadKey2(key, &val, conn);
+    int min = [self convertToNumber:val];
+    return min;
+}
 
-+(int) get_max_speed:(int)fan_number{
-	UInt32Char_t  key;
-	SMCVal_t      val;
-	//kern_return_t result;
-	sprintf(key, "F%dMx", fan_number);
-	SMCReadKey2(key, &val,conn);
-	int max= [self convertToNumber:val];
-	return max;
-}	
++ (int)get_max_speed:(int)fan_number {
+    UInt32Char_t key;
+    SMCVal_t val;
+    //kern_return_t result;
+    sprintf(key, "F%dMx", fan_number);
+    SMCReadKey2(key, &val, conn);
+    int max = [self convertToNumber:val];
+    return max;
+}
 
 
-+ (BOOL)validateSMC:(NSString*)path
-{
++ (BOOL)validateSMC:(NSString *)path {
     SecStaticCodeRef ref = NULL;
-    
-    NSURL * url = [NSURL URLWithString:path];
-    
+
+    NSURL *url = [NSURL URLWithString:path];
+
     OSStatus status;
-    
+
     // obtain the cert info from the executable
-    status = SecStaticCodeCreateWithPath((__bridge CFURLRef)url, kSecCSDefaultFlags, &ref);
-    
+    status = SecStaticCodeCreateWithPath((__bridge CFURLRef) url, kSecCSDefaultFlags, &ref);
+
     if (status != noErr) {
         return false;
     }
-    
+
     @try {
         status = SecStaticCodeCheckValidity(ref, kSecCSDefaultFlags, nil);
-        
+
         if (status != noErr) {
-            NSLog(@"Codesign verification failed: Error id = %d",status);
+            NSLog(@"Codesign verification failed: Error id = %d", status);
             return false;
         }
     }
     @catch (NSException *exception) {
-        NSLog(@"Codesign exception %@",exception);
+        NSLog(@"Codesign exception %@", exception);
         return false;
     }
-    
+
     return true;
 }
 
-+ (NSString*)createCheckSum:(NSString*)path {
-    NSData *d=[NSData dataWithContentsOfMappedFile:path];
++ (NSString *)createCheckSum:(NSString *)path {
+    NSData *d = [NSData dataWithContentsOfMappedFile:path];
     unsigned char result[CC_MD5_DIGEST_LENGTH];
-    CC_MD5((void *)[d bytes], [d length], result);
-    NSMutableString *ret = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH*2];
-    for(int i = 0; i<CC_MD5_DIGEST_LENGTH; i++) {
-        [ret appendFormat:@"%02x",result[i]];
+    CC_MD5((void *) [d bytes], [d length], result);
+    NSMutableString *ret = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
+    for (int i = 0; i < CC_MD5_DIGEST_LENGTH; i++) {
+        [ret appendFormat:@"%02x", result[i]];
     }
     return ret;
 }
 
-//call smc binary with setuid rights and apply
+// call smc binary with setuid rights and apply
 // The smc binary is given root permissions in FanControl.m with the setRights method.
-+(void)setKey_external:(NSString *)key value:(NSString *)value{
-	NSString *launchPath = [[NSBundle mainBundle]   pathForResource:@"smc" ofType:@""];
-    
-   	NSString *checksum=[smcWrapper createCheckSum:launchPath];
-    if (![checksum  isEqualToString:smc_checksum]) {
-        NSLog(@"smcFanControl: Security Error: smc-binary is not the distributed one");
-        return;
-    }
-    NSArray *argsArray = @[@"-k",key,@"-w",value];
-	NSTask *task;
-    task = [[NSTask alloc] init];
-	[task setLaunchPath: launchPath];
-	[task setArguments: argsArray];
-	[task launch];
-}
++ (void)setKey_external:(NSString *)key value:(NSString *)value {
+    NSString *launchPath = [[NSBundle mainBundle] pathForResource:@"smc" ofType:@""];
 
+    NSString *checksum = [smcWrapper createCheckSum:launchPath];
+    if (![checksum isEqualToString:smc_checksum]) {
+        NSLog(@"smcFanControl: Security Error: smc-binary is not the distributed one");
+#ifdef RELEASE
+        return;
+#endif
+    }
+    NSArray *argsArray = @[@"-k", key, @"-w", value];
+    NSTask *task;
+    task = [[NSTask alloc] init];
+    [task setLaunchPath:launchPath];
+    [task setArguments:argsArray];
+    [task launch];
+}
 @end

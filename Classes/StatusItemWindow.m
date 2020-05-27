@@ -22,11 +22,11 @@
 #import "StatusItemWindow.h"
 
 
-@implementation StatusItemWindow 
+@implementation StatusItemWindow
 
 - (void)makeKeyAndOrderFront:(id)sender {
     [[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
     [super makeKeyAndOrderFront:sender];
 }
- 
+
 @end

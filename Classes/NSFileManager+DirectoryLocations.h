@@ -28,9 +28,10 @@
 @interface NSFileManager (DirectoryLocations)
 
 - (NSString *)findOrCreateDirectory:(NSSearchPathDirectory)searchPathDirectory
-	inDomain:(NSSearchPathDomainMask)domainMask
-	appendPathComponent:(NSString *)appendComponent
-	error:(NSError **)errorOut;
-@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString *applicationSupportDirectory;
+                           inDomain:(NSSearchPathDomainMask)domainMask
+                appendPathComponent:(NSString *)appendComponent
+                              error:(NSError **)errorOut;
+
+@property(NS_NONATOMIC_IOSONLY, readonly, copy) NSString *applicationSupportDirectory;
 
 @end
