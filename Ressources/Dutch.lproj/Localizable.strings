@@ -12,7 +12,7 @@
 
 "Right Fan" = "Rechter Fan";
 
-"smcFanControl has not been tested on this machine yet, but it should run if you follow the instructions. \n\nIf you choose to continue, please make you have no other FanControl-software running. Otherwise please quit, deinstall the other software, restart your machine and rerun smcFanControl!" = "smcFanControl is nog niet getest op deze machine, maar het zou moeten werken als je de instructies volgt. \n\nAls je doorgaat, zorg dan dat er geen andere FanControl-software draait. Als dat wel zo is, de-installeer deze software dan, stop smcFanControl en restart je computer voor je smcFanControl installeert!";
+"smcFanControl has not been tested on this machine yet, but it should run if you follow the instructions. \n\nIf you choose to continue, please make sure you have no other FanControl-software running. Otherwise please quit, deinstall the other software, restart your machine and rerun smcFanControl!" = "smcFanControl is nog niet getest op deze machine, maar het zou moeten werken als je de instructies volgt. \n\nAls je doorgaat, zorg dan dat er geen andere FanControl-software draait. Als dat wel zo is, de-installeer deze software dan, stop smcFanControl en restart je computer voor je smcFanControl installeert!";
 
 "Continue" = "Doorgaan";
 
