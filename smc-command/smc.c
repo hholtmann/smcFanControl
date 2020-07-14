@@ -557,24 +557,24 @@ kern_return_t SMCPrintFans(void)
     for (i = 0; i < totalFans; i++)
     {
         printf("\nFan #%d:\n", i);
-        sprintf(key, "F%dID", i);
+        sprintf(key, "F%cID", fannum[i]);
         SMCReadKey(key, &val);
         if(val.dataSize > 0) {
             printf("    Fan ID       : %s\n", val.bytes+4);
         }
-        sprintf(key, "F%dAc", i);
+        sprintf(key, "F%cAc", fannum[i]);
         SMCReadKey(key, &val);
         printf("    Actual speed : %.0f\n", getFloatFromVal(val));
-        sprintf(key, "F%dMn", i);
+        sprintf(key, "F%cMn", fannum[i]);
         SMCReadKey(key, &val);
         printf("    Minimum speed: %.0f\n", getFloatFromVal(val));
-        sprintf(key, "F%dMx", i);
+        sprintf(key, "F%cMx", fannum[i]);
         SMCReadKey(key, &val);
         printf("    Maximum speed: %.0f\n", getFloatFromVal(val));
-        sprintf(key, "F%dSf", i);
+        sprintf(key, "F%cSf", fannum[i]);
         SMCReadKey(key, &val);
         printf("    Safe speed   : %.0f\n", getFloatFromVal(val));
-        sprintf(key, "F%dTg", i);
+        sprintf(key, "F%cTg", fannum[i]);
         SMCReadKey(key, &val);
         printf("    Target speed : %.0f\n", getFloatFromVal(val));
         SMCReadKey("FS! ", &val);

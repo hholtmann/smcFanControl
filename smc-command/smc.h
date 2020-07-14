@@ -98,6 +98,8 @@ typedef struct {
 
 typedef unsigned char              SMCBytes_t[32];
 
+UInt8 fannum[] = "0123456789ABCDEFGHIJ";
+
 typedef struct {
   UInt32                  key; 
   SMCKeyData_vers_t       vers; 
