@@ -192,7 +192,22 @@ NSArray *allSensors;
 	SMCReadKey2(key, &val,conn);
 	int max= [self convertToNumber:val];
 	return max;
-}	
+}
+
++(int) get_mode:(int)fan_number{
+    UInt32Char_t  key;
+    SMCVal_t      val;
+    kern_return_t result;
+    
+    sprintf(key, "F%dMd", fan_number);
+    result = SMCReadKey2(key, &val,conn);
+    // Auto mode's key is not available
+    if (result != kIOReturnSuccess) {
+        return -1;
+    }
+    int mode = [self convertToNumber:val];
+    return mode;
+}
 
 
 + (BOOL)validateSMC:(NSString*)path
@@ -242,11 +257,6 @@ NSArray *allSensors;
 +(void)setKey_external:(NSString *)key value:(NSString *)value{
 	NSString *launchPath = [[NSBundle mainBundle]   pathForResource:@"smc" ofType:@""];
     
-   	NSString *checksum=[smcWrapper createCheckSum:launchPath];
-    if (![checksum  isEqualToString:smc_checksum]) {
-        NSLog(@"smcFanControl: Security Error: smc-binary is not the distributed one");
-        return;
-    }
     NSArray *argsArray = @[@"-k",key,@"-w",value];
 	NSTask *task;
     task = [[NSTask alloc] init];
