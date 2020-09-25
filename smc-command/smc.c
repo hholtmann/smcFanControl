@@ -564,7 +564,7 @@ kern_return_t SMCPrintFans(void)
         }
         sprintf(key, "F%cAc", fannum[i]);
         SMCReadKey(key, &val);
-        printf("    Actual speed : %.0f\n", getFloatFromVal(val));
+        printf("    Current speed : %.0f\n", getFloatFromVal(val));
         sprintf(key, "F%cMn", fannum[i]);
         SMCReadKey(key, &val);
         printf("    Minimum speed: %.0f\n", getFloatFromVal(val));
