@@ -20,14 +20,13 @@
  *	along with this program; if not, write to the Free Software
  *	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
- 
+
 
 #import "FanControl.h"
 #import "MachineDefaults.h"
 #import <Security/Authorization.h>
 #import <Security/AuthorizationDB.h>
 #import <Security/AuthorizationTags.h>
-#import <Sparkle/SUUpdater.h>
 #import "SystemVersion.h"
 
 @interface FanControl ()
@@ -48,17 +47,17 @@ NSUserDefaults *defaults;
 #pragma mark **Init-Methods**
 
 +(void) initialize {
-    
+
 	//avoid Zombies when starting external app
 	signal(SIGCHLD, SIG_IGN);
-    
+
     [FanControl copyMachinesIfNecessary];
 	//check owner and suid rights
 	[FanControl setRights];
 
 	//talk to smc
 	[smcWrapper init];
-	
+
 	//app in foreground for update notifications
 	[[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
 
@@ -91,19 +90,19 @@ NSUserDefaults *defaults;
 			rfavorites[i][PREF_FAN_ARRAY][0][PREF_FAN_SHOWMENU] = @YES;
 		}
 	}
-	
+
 }
 
 -(void) awakeFromNib {
-    
+
 	pw=[[Power alloc] init];
 	[pw setDelegate:self];
 	[pw registerForSleepWakeNotification];
 	[pw registerForPowerChange];
-	
+
 
     //load defaults
-    
+
     [DefaultsController setAppliesImmediately:NO];
 
 	mdefaults=[[MachineDefaults alloc] init:nil];
@@ -111,20 +110,20 @@ NSUserDefaults *defaults;
     self.machineDefaultsDict=[[NSMutableDictionary alloc] initWithDictionary:[mdefaults get_machine_defaults]];
 
     NSMutableArray *favorites = [[NSMutableArray alloc] init];
-    
+
     NSMutableDictionary *defaultFav = [[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Default", PREF_FAN_TITLE,
                                   [NSKeyedUnarchiver unarchiveObjectWithData:[NSKeyedArchiver archivedDataWithRootObject:[[mdefaults get_machine_defaults] objectForKey:@"Fans"]]], PREF_FAN_ARRAY,nil];
 
     [favorites addObject:defaultFav];
-    
-    
+
+
 	NSRange range=[[MachineDefaults computerModel] rangeOfString:@"MacBook"];
 	if (range.length>0) {
 		//for macbooks add a second default
 		NSMutableDictionary *higherFav=[[NSMutableDictionary alloc] initWithObjectsAndKeys:@"Higher RPM", PREF_FAN_TITLE,
                                         [NSKeyedUnarchiver unarchiveObjectWithData:[NSKeyedArchiver archivedDataWithRootObject:[[mdefaults get_machine_defaults] objectForKey:@"Fans"]]], PREF_FAN_ARRAY,nil];
 		for (NSUInteger i=0;i<[_machineDefaultsDict[@"Fans"] count];i++) {
-            
+
             int min_value=([[[[_machineDefaultsDict objectForKey:@"Fans"] objectAtIndex:i] objectForKey:PREF_FAN_MINSPEED] intValue])*2;
             [[[higherFav objectForKey:PREF_FAN_ARRAY] objectAtIndex:i] setObject:[NSNumber numberWithInt:min_value] forKey:PREF_FAN_SELSPEED];
 		}
@@ -156,8 +155,8 @@ NSUserDefaults *defaults;
 			[NSArchiver archivedDataWithRootObject:[NSColor blackColor]],PREF_MENU_TEXTCOLOR,
 			favorites,PREF_FAVORITES_ARRAY,
 	nil]];
-	
-	
+
+
 
 	g_numFans = [smcWrapper get_fan_num];
 	s_menus=[[NSMutableArray alloc] init];
@@ -167,13 +166,13 @@ NSUserDefaults *defaults;
 		[mitem setTag:(i+1)*10];
 		[s_menus insertObject:mitem atIndex:i];
 	}
-	
+
 	[FavoritesController bind:@"content"
              toObject:[NSUserDefaultsController sharedUserDefaultsController]
           withKeyPath:[@"values." stringByAppendingString:PREF_FAVORITES_ARRAY]
               options:nil];
 	[FavoritesController setEditable:YES];
-	
+
 	// set slider sync - only for MBP
 	for (i=0;i<[[FavoritesController arrangedObjects] count];i++) {
 		if([[FavoritesController arrangedObjects][i][PREF_FAN_SYNC] boolValue]==YES) {
@@ -185,13 +184,13 @@ NSUserDefaults *defaults;
 	//init statusitem
 	[self init_statusitem];
 
-	
+
 	[programinfo setStringValue: [NSString stringWithFormat:@"%@ %@",[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"]
 	,[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"] ]];
 	//
 	[copyright setStringValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSHumanReadableCopyright"]];
 
-	
+
 	//power controls only available on portables
 	if (range.length>0) {
 		[autochange setEnabled:true];
@@ -203,7 +202,7 @@ NSUserDefaults *defaults;
 	[[[[theMenu itemWithTag:1] submenu] itemAtIndex:[[defaults objectForKey:PREF_SELECTION_DEFAULT] intValue]] setState:NSOnState];
 	[[sliderCell dataCell] setControlSize:NSSmallControlSize];
 	[self changeMenu:nil];
-	
+
 	//seting toolbar image
     menu_image = [[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"smc" ofType:@"png"]];
     menu_image_alt  = [[NSImage alloc] initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"smcover" ofType:@"png"]];
@@ -218,41 +217,23 @@ NSUserDefaults *defaults;
         [_readTimer setTolerance:2.0];
     }
 	[_readTimer fire];
-    
+
 	//autoapply settings if valid
 	[self upgradeFavorites];
-    
+
     //autostart
     [[NSUserDefaults standardUserDefaults] setValue:@([self isInAutoStart]) forKey:PREF_AUTOSTART_ENABLED];
      NSUInteger numLaunches = [[[NSUserDefaults standardUserDefaults] objectForKey:PREF_NUMBEROF_LAUNCHES] integerValue];
     [[NSUserDefaults standardUserDefaults] setObject:@(numLaunches+1) forKey:PREF_NUMBEROF_LAUNCHES];
-    if (numLaunches != 0 && (numLaunches % 3 == 0) && ![[[NSUserDefaults standardUserDefaults] objectForKey:PREF_DONATIONMESSAGE_DISPLAY] boolValue]) {
-        [self displayDonationMessage];
-    }
-    
+
     [[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(readFanData:) name:@"AppleInterfaceThemeChangedNotification" object:nil];
 
 }
 
--(void)displayDonationMessage
-{
-    NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Consider a donation",nil)
-                                     defaultButton:NSLocalizedString(@"Donate over Paypal",nil) alternateButton:NSLocalizedString(@"Never ask me again",nil) otherButton:NSLocalizedString(@"Remind me later",nil)
-                         informativeTextWithFormat:NSLocalizedString(@"smcFanControl keeps your Mac cool since 2006.\n\nIf smcFanControl is helfpul for you and you want to support further development, a small donation over Paypal is much appreciated.",nil)];
-    NSModalResponse code=[alert runModal];
-    if (code == NSAlertDefaultReturn) {
-        [self paypal:nil];
-        [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:PREF_DONATIONMESSAGE_DISPLAY];
-    } else if (code == NSAlertAlternateReturn) {
-        [[NSUserDefaults standardUserDefaults] setObject:@(YES) forKey:PREF_DONATIONMESSAGE_DISPLAY];
-    }
-}
-
-
 -(void)init_statusitem{
 	statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength: NSVariableStatusItemLength];
 	[statusItem setMenu: theMenu];
-    
+
     if ([statusItem respondsToSelector:@selector(button)]) {
         [statusItem.button setTitle:@"smc..."];
     } else {
@@ -264,7 +245,7 @@ NSUserDefaults *defaults;
 	for(i=0;i<[s_menus count];i++) {
 		[theMenu insertItem:s_menus[i] atIndex:i];
 	};
-    
+
     // Sign up for menuNeedsUpdate call
     // so that the fan speeds in the menu can be updated
     // only when needed.
@@ -327,9 +308,9 @@ NSUserDefaults *defaults;
 }
 
 - (IBAction)delete_favorite:(id)sender{
-	
+
     NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Delete favorite",nil) defaultButton:NSLocalizedString(@"No",nil) alternateButton:NSLocalizedString(@"Yes",nil) otherButton:nil informativeTextWithFormat:[NSString stringWithFormat:NSLocalizedString(@"Do you really want to delete the favorite %@?",nil), [FavoritesController arrangedObjects][[FavoritesController selectionIndex]][@"Title"] ]];
-    
+
     [alert beginSheetModalForWindow:mainwindow modalDelegate:self didEndSelector:@selector(deleteAlertDidEnd:returnCode:contextInfo:) contextInfo:NULL];
 }
 
@@ -338,14 +319,14 @@ NSUserDefaults *defaults;
 // Called via a timer mechanism. This is where all the temp / RPM reading is done.
 //reads fan data and updates the gui
 -(void) readFanData:(id)caller{
-	
+
     int i = 0;
-	
+
 	//on init handling
 	if (_machineDefaultsDict==nil) {
 		return;
 	}
-    
+
     // Determine what data is actually needed to keep the energy impact
     // as low as possible.
     bool bNeedTemp = false;
@@ -357,17 +338,17 @@ NSUserDefaults *defaults;
             bNeedTemp = true;
             bNeedRpm = true;
             break;
-            
+
         case 2:
             bNeedTemp = true;
             bNeedRpm = true;
             break;
-            
+
         case 3:
             bNeedTemp = true;
             bNeedRpm = false;
             break;
-            
+
         case 4:
             bNeedTemp = false;
             bNeedRpm = true;
@@ -378,7 +359,7 @@ NSUserDefaults *defaults;
 	NSString *fan = nil;
     float c_temp = 0.0f;
     int selectedRpm = 0;
-    
+
     if (bNeedRpm == true) {
         // Read the current fan speed for the desired fan and format text for display in the menubar.
         NSArray *fans = [FavoritesController arrangedObjects][[FavoritesController selectionIndex]][PREF_FAN_ARRAY];
@@ -389,18 +370,18 @@ NSUserDefaults *defaults;
                 break;
             }
         }
-        
+
         NSNumberFormatter *nc=[[NSNumberFormatter alloc] init];
         //avoid jumping in menu bar
         [nc setFormat:@"000;000;-000"];
-        
+
         fan = [NSString stringWithFormat:@"%@rpm",[nc stringForObjectValue:[NSNumber numberWithFloat:selectedRpm]]];
     }
-    
+
     if (bNeedTemp == true) {
         // Read current temperature and format text for the menubar.
         c_temp = [smcWrapper get_maintemp];
-        
+
         if ([[defaults objectForKey:PREF_TEMP_UNIT] intValue]==0) {
             temp = [NSString stringWithFormat:@"%@%CC",@(c_temp),(unsigned short)0xb0];
         } else {
@@ -409,24 +390,24 @@ NSUserDefaults *defaults;
             temp = [NSString stringWithFormat:@"%@%CF",[ncf stringForObjectValue:[@(c_temp) celsius_fahrenheit]],(unsigned short)0xb0];
         }
     }
-    
+
     // Update the temp and/or fan speed text in the menubar.
     NSMutableAttributedString *s_status = nil;
     NSMutableParagraphStyle *paragraphStyle = nil;
-    
+
     NSColor *menuColor = (NSColor*)[NSUnarchiver unarchiveObjectWithData:[defaults objectForKey:PREF_MENU_TEXTCOLOR]];
     BOOL setColor = NO;
     if (!([[menuColor colorUsingColorSpaceName:
               NSCalibratedWhiteColorSpace] whiteComponent] == 0.0) || ![statusItem respondsToSelector:@selector(button)]) setColor = YES;
-    
-    
+
+
     NSString *osxMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
-    
+
     if (osxMode && !setColor) {
         menuColor = [NSColor whiteColor];
         setColor = YES;
     }
-    
+
     switch (menuBarSetting) {
         default:
         case 1: {
@@ -441,16 +422,16 @@ NSUserDefaults *defaults;
                 fsize=11;
                 [statusItem setLength:96];
             }
-            
+
             s_status=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@%@%@",temp,add,fan]];
             paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
             [paragraphStyle setAlignment:NSLeftTextAlignment];
             [s_status addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Lucida Grande" size:fsize] range:NSMakeRange(0,[s_status length])];
             [s_status addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0,[s_status length])];
-         
+
             if (setColor) [s_status addAttribute:NSForegroundColorAttributeName value:menuColor  range:NSMakeRange(0,[s_status length])];
-            
-           
+
+
             if ([statusItem respondsToSelector:@selector(button)]) {
                 [statusItem.button setAttributedTitle:s_status];
                 [statusItem.button setImage:nil];
@@ -462,7 +443,7 @@ NSUserDefaults *defaults;
             }
             break;
         }
-            
+
         case 2:
             // TODO: Big waste of energy to update this tooltip every X seconds when the user
             // is unlikely to hover the smcFanControl icon over and over again.
@@ -479,7 +460,7 @@ NSUserDefaults *defaults;
                 [statusItem setAlternateImage:menu_image_alt];
             }
             break;
-            
+
         case 3:
             [statusItem setLength:46];
             s_status=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",temp]];
@@ -495,7 +476,7 @@ NSUserDefaults *defaults;
                 [statusItem setAlternateImage:nil];
             }
             break;
-            
+
         case 4:
             [statusItem setLength:65];
             s_status=[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@",fan]];
@@ -512,7 +493,7 @@ NSUserDefaults *defaults;
             }
             break;
     }
-    
+
 }
 
 
@@ -539,7 +520,7 @@ NSUserDefaults *defaults;
 	int i;
 	[FanControl setRights];
 	[FavoritesController setSelectionIndex:cIndex];
-    
+
     for (i=0;i<[[FavoritesController arrangedObjects][cIndex][PREF_FAN_ARRAY] count];i++) {
         int fan_mode = [smcWrapper get_mode:i];
         // Auto/forced mode is not available
@@ -554,9 +535,9 @@ NSUserDefaults *defaults;
             [smcWrapper setKey_external:[NSString stringWithFormat:@"F%dTg",i] value:[NSString stringWithFormat:@"%02x%02x%02x%02x",vals[0],vals[1],vals[2],vals[3]]];
         }
     }
-    
+
 	NSMenu *submenu = [[NSMenu alloc] init];
-	
+
 	for(i=0;i<[[FavoritesController arrangedObjects] count];i++){
 		NSMenuItem *submenuItem = [[NSMenuItem alloc] initWithTitle:[FavoritesController arrangedObjects][i][@"Title"] action:@selector(apply_quickselect:) keyEquivalent:@""];
 		[submenuItem setTag:i*100]; //for later manipulation
@@ -565,7 +546,7 @@ NSUserDefaults *defaults;
 		[submenuItem setRepresentedObject:[FavoritesController arrangedObjects][i]];
 		[submenu addItem:submenuItem];
 	}
-	
+
 	[[theMenu itemWithTag:1] setSubmenu:submenu];
 	for (i=0;i<[[[theMenu itemWithTag:1] submenu] numberOfItems];i++) {
 		[[[[theMenu itemWithTag:1] submenu] itemAtIndex:i] setState:NSOffState];
@@ -627,7 +608,7 @@ NSUserDefaults *defaults;
 	for (i=0;i<[[FanController arrangedObjects] count];i++) {
 		if (i!=[sender selectedRow]) {
 			[[FanController arrangedObjects][i] setValue:@NO forKey:PREF_FAN_SHOWMENU];
-		}	
+		}
 	}
 }
 
@@ -640,7 +621,7 @@ NSUserDefaults *defaults;
         if (theMenu == menu) {
             if (_machineDefaultsDict == nil)
                 return;
-            
+
             int i;
             for(i=0; i<g_numFans; ++i){
                 NSString *fandesc=_machineDefaultsDict[@"Fans"][i][@"Description"];
@@ -653,14 +634,6 @@ NSUserDefaults *defaults;
 
 
 #pragma mark **Helper-Methods**
-
-//just a helper to bringt update-info-window to the front
-- (IBAction)updateCheck:(id)sender{
-    SUUpdater *updater = [[SUUpdater alloc] init];
-	[updater checkForUpdates:sender];
-	[[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
-}
-
 
 -(void)performReset
 {
@@ -681,8 +654,7 @@ NSUserDefaults *defaults;
 
     NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
     [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:domainName];
-    
-    
+
     NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Shutdown required",nil)
                                      defaultButton:NSLocalizedString(@"OK",nil) alternateButton:nil otherButton:nil
                          informativeTextWithFormat:NSLocalizedString(@"Please shutdown your computer now to return to default fan settings.",nil)];
@@ -710,11 +682,6 @@ NSUserDefaults *defaults;
 	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://www.eidac.de/products"]];
 }
 
-
-- (IBAction)paypal:(id)sender{
-	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=holtmann%40campus%2dvirtuell%2ede&no_shipping=0&no_note=1&tax=0&currency_code=EUR&bn=PP%2dDonationsBF&charset=UTF%2d8&country=US"]];
-}
-
 -(void) syncBinder:(Boolean)bind{
 	//in case plist is corrupt, don't bind
 	if ([[FanController arrangedObjects] count]>1 ) {
@@ -725,7 +692,7 @@ NSUserDefaults *defaults;
 			[[FanController arrangedObjects][1] unbind:PREF_FAN_SELSPEED];
 			[[FanController arrangedObjects][0] unbind:PREF_FAN_SELSPEED];
 		}
-	}	
+	}
 }
 
 
@@ -754,7 +721,7 @@ NSUserDefaults *defaults;
 	if ([[defaults objectForKey:@"AutomaticChange"] boolValue]==YES) {
 		[self apply_settings:nil controllerindex:[[defaults objectForKey:PREF_CHARGING_SELECTION] intValue]];
 
-	}	
+	}
 }
 
 
@@ -768,20 +735,20 @@ NSUserDefaults *defaults;
 	NSString *path = [[NSBundle mainBundle] bundlePath];
 	CFURLRef URLToToggle = (__bridge CFURLRef)[NSURL fileURLWithPath:path];
 	//LSSharedFileListItemRef existingItem = NULL;
-	
+
 	UInt32 seed = 0U;
     NSArray *currentLoginItems = CFBridgingRelease(LSSharedFileListCopySnapshot(loginItems, &seed));
-	
+
 	for (id itemObject in currentLoginItems) {
 		LSSharedFileListItemRef item = (__bridge LSSharedFileListItemRef)itemObject;
-		
+
 		UInt32 resolutionFlags = kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes;
 		CFURLRef URL = NULL;
 		OSStatus err = LSSharedFileListItemResolve(item, resolutionFlags, &URL, /*outRef*/ NULL);
 		if (err == noErr) {
 			Boolean foundIt = CFEqual(URL, URLToToggle);
 			CFRelease(URL);
-			
+
 			if (foundIt) {
 				//existingItem = item;
 				found = YES;
@@ -793,36 +760,36 @@ NSUserDefaults *defaults;
 }
 
 - (void) setStartAtLogin:(BOOL)enabled {
-    
+
 	LSSharedFileListRef loginItems = LSSharedFileListCreate(kCFAllocatorDefault, kLSSharedFileListSessionLoginItems, /*options*/ NULL);
-    
-	
+
+
 	NSString *path = [[NSBundle mainBundle] bundlePath];
-	
+
 	OSStatus status;
 	CFURLRef URLToToggle = (__bridge CFURLRef)[NSURL fileURLWithPath:path];
 	LSSharedFileListItemRef existingItem = NULL;
-	
+
 	UInt32 seed = 0U;
     NSArray *currentLoginItems = CFBridgingRelease(LSSharedFileListCopySnapshot(loginItems, &seed));
-	
+
 	for (id itemObject in currentLoginItems) {
 		LSSharedFileListItemRef item = (__bridge LSSharedFileListItemRef)itemObject;
-		
+
 		UInt32 resolutionFlags = kLSSharedFileListNoUserInteraction | kLSSharedFileListDoNotMountVolumes;
 		CFURLRef URL = NULL;
 		OSStatus err = LSSharedFileListItemResolve(item, resolutionFlags, &URL, /*outRef*/ NULL);
 		if (err == noErr) {
 			Boolean foundIt = CFEqual(URL, URLToToggle);
 			CFRelease(URL);
-			
+
 			if (foundIt) {
 				existingItem = item;
 				break;
 			}
 		}
 	}
-	
+
 	if (enabled && (existingItem == NULL)) {
 		NSString *displayName = [[NSFileManager defaultManager] displayNameAtPath:path];
 		IconRef icon = NULL;
@@ -838,7 +805,7 @@ NSUserDefaults *defaults;
 			if (status != noErr)
 				icon = NULL;
 		}
-		
+
 		LSSharedFileListInsertItemURL(loginItems, kLSSharedFileListItemBeforeFirst, (__bridge CFStringRef)displayName, icon, URLToToggle, /*propertiesToSet*/ NULL, /*propertiesToClear*/ NULL);
 	} else if (!enabled && (existingItem != NULL))
 		LSSharedFileListItemRemove(loginItems, existingItem);
@@ -851,7 +818,7 @@ NSUserDefaults *defaults;
         NSAlert *alert = [NSAlert alertWithMessageText:@"Authorization failed" defaultButton:@"Quit" alternateButton:nil otherButton:nil informativeTextWithFormat:[NSString stringWithFormat:@"Authorization failed with code %d",status]];
         [alert setAlertStyle:2];
         NSInteger result = [alert runModal];
-        
+
         if (result == NSAlertDefaultReturn) {
             [[NSApplication sharedApplication] terminate:self];
         }
@@ -876,9 +843,9 @@ NSUserDefaults *defaults;
 	AuthorizationRights gencright = { 1, &gencitem };
 	int flags = kAuthorizationFlagExtendRights | kAuthorizationFlagInteractionAllowed;
 	OSStatus status = AuthorizationCreate(&gencright,  kAuthorizationEmptyEnvironment, flags, &authorizationRef);
-    
+
     [self checkRightStatus:status];
-    
+
     NSString *tool=@"/usr/sbin/chown";
     NSArray *argsArray = @[@"root:admin",smcpath];
 	int i;
@@ -888,9 +855,9 @@ NSUserDefaults *defaults;
 	}
 	args[i] = NULL;
 	status=AuthorizationExecuteWithPrivileges(authorizationRef,[tool UTF8String],0,args,&commPipe);
-    
+
     [self checkRightStatus:status];
-    
+
     	//second call for suid-bit
 	tool=@"/bin/chmod";
 	argsArray = @[@"6555",smcpath];
@@ -928,6 +895,3 @@ NSUserDefaults *defaults;
 }
 
 @end
-
-
-

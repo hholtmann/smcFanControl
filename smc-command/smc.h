@@ -1,6 +1,6 @@
 /*
  * Apple System Management Control (SMC) Tool
- * Copyright (C) 2006 devnull 
+ * Copyright (C) 2006 devnull
  * Portions Copyright (C) 2013 Michael Wilber
  *
  * This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@
 #define VERSION               "0.01"
 
 #define OP_NONE               0
-#define OP_LIST               1 
+#define OP_LIST               1
 #define OP_READ               2
 #define OP_READ_FAN           3
 #define OP_WRITE              4
@@ -78,7 +78,7 @@ typedef struct {
     char                  major;
     char                  minor;
     char                  build;
-    char                  reserved[1]; 
+    char                  reserved[1];
     UInt16                release;
 } SMCKeyData_vers_t;
 
@@ -101,8 +101,8 @@ typedef unsigned char              SMCBytes_t[32];
 static UInt8 fannum[] = "0123456789ABCDEFGHIJ";
 
 typedef struct {
-  UInt32                  key; 
-  SMCKeyData_vers_t       vers; 
+  UInt32                  key;
+  SMCKeyData_vers_t       vers;
   SMCKeyData_pLimitData_t pLimitData;
   SMCKeyData_keyInfo_t    keyInfo;
   char                    result;
@@ -137,4 +137,3 @@ kern_return_t SMCWriteSimple(UInt32Char_t key,char *wvalue,io_connect_t conn);
 kern_return_t SMCOpen(io_connect_t *conn);
 kern_return_t SMCClose(io_connect_t conn);
 kern_return_t SMCReadKey2(UInt32Char_t key, SMCVal_t *val,io_connect_t conn);
-
