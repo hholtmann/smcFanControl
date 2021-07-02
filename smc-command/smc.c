@@ -420,6 +420,47 @@ kern_return_t SMCReadKey2(UInt32Char_t key, SMCVal_t *val,io_connect_t conn)
 // Exclude command-line only code from smcFanControl UI
 #ifdef CMD_TOOL_BUILD
 
+// The format the output is written to the console in
+const int FORMAT_TEXT = 101;
+const int FORMAT_JSON = 201;
+
+// Constants to represent the fan mode
+const UInt32 FAN_MODE_AUTO = 100;
+const UInt32 FAN_MODE_FORCED = 200;
+
+// Details of one fan
+typedef struct FanInfo {
+    int fanNumber;
+    char* fanId;
+    float currentSpeed;
+    float minSpeed;
+    float maxSpeed;
+    float safeSpeed;
+    float targetSpeed;
+    int fanMode;
+} FanInfo;
+
+// Result of fetching the details of all fans
+typedef struct GetFanInfoResult {
+    UInt32 count;
+    FanInfo* fans;
+    kern_return_t status;
+} GetFanInfoResult;
+
+// A reading from one temperature sensor
+typedef struct TemperatureInfo {
+    char* sensorName;
+    float value;
+} TemperatureInfo;
+
+// The result of reading all temperature sensors
+typedef struct ReadTemperatureSensorsResult {
+    kern_return_t status;
+    UInt32 count;
+    TemperatureInfo* readings;
+
+} ReadTemperatureSensorsResult;
+
 io_connect_t g_conn = 0;
 
 void smc_init(){
@@ -540,75 +581,150 @@ float getFloatFromVal(SMCVal_t val)
     return fval;
 }
 
-kern_return_t SMCPrintFans(void)
-{
-    kern_return_t result;
+void SMCRenderFanInfoAsText(GetFanInfoResult info) {
+    printf("Total fans in system: %d\n", info.count);
+
+    for(int i = 0; i < info.count; i++) {
+        FanInfo fan = info.fans[i];
+        printf("\nFan #%d:\n", i);
+        printf("    Fan ID       : %s\n", fan.fanId);
+        printf("    Current speed : %.0f\n", fan.currentSpeed);
+        printf("    Minimum speed: %.0f\n", fan.minSpeed);
+        printf("    Maximum speed: %.0f\n", fan.maxSpeed);
+        printf("    Safe speed   : %.0f\n", fan.safeSpeed);
+        printf("    Target speed : %.0f\n", fan.targetSpeed);
+        printf("    Mode         : %s\n", fan.fanMode == FAN_MODE_AUTO ? "auto" : "forced");
+    }
+}
+
+void SMCRenderFanInfoAsJson(GetFanInfoResult info) {
+    printf("[");
+    for(int i = 0; i < info.count; i++) {
+        printf("{");
+        FanInfo fan = info.fans[i];
+        printf("\"fanId\": \"%s\",", fan.fanId);
+        printf("\"currentSpeed\": %.0f,", fan.currentSpeed);
+        printf("\"minSpeed\": %.0f,", fan.minSpeed);
+        printf("\"maxSpeed\": %.0f,", fan.maxSpeed);
+        printf("\"safeSpeed\": %.0f,", fan.safeSpeed);
+        printf("\"targetSpeed\": %.0f,", fan.targetSpeed);
+        printf("\"mode\": \"%s\"", fan.fanMode == FAN_MODE_AUTO ? "auto" : "forced");
+        printf("}");
+
+        if(i != info.count - 1) {
+            printf(",");
+        }
+    }
+    printf("]");
+}
+
+GetFanInfoResult SMCGetFanInfo() {
+    GetFanInfoResult result;
     SMCVal_t      val;
     UInt32Char_t  key;
-    int           totalFans, i;
     
-    result = SMCReadKey("FNum", &val);
-    if (result != kIOReturnSuccess)
-        return kIOReturnError;
+    kern_return_t status = SMCReadKey("FNum", &val);
+    if (status != kIOReturnSuccess) {
+        result.status = kIOReturnError;
+        return result;
+    }
     
-    totalFans = _strtoul((char *)val.bytes, val.dataSize, 10);
-    printf("Total fans in system: %d\n", totalFans);
+    result.count = _strtoul((char *)val.bytes, val.dataSize, 10);
+    result.fans = (FanInfo*) malloc(result.count * sizeof(FanInfo));
     
-    for (i = 0; i < totalFans; i++)
+    for (int i = 0; i < result.count; i++)
     {
-        printf("\nFan #%d:\n", i);
+        FanInfo info;
+        
         sprintf(key, "F%cID", fannum[i]);
         SMCReadKey(key, &val);
         if(val.dataSize > 0) {
-            printf("    Fan ID       : %s\n", val.bytes+4);
+            info.fanId = malloc(strlen(val.bytes+4) * sizeof(char));
+            strcpy(info.fanId, val.bytes+4);
         }
+        
         sprintf(key, "F%cAc", fannum[i]);
         SMCReadKey(key, &val);
-        printf("    Current speed : %.0f\n", getFloatFromVal(val));
+        info.currentSpeed = getFloatFromVal(val);
+        
         sprintf(key, "F%cMn", fannum[i]);
         SMCReadKey(key, &val);
-        printf("    Minimum speed: %.0f\n", getFloatFromVal(val));
+        info.minSpeed = getFloatFromVal(val);
+
         sprintf(key, "F%cMx", fannum[i]);
         SMCReadKey(key, &val);
-        printf("    Maximum speed: %.0f\n", getFloatFromVal(val));
+        info.maxSpeed = getFloatFromVal(val);
+
         sprintf(key, "F%cSf", fannum[i]);
         SMCReadKey(key, &val);
-        printf("    Safe speed   : %.0f\n", getFloatFromVal(val));
+        info.safeSpeed = getFloatFromVal(val);
+
         sprintf(key, "F%cTg", fannum[i]);
         SMCReadKey(key, &val);
-        printf("    Target speed : %.0f\n", getFloatFromVal(val));
+        info.targetSpeed = getFloatFromVal(val);
+
         SMCReadKey("FS! ", &val);
         if(val.dataSize > 0) {
-            if ((_strtoul((char *)val.bytes, 2, 16) & (1 << i)) == 0)
-                printf("    Mode         : auto\n");
-            else
-                printf("    Mode         : forced\n");
-        }
-        else {
+            if ((_strtoul((char *)val.bytes, 2, 16) & (1 << i)) == 0) {
+                info.fanMode = FAN_MODE_AUTO;
+            }
+            else {
+                info.fanMode = FAN_MODE_FORCED;
+            }
+        } else {
             sprintf(key, "F%dMd", i);
             SMCReadKey(key, &val);
-            if (getFloatFromVal(val))
-                printf("    Mode         : forced\n");
-            else
-                printf("    Mode         : auto\n");
+            if (getFloatFromVal(val)) {
+                info.fanMode = FAN_MODE_FORCED;
+            }
+            else {
+                info.fanMode = FAN_MODE_AUTO;
+            }
         }
+
+        result.fans[i] = info;
     }
     
+    result.status = kIOReturnSuccess;
+    return result;
+}
+
+kern_return_t SMCPrintFans(int format)
+{
+    GetFanInfoResult result = SMCGetFanInfo();
+    if (result.status != kIOReturnSuccess)
+        return kIOReturnError;
+
+    switch (format)
+    {
+    case FORMAT_TEXT:
+        SMCRenderFanInfoAsText(result);
+        break;
+    case FORMAT_JSON:
+        SMCRenderFanInfoAsJson(result);
+        break;
+    default:
+        break;
+    }
+
     return kIOReturnSuccess;
 }
 
-kern_return_t SMCPrintTemps(void)
-{
-    kern_return_t result;
+ReadTemperatureSensorsResult SMCReadTemperatureSensors() {
+
+    ReadTemperatureSensorsResult result;
+
     SMCKeyData_t  inputStructure;
     SMCKeyData_t  outputStructure;
 
-    int           totalKeys, i;
+    int           totalKeys;
     UInt32Char_t  key;
     SMCVal_t      val;
 
     totalKeys = SMCReadIndexCount();
-    for (i = 0; i < totalKeys; i++)
+    result.readings = malloc(sizeof(TemperatureInfo) * totalKeys);
+    int appendCount = 0;
+    for (int i = 0; i < totalKeys; i++)
     {
         memset(&inputStructure, 0, sizeof(SMCKeyData_t));
         memset(&outputStructure, 0, sizeof(SMCKeyData_t));
@@ -617,8 +733,8 @@ kern_return_t SMCPrintTemps(void)
         inputStructure.data8 = SMC_CMD_READ_INDEX;
         inputStructure.data32 = i;
 
-        result = SMCCall(KERNEL_INDEX_SMC, &inputStructure, &outputStructure);
-        if (result != kIOReturnSuccess)
+        kern_return_t status = SMCCall(KERNEL_INDEX_SMC, &inputStructure, &outputStructure);
+        if (status != kIOReturnSuccess)
             continue;
 
         _ultostr(key, outputStructure.key);
@@ -628,13 +744,62 @@ kern_return_t SMCPrintTemps(void)
         SMCReadKey(key, &val);
         //printVal(val);
         if (strcmp(val.dataType, DATATYPE_SP78) == 0 && val.dataSize == 2) {
-          printf("%-4s ", val.key);
-          printSP78(val);
-          printf("\n");
+          TemperatureInfo info;
+          info.sensorName = malloc(strlen(val.key) * sizeof(char));
+          strcpy(info.sensorName, val.key);
+          info.value = ((SInt16)ntohs(*(UInt16*)val.bytes)) / 256.0f;
+
+          result.readings[appendCount] = info;
+          appendCount++;
         }
     }
 
-    return kIOReturnSuccess;
+    result.count = appendCount;
+    result.status = kIOReturnSuccess;
+    return result;
+}
+
+void SMCRenderTemperatureSensorsAsText(ReadTemperatureSensorsResult result) {
+    for(int i = 0; i < result.count; i++) {
+        TemperatureInfo info = result.readings[i];
+        printf("%-4s ", info.sensorName);
+        printf("%.3f \n", info.value);
+    }
+}
+
+void SMCRenderTemperatureSensorsAsJson(ReadTemperatureSensorsResult result) {
+    printf("{");
+    for(int i = 0; i < result.count; i++) {
+        TemperatureInfo info = result.readings[i];
+        printf("\"%s\": %.3f", info.sensorName, info.value);
+        if(i != result.count - 1) {
+            printf(",");
+        }
+        
+    }
+    printf("}");
+}
+
+kern_return_t SMCPrintTemps(int format)
+{
+    ReadTemperatureSensorsResult result = SMCReadTemperatureSensors();
+    if (result.status != kIOReturnSuccess)
+        return kIOReturnError;
+
+    
+    switch (format)
+    {
+    case FORMAT_TEXT:
+        SMCRenderTemperatureSensorsAsText(result);
+        break;
+    case FORMAT_JSON:
+        SMCRenderTemperatureSensorsAsJson(result);
+        break;
+    default:
+        break;
+    }
+
+    return kIOReturnSuccess;    
 }
 
 void usage(char* prog)
@@ -644,6 +809,7 @@ void usage(char* prog)
     printf("%s [options]\n", prog);
     printf("    -f         : fan info decoded\n");
     printf("    -t         : list all temperatures\n");
+    printf("    -o <format>: output format for -f and -t. Options are 'json' and 'text'. Default is 'text'");
     printf("    -h         : help\n");
     printf("    -k <key>   : key to manipulate\n");
     printf("    -l         : list all keys and values\n");
@@ -683,8 +849,10 @@ int main(int argc, char *argv[])
     int           op = OP_NONE;
     UInt32Char_t  key = { 0 };
     SMCVal_t      val;
+
+    int format = FORMAT_TEXT;
     
-    while ((c = getopt(argc, argv, "fthk:lrw:v")) != -1)
+    while ((c = getopt(argc, argv, "fthk:lrwo:v")) != -1)
     {
         switch(c)
         {
@@ -697,6 +865,16 @@ int main(int argc, char *argv[])
             case 'k':
                 strncpy(key, optarg, sizeof(key));   //fix for buffer overflow
                 key[sizeof(key) - 1] = '\0';
+                break;
+            case 'o':
+                if(strcmp("json", optarg) == 0) {
+                    format = FORMAT_JSON;
+                } else if(strcmp("text", optarg) == 0) {
+                    format = FORMAT_TEXT;
+                } else {
+                    printf("Error: Invalid format value '%s'\n", optarg);
+                    return 1;
+                }
                 break;
             case 'l':
                 op = OP_LIST;
@@ -763,12 +941,12 @@ int main(int argc, char *argv[])
             }
             break;
         case OP_READ_FAN:
-            result = SMCPrintFans();
+            result = SMCPrintFans(format);
             if (result != kIOReturnSuccess)
                 printf("Error: SMCPrintFans() = %08x\n", result);
             break;
         case OP_READ_TEMPS:
-            result = SMCPrintTemps();
+            result = SMCPrintTemps(format);
             if (result != kIOReturnSuccess)
                 printf("Error: SMCPrintFans() = %08x\n", result);
             break;
