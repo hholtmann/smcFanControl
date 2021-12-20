@@ -1,8 +1,8 @@
 Warning
 -------
-This tool will allow you to write values to the SMC which could irreversably damage your
-computer.  Manipulating the fans could cause overheating and permanent damange.  USE THIS
-PROGRAM AT YOUR OWN RISK! 
+This tool will allow you to write values to the SMC which could irreversibly damage your
+computer.  Manipulating the fans could cause overheating and permanent damage.  USE THIS
+PROGRAM AT YOUR OWN RISK!
 
 Background
 ----------
@@ -18,7 +18,7 @@ people are trying to charge for simple programs to manipulate this type of data.
 In my testing I've been able to lower the average system temperature by 15C just
 by running the fans at a low speed like 3500 RPM, which you can barely hear.
 
-Usage 
+Usage
 ------
 # smc -h
 
@@ -33,7 +33,7 @@ Usage:
     -w <value> : write the specified value to a key
     -v         : version
 
-Fan control 
+Fan control
 -----------
 To decode:
 # smc -f
@@ -85,8 +85,8 @@ Th1H
 
 Light sensors
 -------------
-ALV0 - Left 
-ALV1 - Right 
+ALV0 - Left
+ALV1 - Right
 
 Motion sensors
 --------------
