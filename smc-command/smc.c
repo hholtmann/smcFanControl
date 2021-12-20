@@ -87,7 +87,7 @@ void printFLT(SMCVal_t val)
 {
     float fval;
     memcpy(&fval,val.bytes,sizeof(float));
-    printf("%.0f ", fval);
+    printf("%f ", fval);
 }
 
 void printFP1F(SMCVal_t val)
@@ -271,8 +271,6 @@ void printVal(SMCVal_t val)
 			printSI16(val);
 		else if (strcmp(val.dataType, DATATYPE_PWM) == 0 && val.dataSize == 2)
 			printPWM(val);
-		else if (strcmp(val.dataType, DATATYPE_FLT) == 0 && val.dataSize == 4)
-			printFLT(val);
 
         printBytesHex(val);
     }
@@ -631,6 +629,12 @@ kern_return_t SMCPrintTemps(void)
           printf("%-4s ", val.key);
           printSP78(val);
           printf("\n");
+        }
+        else if (strcmp(val.dataType, DATATYPE_FLT) == 0 && val.dataSize == 4)
+        {
+            printf("%-4s ", val.key);
+            printFLT(val);
+            printf("\n");
         }
     }
 
