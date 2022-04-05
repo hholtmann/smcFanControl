@@ -29,7 +29,7 @@ Oui
 
 \b J'obtiens le message d'avertissement "smcFanControl n'a pas encore \'e9t\'e9 test\'e9 sur cette machine". Qu'est ce que cela signifie?\
 
-\b0 Techniquement, smcFanControl fonctionne avec tous les Mac intel, mais ces machines ont des valeurs par d\'e9faut diff\'e9rente. Si vous obtenez ce message, smcFanControl tente de lire la valeur par d\'e9faut directement du System Management Controller. Si vous suivez les instructions (ne pas lancer d'autres logiciels de gestion de ventilation, etc.) vous devriez pouvoir utiliser smcFanControl sur une machine que n'a pas encore \'e9t\'e9 test\'e9e par nos soins.\
+\b0 Techniquement, smcFanControl fonctionne avec tous les Mac Apple Silicon et Intel, mais ces machines ont des valeurs par d\'e9faut diff\'e9rente. Si vous obtenez ce message, smcFanControl tente de lire la valeur par d\'e9faut directement du System Management Controller. Si vous suivez les instructions (ne pas lancer d'autres logiciels de gestion de ventilation, etc.) vous devriez pouvoir utiliser smcFanControl sur une machine que n'a pas encore \'e9t\'e9 test\'e9e par nos soins.\
 \
 
 \b Comment revenir au valeur par d\'e9fauts d\'e9finies par Apple ?\
@@ -63,7 +63,7 @@ Toutefois, vous pouvez d\'e9finir une vitesse minimale sous OSX  puis red\'e9mar
 
 \b Ne serait-il pas mieux de d\'e9finir la vitesse de rotation en fonction de la temp\'e9rature plut\'f4t que de choisir une vitesse minimale et laisse Apple faire le reste ?\
 
-\b0 Oui, cette approche serait probablement plus int\'e9ressante. MAIS : cette m\'e9thode n'a pas \'e9t\'e9 retenue car elle comporte des risques. D\'e9finir la vitesse en fonction de la temp\'e9rature requiert un programme qui tourne en continue. Si ce programme crash ou devient incompatible \'e0 la suite d'une mise \'e0 jour, le ventilateur pourrait \'eatre d\'e9fini \'e0 une valeur trop basse qui pourrait endommager votre machine. D'autre part, cette logique est complexe \'e0 mettre en oeuvre. Un mac intel poss\'e8de une dizaine de sondes de temp\'e9rature, lues continuellement afin de d\'e9finir la vitesse ad\'e9quate de rotation des ventilateurs. Ainsi il ne serait pas judicieux de se reposer sur la lecture d'une seule sonde pour le contr\'f4le de la ventilation.\
+\b0 Oui, cette approche serait probablement plus int\'e9ressante. MAIS : cette m\'e9thode n'a pas \'e9t\'e9 retenue car elle comporte des risques. D\'e9finir la vitesse en fonction de la temp\'e9rature requiert un programme qui tourne en continue. Si ce programme crash ou devient incompatible \'e0 la suite d'une mise \'e0 jour, le ventilateur pourrait \'eatre d\'e9fini \'e0 une valeur trop basse qui pourrait endommager votre machine. D'autre part, cette logique est complexe \'e0 mettre en oeuvre. Un Mac poss\'e8de une dizaine de sondes de temp\'e9rature, lues continuellement afin de d\'e9finir la vitesse ad\'e9quate de rotation des ventilateurs. Ainsi il ne serait pas judicieux de se reposer sur la lecture d'une seule sonde pour le contr\'f4le de la ventilation.\
 \
 
 \b Je poss\'e8de un MBP et smcFanControl m'indique 0 rpm pour l'un des ventilateurs\

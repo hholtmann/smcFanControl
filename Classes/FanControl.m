@@ -29,6 +29,7 @@
 #import <Security/AuthorizationTags.h>
 #import <Sparkle/SUUpdater.h>
 #import "SystemVersion.h"
+#include "TargetConditionals.h"
 
 @interface FanControl ()
 + (void)copyMachinesIfNecessary;
@@ -150,7 +151,11 @@ NSUserDefaults *defaults;
 			@0, PREF_AC_SELECTION,
 			@0, PREF_CHARGING_SELECTION,
 			@0, PREF_MENU_DISPLAYMODE,
+#if TARGET_CPU_ARM64
+            @"Tp0D",PREF_TEMPERATURE_SENSOR,
+#else
             @"TC0D",PREF_TEMPERATURE_SENSOR,
+#endif
             @0, PREF_NUMBEROF_LAUNCHES,
             @NO,PREF_DONATIONMESSAGE_DISPLAY,
 			[NSArchiver archivedDataWithRootObject:[NSColor blackColor]],PREF_MENU_TEXTCOLOR,

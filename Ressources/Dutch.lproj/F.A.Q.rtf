@@ -30,7 +30,7 @@ All changes smcFanControl does to the fan controlling get lost after you shutdow
 
 \b I get a "smcFanControl has not been tested on this machine" warning. What does that mean?\
 
-\b0 Technically smcFanControl supports every intel mac, but it does not come with defaults for every machine. If you get the warning, smcFanControl tries to read out the fan-details directly from the System Management Controller. If you follow the instructions (no other fan control software is running etc.) you should have no problem running smcFanControl on a machine it has not been tested on.\
+\b0 Technically smcFanControl supports every Apple Silicon & Intel Mac, but it does not come with defaults for every machine. If you get the warning, smcFanControl tries to read out the fan-details directly from the System Management Controller. If you follow the instructions (no other fan control software is running etc.) you should have no problem running smcFanControl on a machine it has not been tested on.\
 \
 
 \b How can I restore the Apple defaults for fanspeed?\
@@ -74,7 +74,7 @@ Will there be a version of smcFanControl for Powerbooks or other PPC based Macs?
 
 \b Wouldn't it be even better to read out the temperature and set the fan speeds depending on the readout than just set the minimum fan speed and let automatic fan control as defined by apple do the rest?\
 
-\b0 Yes, that approach is even better and could make your machine running cooler, when you are at higher loads. BUT: I did not take this route for smcFanControl, cause it has some risks. Adjusting the fan speed to CPU temperature requires you have a program running in the background (e.g. a daemon) that adjust fan speed continuously . If that program ever crashes or becomes incompatible cause of a System Update (or the readouts of the temperature sensor get inappropriate) , the fans could get set to a wrong (too low) speed and this could probably damage the machine. In addition to that the fan-control-logic is quite complicate. An intel mac has about 10 temperature sensors, that are continuously read out and are used for monitoring and setting the right fan speeds. So it would be "not so great" to read out just the CPU temperature as a foundation for the fan-controlling.\
+\b0 Yes, that approach is even better and could make your machine running cooler, when you are at higher loads. BUT: I did not take this route for smcFanControl, cause it has some risks. Adjusting the fan speed to CPU temperature requires you have a program running in the background (e.g. a daemon) that adjust fan speed continuously . If that program ever crashes or becomes incompatible cause of a System Update (or the readouts of the temperature sensor get inappropriate) , the fans could get set to a wrong (too low) speed and this could probably damage the machine. In addition to that the fan-control-logic is quite complicate. A Mac has about 10 temperature sensors, that are continuously read out and are used for monitoring and setting the right fan speeds. So it would be "not so great" to read out just the CPU temperature as a foundation for the fan-controlling.\
 \
 
 \b I have got a MBP and smcFanControl is reporting 0rpm for one of my fans?\

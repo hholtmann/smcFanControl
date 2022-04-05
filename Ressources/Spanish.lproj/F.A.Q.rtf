@@ -29,7 +29,7 @@ Todos los cambios realizados por smcFanControl se pierden al apagar el ordenador
 
 \b Me sale el aviso "smcFanControl no ha sido probado en esta m\'e1quina". \'bfQu\'e9 significa?\
 
-\b0 T\'e9cnicamente smcFanControl funciona en todos los mac Intel, pero no trae los valores por defecto para todos los modelos. Si sale este aviso smcFanControl tratar\'e1 de leer los valores por defecto del SMC (System Management Controller) Si sigue las instrucciones (no hay otro controlador de ventiladoes, etc) no deber\'eda de tener ning\'fan problema en usarlo en un modelo en el que no haya sido probado a\'fan.\
+\b0 T\'e9cnicamente smcFanControl funciona en todos los Mac Apple Silicon o Intel, pero no trae los valores por defecto para todos los modelos. Si sale este aviso smcFanControl tratar\'e1 de leer los valores por defecto del SMC (System Management Controller) Si sigue las instrucciones (no hay otro controlador de ventiladoes, etc) no deber\'eda de tener ning\'fan problema en usarlo en un modelo en el que no haya sido probado a\'fan.\
 \
 
 \b \'bfComo puedo recobrar los valores por defecto de Apple para la velocidad de los ventiladores?\
@@ -73,7 +73,7 @@ b) La m\'e1quina se apaga.\
 
 \b \'bfNo ser\'eda mejor leer los valores de temperaura y ajustar la velocidad que limitarse a cambiar el valor m\'ednimo y dejar que el control autom\'e1tico de ventiladores de Apple haga el resto?\
 
-\b0 Si, ese camino es mejor y puede que haga que la m\'e1quina funcione m\'e1s fresca cuando la carga es alta... PERO: No eleg\'ed este camino por los los riesgos que tiene. Requiere un programa en segundo plano (un daemon) ajustando constantemente la velocidad. Si este programa es incompatible con una fuura actualiaci\'f3n del sistema o se cuelga puede fijar la velocidad a un valor demasiado bajo y estropear la m\'e1quina. Adem\'e1s la l\'f3gica que hay que a\'f1adir es muy complicada, un mac intel tiene en torno a 10 sensores de temperatura, con lo que simplemente "leer la temperatura de la CPU y ajustar el ventilador" no es tan buena idea.\
+\b0 Si, ese camino es mejor y puede que haga que la m\'e1quina funcione m\'e1s fresca cuando la carga es alta... PERO: No eleg\'ed este camino por los los riesgos que tiene. Requiere un programa en segundo plano (un daemon) ajustando constantemente la velocidad. Si este programa es incompatible con una fuura actualiaci\'f3n del sistema o se cuelga puede fijar la velocidad a un valor demasiado bajo y estropear la m\'e1quina. Adem\'e1s la l\'f3gica que hay que a\'f1adir es muy complicada, un Mac tiene en torno a 10 sensores de temperatura, con lo que simplemente "leer la temperatura de la CPU y ajustar el ventilador" no es tan buena idea.\
 \
 
 \b \'bfTengo un MBP y smcFanControl dice que un ventilador gira a 0rpm?\

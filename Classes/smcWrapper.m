@@ -22,6 +22,7 @@
  */
 
 #import "smcWrapper.h"
+#include "TargetConditionals.h"
 #import <CommonCrypto/CommonDigest.h>
 NSString * const smc_checksum=@"4fc00a0979970ee8b55f078a0c793c4d";
 
@@ -70,7 +71,11 @@ NSArray *allSensors;
     NSString *sensor = [[NSUserDefaults standardUserDefaults] objectForKey:PREF_TEMPERATURE_SENSOR];
     SMCReadKey2((char*)[sensor UTF8String], &val,conn);
     retValue = [self convertToNumber:val];
+#if TARGET_CPU_ARM64
+    allSensors = [NSArray arrayWithObjects:@"Tp0D",@"Tp0P",nil];
+#else
     allSensors = [NSArray arrayWithObjects:@"TC0D",@"TC0P",@"TCAD",@"TC0H",@"TC0F",@"TCAH",@"TCBH",nil];
+#endif
     if (retValue<=0 || floor(retValue) == 129 ) { //workaround for some iMac Models
         for (NSString *sensor in allSensors) {
             SMCReadKey2((char*)[sensor UTF8String], &val,conn);
