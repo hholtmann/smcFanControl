@@ -534,9 +534,7 @@ NSUserDefaults *defaults;
 	[DefaultsController revert:sender];
 }
 
-
--(void)setFansToAuto:(bool)is_auto
-{
+-(void)setFansToAuto:(bool)is_auto {
 	for (int fan_index=0;fan_index<[[FavoritesController arrangedObjects][0][PREF_FAN_ARRAY] count];fan_index++) {
 		[self setFanToAuto:fan_index is_auto:is_auto];
 	}
