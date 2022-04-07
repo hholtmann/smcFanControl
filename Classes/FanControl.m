@@ -29,7 +29,6 @@
 #import <Security/AuthorizationTags.h>
 #import <Sparkle/SUUpdater.h>
 #import "SystemVersion.h"
-#include "TargetConditionals.h"
 
 @interface FanControl ()
 + (void)copyMachinesIfNecessary;
@@ -151,11 +150,7 @@ NSUserDefaults *defaults;
 			@0, PREF_AC_SELECTION,
 			@0, PREF_CHARGING_SELECTION,
 			@0, PREF_MENU_DISPLAYMODE,
-#if TARGET_CPU_ARM64
-            @"Tp0D",PREF_TEMPERATURE_SENSOR,
-#else
-            @"TC0D",PREF_TEMPERATURE_SENSOR,
-#endif
+			[MachineDefaults isAppleSilicon] ? @"Tp0D" : @"TC0D", PREF_TEMPERATURE_SENSOR,
             @0, PREF_NUMBEROF_LAUNCHES,
             @NO,PREF_DONATIONMESSAGE_DISPLAY,
 			[NSArchiver archivedDataWithRootObject:[NSColor blackColor]],PREF_MENU_TEXTCOLOR,
@@ -540,6 +535,17 @@ NSUserDefaults *defaults;
 }
 
 
+-(void)setFansToAuto:(bool)is_auto
+{
+	for (int fan_index=0;fan_index<[[FavoritesController arrangedObjects][0][PREF_FAN_ARRAY] count];fan_index++) {
+		[self setFanToAuto:fan_index is_auto:is_auto];
+	}
+}
+
+-(void)setFanToAuto:(int)fan_index is_auto:(bool)is_auto {
+	[smcWrapper setKey_external:[NSString stringWithFormat:@"F%dMd",fan_index] value:is_auto ? @"00" : @"01"];
+}
+
 //set the new fan settings
 
 -(void)apply_settings:(id)sender controllerindex:(int)cIndex{
@@ -554,7 +560,7 @@ NSUserDefaults *defaults;
             [smcWrapper setKey_external:[NSString stringWithFormat:@"F%dMn",i] value:[[FanController arrangedObjects][i][PREF_FAN_SELSPEED] tohex]];
         } else {
             bool is_auto = [[FanController arrangedObjects][i][PREF_FAN_AUTO] boolValue];
-            [smcWrapper setKey_external:[NSString stringWithFormat:@"F%dMd",i] value:is_auto ? @"00" : @"01"];
+            [self setFanToAuto:i is_auto:is_auto];
             float f_val = [[FanController arrangedObjects][i][PREF_FAN_SELSPEED] floatValue];
             uint8 *vals = (uint8*)&f_val;
             //NSString str_val = ;
@@ -681,9 +687,7 @@ NSUserDefaults *defaults;
     }
     error = nil;
     if ([[MachineDefaults computerModel] rangeOfString:@"MacBookPro15"].location != NSNotFound) {
-        for (int i=0;i<[[FavoritesController arrangedObjects][0][PREF_FAN_ARRAY] count];i++) {
-            [smcWrapper setKey_external:[NSString stringWithFormat:@"F%dMd",i] value:@"00"];
-        }
+        [self setFansToAuto:true];
     }
 
     NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
@@ -737,6 +741,13 @@ NSUserDefaults *defaults;
 
 
 #pragma mark **Power Watchdog-Methods**
+
+- (void)systemWillSleep:(id)sender{
+	if ([MachineDefaults isAppleSilicon]) {
+		[FanControl setRights];
+		[self setFansToAuto:true];
+	}
+}
 
 - (void)systemDidWakeFromSleep:(id)sender{
 	[self apply_settings:nil controllerindex:[[defaults objectForKey:PREF_SELECTION_DEFAULT] intValue]];

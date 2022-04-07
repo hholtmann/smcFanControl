@@ -30,6 +30,7 @@
 	int machine_num;
 }
 
++ (BOOL)isAppleSilicon;
 + (NSString *)computerModel;
 - (instancetype)init:(NSString*)p_machine ;
 

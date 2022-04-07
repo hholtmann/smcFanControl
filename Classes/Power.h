@@ -58,6 +58,8 @@
 //delegate Prototypes 
 @interface NSObject (PowerDelegate)
 
+- (void)systemWillSleep:(id)sender;
+
 - (void)systemDidWakeFromSleep:(id)sender;
 
 - (void)powerChangeToBattery:(id)sender;
