@@ -42,7 +42,7 @@ Fan control
 To decode:  
 `smc -f`
 
-To manually query and control:
+To manually query and control:  
 `FNum` - tells you how many fans are in the system
 
 To read data from each fan:
