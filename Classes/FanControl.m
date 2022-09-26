@@ -740,6 +740,7 @@ NSUserDefaults *defaults;
     if ([[theMenu itemWithTitle:@"Turbo Boost"] state] == NSOnState) {
         enable_tb();
     } else {
+        enable_tb();
         disable_tb();
     }
 }
