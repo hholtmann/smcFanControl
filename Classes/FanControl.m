@@ -455,12 +455,14 @@ NSUserDefaults *defaults;
             s_status = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@%@%@", temp, add, fan]];
             paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
             [paragraphStyle setAlignment:NSLeftTextAlignment];
-            [s_status addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Lucida Grande" size:fsize] range:NSMakeRange(0, [s_status length])];
-            [s_status addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [s_status length])];
 
-            if (setColor) [s_status addAttribute:NSForegroundColorAttributeName value:menuColor range:NSMakeRange(0, [s_status length])];
-
-
+            [s_status addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Lucida Grande" size:fsize] range:NSMakeRange(0,[s_status length])];
+            [s_status addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0,[s_status length])];
+            if (menuBarSetting == 0)
+                [s_status addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat: -6] range:NSMakeRange(0, [s_status length])];
+         
+            if (setColor) [s_status addAttribute:NSForegroundColorAttributeName value:menuColor  range:NSMakeRange(0,[s_status length])];
+            
             if ([statusItem respondsToSelector:@selector(button)]) {
                 [statusItem.button setAttributedTitle:s_status];
                 [statusItem.button setImage:nil];
@@ -544,97 +546,100 @@ NSUserDefaults *defaults;
 
 //set the new fan settings
 
-- (void)apply_settings:(id)sender controllerindex:(int)cIndex {
-    int i;
-    [FanControl setRights];
-    [FavoritesController setSelectionIndex:cIndex];
-
-    if ([[MachineDefaults computerModel] rangeOfString:@"MacBookPro15"].location != NSNotFound) {
-        for (i = 0; i < [[FavoritesController arrangedObjects][cIndex][PREF_FAN_ARRAY] count]; i++) {
-            [smcWrapper setKey_external:[NSString stringWithFormat:@"F%dMd", i] value:@"01"];
+-(void)apply_settings:(id)sender controllerindex:(int)cIndex{
+	int i;
+	[FanControl setRights];
+	[FavoritesController setSelectionIndex:cIndex];
+    
+    for (i=0;i<[[FavoritesController arrangedObjects][cIndex][PREF_FAN_ARRAY] count];i++) {
+        int fan_mode = [smcWrapper get_mode:i];
+        // Auto/forced mode is not available
+        if (fan_mode < 0) {
+            [smcWrapper setKey_external:[NSString stringWithFormat:@"F%dMn",i] value:[[FanController arrangedObjects][i][PREF_FAN_SELSPEED] tohex]];
+        } else {
+            bool is_auto = [[FanController arrangedObjects][i][PREF_FAN_AUTO] boolValue];
+            [smcWrapper setKey_external:[NSString stringWithFormat:@"F%dMd",i] value:is_auto ? @"00" : @"01"];
             float f_val = [[FanController arrangedObjects][i][PREF_FAN_SELSPEED] floatValue];
             uint8 *vals = (uint8 *) &f_val;
             //NSString str_val = ;
             [smcWrapper setKey_external:[NSString stringWithFormat:@"F%dTg", i] value:[NSString stringWithFormat:@"%02x%02x%02x%02x", vals[0], vals[1], vals[2], vals[3]]];
         }
-    } else {
-        for (i = 0; i < [[FavoritesController arrangedObjects][cIndex][PREF_FAN_ARRAY] count]; i++) {
-            [smcWrapper setKey_external:[NSString stringWithFormat:@"F%dMn", i] value:[[FanController arrangedObjects][i][PREF_FAN_SELSPEED] tohex]];
-        }
     }
-
-    NSMenu *submenu = [[NSMenu alloc] init];
-
-    for (i = 0; i < [[FavoritesController arrangedObjects] count]; i++) {
-        NSMenuItem *submenuItem = [[NSMenuItem alloc] initWithTitle:[FavoritesController arrangedObjects][i][@"Title"] action:@selector(apply_quickselect:) keyEquivalent:@""];
-        [submenuItem setTag:i * 100]; //for later manipulation
-        [submenuItem setEnabled:YES];
-        [submenuItem setTarget:self];
-        [submenuItem setRepresentedObject:[FavoritesController arrangedObjects][i]];
-        [submenu addItem:submenuItem];
-    }
-
-    [[theMenu itemWithTag:1] setSubmenu:submenu];
-    for (i = 0; i < [[[theMenu itemWithTag:1] submenu] numberOfItems]; i++) {
-        [[[[theMenu itemWithTag:1] submenu] itemAtIndex:i] setState:NSOffState];
-    }
-    [[[[theMenu itemWithTag:1] submenu] itemAtIndex:cIndex] setState:NSOnState];
-    [defaults setObject:@(cIndex) forKey:PREF_SELECTION_DEFAULT];
-    //change active setting display
-    [[theMenu itemWithTag:1] setTitle:[NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Active Setting", nil), [FavoritesController arrangedObjects][[FavoritesController selectionIndex]][PREF_FAN_TITLE]]];
+    
+	NSMenu *submenu = [[NSMenu alloc] init];
+	
+	for(i=0;i<[[FavoritesController arrangedObjects] count];i++){
+		NSMenuItem *submenuItem = [[NSMenuItem alloc] initWithTitle:[FavoritesController arrangedObjects][i][@"Title"] action:@selector(apply_quickselect:) keyEquivalent:@""];
+		[submenuItem setTag:i*100]; //for later manipulation
+		[submenuItem setEnabled:YES];
+		[submenuItem setTarget:self];
+		[submenuItem setRepresentedObject:[FavoritesController arrangedObjects][i]];
+		[submenu addItem:submenuItem];
+	}
+	
+	[[theMenu itemWithTag:1] setSubmenu:submenu];
+	for (i=0;i<[[[theMenu itemWithTag:1] submenu] numberOfItems];i++) {
+		[[[[theMenu itemWithTag:1] submenu] itemAtIndex:i] setState:NSOffState];
+	}
+	[[[[theMenu itemWithTag:1] submenu] itemAtIndex:cIndex] setState:NSOnState];
+	[defaults setObject:@(cIndex) forKey:PREF_SELECTION_DEFAULT];
+	//change active setting display
+	[[theMenu itemWithTag:1] setTitle:[NSString stringWithFormat:@"%@: %@",NSLocalizedString(@"Active Setting",nil),[FavoritesController arrangedObjects][[FavoritesController selectionIndex]][PREF_FAN_TITLE] ]];
 }
 
 
-- (void)apply_quickselect:(id)sender {
-    int i;
-    [FanControl setRights];
-    //set all others items to off
-    for (i = 0; i < [[[theMenu itemWithTag:1] submenu] numberOfItems]; i++) {
-        [[[[theMenu itemWithTag:1] submenu] itemAtIndex:i] setState:NSOffState];
-    }
-    [sender setState:NSOnState];
-    [[theMenu itemWithTag:1] setTitle:[NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Active Setting", nil), [sender title]]];
-    [self apply_settings:sender controllerindex:[[[theMenu itemWithTag:1] submenu] indexOfItem:sender]];
+
+-(void)apply_quickselect:(id)sender{
+	int i;
+	[FanControl setRights];
+	//set all others items to off
+	for (i=0;i<[[[theMenu itemWithTag:1] submenu] numberOfItems];i++) {
+		[[[[theMenu itemWithTag:1] submenu] itemAtIndex:i] setState:NSOffState];
+	}
+	[sender setState:NSOnState];
+	[[theMenu itemWithTag:1] setTitle:[NSString stringWithFormat:@"%@: %@",NSLocalizedString(@"Active Setting",nil),[sender title]]];
+	[self apply_settings:sender controllerindex:[[[theMenu itemWithTag:1] submenu] indexOfItem:sender]];
 }
 
 
-- (void)terminate:(id)sender {
-    //get last active selection
-    [defaults synchronize];
-    [smcWrapper cleanUp];
-    [_readTimer invalidate];
-    [pw deregisterForSleepWakeNotification];
-    [pw deregisterForPowerChange];
-    enable_tb();
-    [[NSApplication sharedApplication] terminate:self];
-}
-
-- (IBAction)syncSliders:(id)sender {
-    if ([sender state]) {
-        [self syncBinder:YES];
-    } else {
-        [self syncBinder:NO];
-    }
+-(void)terminate:(id)sender{
+	//get last active selection
+	[defaults synchronize];
+	[smcWrapper cleanUp];
+	[_readTimer invalidate];
+	[pw deregisterForSleepWakeNotification];
+	[pw deregisterForPowerChange];
+	[[NSApplication sharedApplication] terminate:self];
 }
 
 
-- (IBAction) changeMenu:(id)sender {
-    if ([[[[NSUserDefaultsController sharedUserDefaultsController] values] valueForKey:PREF_MENU_DISPLAYMODE] intValue] == 2) {
-        [colorSelector setEnabled:NO];
-    } else {
-        [colorSelector setEnabled:YES];
-    }
+
+- (IBAction)syncSliders:(id)sender{
+	if ([sender state]) {
+		[self syncBinder:YES];
+	} else {
+		[self syncBinder:NO];
+	}
+}
+
+
+- (IBAction) changeMenu:(id)sender{
+	if ([[[[NSUserDefaultsController sharedUserDefaultsController] values] valueForKey:PREF_MENU_DISPLAYMODE] intValue]==2) {
+		[colorSelector setEnabled:NO];
+	} else {
+		[colorSelector setEnabled:YES];
+	}
 
 }
 
-- (IBAction)menuSelect:(id)sender {
-    //deactivate all other radio buttons
-    int i;
-    for (i = 0; i < [[FanController arrangedObjects] count]; i++) {
-        if (i != [sender selectedRow]) {
-            [[FanController arrangedObjects][i] setValue:@NO forKey:PREF_FAN_SHOWMENU];
-        }
-    }
+- (IBAction)menuSelect:(id)sender{
+	//deactivate all other radio buttons
+	int i;
+	for (i=0;i<[[FanController arrangedObjects] count];i++) {
+		if (i!=[sender selectedRow]) {
+			[[FanController arrangedObjects][i] setValue:@NO forKey:PREF_FAN_SHOWMENU];
+		}	
+	}
 }
 
 // Called when user clicks on smcFanControl status bar item

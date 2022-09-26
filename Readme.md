@@ -12,7 +12,7 @@ Make sure you have both [Homebrew](http://brew.sh/) and [Cask](https://caskroom.
 After installing Homebrew and Cask, run:
 
 ```
-$ brew cask install smcfancontrol
+$ brew install --cask smcfancontrol
 ```
 
 After that you'll be able to use Spotlight to launch smcFanControl normally. :-)

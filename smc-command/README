@@ -42,7 +42,7 @@ To manually query and control:
 FNum - tells you how many fans are in the system
 
 To read data from each fan:
-F0Ac - Fan actual speed
+F0Ac - Fan current speed
 F0Mn - Fan minimum speed
 F0Mx - Fan maximum speed
 F0Sf - Fan safe speed
