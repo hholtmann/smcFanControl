@@ -27,6 +27,28 @@
 #import "Privilege.h"
 #import "tb-switcher.h"
 
+@interface NSString (ShellExecution)
+- (NSString*)runAsCommand;
+@end
+
+@implementation NSString (ShellExecution)
+
+- (NSString*)runAsCommand {
+    NSPipe* pipe = [NSPipe pipe];
+
+    NSTask* task = [[NSTask alloc] init];
+    [task setLaunchPath: @"/bin/sh"];
+    [task setArguments:@[@"-c", [NSString stringWithFormat:@"%@", self]]];
+    [task setStandardOutput:pipe];
+
+    NSFileHandle* file = [pipe fileHandleForReading];
+    [task launch];
+
+    return [[NSString alloc] initWithData:[file readDataToEndOfFile] encoding:NSUTF8StringEncoding];
+}
+
+@end
+
 @interface FanControl ()
 + (void)copyMachinesIfNecessary;
 
@@ -245,9 +267,11 @@ NSUserDefaults *defaults;
     if (state == NSOffState) {
         [sender setState:NSOnState];
         enable_tb();
+        [@"echo 1 > ~/.turbo_boost" runAsCommand];
     } else {
         [sender setState:NSOffState];
         disable_tb();
+        [@"echo 0 > ~/.turbo_boost" runAsCommand];
     }
 }
 
@@ -267,14 +291,21 @@ NSUserDefaults *defaults;
         [theMenu insertItem:s_menus[i] atIndex:i];
     };
 
-    disable_tb();
     NSMenuItem *fan1Item = [theMenu itemWithTitle:@"Fan: 1"];
     int fan1ItemIdx = [theMenu indexOfItem:fan1Item];
+    
     NSMenuItem *turboBoostItem = [[NSMenuItem alloc]
         initWithTitle:@"Turbo Boost"
                action:@selector(applyTurboBoost:)
         keyEquivalent:@""];
-    [turboBoostItem setState:NSOffState];
+    NSString* output = [@"cat ~/.turbo_boost" runAsCommand];
+    if ([output  isEqual: @"1\n"]) {
+        enable_tb();
+        [turboBoostItem setState:NSOnState];
+    } else {
+        disable_tb();
+        [turboBoostItem setState:NSOffState];
+    }
     [turboBoostItem setEnabled:true];
     [turboBoostItem setTarget:self];
     [theMenu insertItem:turboBoostItem atIndex:fan1ItemIdx + 1];
