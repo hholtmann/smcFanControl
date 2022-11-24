@@ -809,7 +809,7 @@ void usage(char* prog)
     printf("%s [options]\n", prog);
     printf("    -f         : fan info decoded\n");
     printf("    -t         : list all temperatures\n");
-    printf("    -o <format>: output format for -f and -t. Options are 'json' and 'text'. Default is 'text'");
+    printf("    -o <format>: output format for -f and -t. Options are 'json' and 'text'. Default is 'text'\n");
     printf("    -h         : help\n");
     printf("    -k <key>   : key to manipulate\n");
     printf("    -l         : list all keys and values\n");
