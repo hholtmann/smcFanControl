@@ -22,9 +22,6 @@
 
 #import "MachineDefaults.h"
 #import "NSFileManager+DirectoryLocations.h"
-#include <sys/types.h>
-#include <sys/sysctl.h>
-#include <mach/machine.h>
 
 @interface MachineDefaults ()
 {
@@ -124,14 +121,6 @@
     }
     
 	return defaultsDict;
-}
-
-+ (BOOL)isAppleSilicon
-{
-    cpu_type_t cpu_type;
-    size_t size = sizeof(cpu_type);
-    sysctlbyname("hw.cputype", &cpu_type, &size, NULL, 0);
-    return cpu_type == CPU_TYPE_ARM64;
 }
 
 + (NSString *)computerModel

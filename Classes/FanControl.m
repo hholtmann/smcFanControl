@@ -150,7 +150,11 @@ NSUserDefaults *defaults;
 			@0, PREF_AC_SELECTION,
 			@0, PREF_CHARGING_SELECTION,
 			@0, PREF_MENU_DISPLAYMODE,
-			[MachineDefaults isAppleSilicon] ? @"Tp0D" : @"TC0D", PREF_TEMPERATURE_SENSOR,
+#if TARGET_CPU_ARM64
+            @"",PREF_TEMPERATURE_SENSOR,
+#else
+            @"TC0D",PREF_TEMPERATURE_SENSOR,
+#endif
             @0, PREF_NUMBEROF_LAUNCHES,
             @NO,PREF_DONATIONMESSAGE_DISPLAY,
 			[NSArchiver archivedDataWithRootObject:[NSColor blackColor]],PREF_MENU_TEXTCOLOR,
@@ -399,7 +403,11 @@ NSUserDefaults *defaults;
     
     if (bNeedTemp == true) {
         // Read current temperature and format text for the menubar.
+#if TARGET_CPU_ARM64
+        c_temp = [IOKitSensor getSOCTemperature];
+#else
         c_temp = [smcWrapper get_maintemp];
+#endif
         
         if ([[defaults objectForKey:PREF_TEMP_UNIT] intValue]==0) {
             temp = [NSString stringWithFormat:@"%@%CC",@(c_temp),(unsigned short)0xb0];
@@ -741,10 +749,10 @@ NSUserDefaults *defaults;
 #pragma mark **Power Watchdog-Methods**
 
 - (void)systemWillSleep:(id)sender{
-	if ([MachineDefaults isAppleSilicon]) {
-		[FanControl setRights];
-		[self setFansToAuto:true];
-	}
+#if TARGET_CPU_ARM64
+	[FanControl setRights];
+	[self setFansToAuto:true];
+#endif
 }
 
 - (void)systemDidWakeFromSleep:(id)sender{

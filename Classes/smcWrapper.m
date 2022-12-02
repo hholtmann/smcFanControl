@@ -70,11 +70,7 @@ NSArray *allSensors;
     NSString *sensor = [[NSUserDefaults standardUserDefaults] objectForKey:PREF_TEMPERATURE_SENSOR];
     SMCReadKey2((char*)[sensor UTF8String], &val,conn);
     retValue = [self convertToNumber:val];
-    if ([MachineDefaults isAppleSilicon]) {
-        allSensors = [NSArray arrayWithObjects:@"Tp0D",@"Tp0P",nil];
-    } else {
-        allSensors = [NSArray arrayWithObjects:@"TC0D",@"TC0P",@"TCAD",@"TC0H",@"TC0F",@"TCAH",@"TCBH",nil];
-    }
+    allSensors = [NSArray arrayWithObjects:@"TC0D",@"TC0P",@"TCAD",@"TC0H",@"TC0F",@"TCAH",@"TCBH",nil];
     if (retValue<=0 || floor(retValue) == 129 ) { //workaround for some iMac Models
         for (NSString *sensor in allSensors) {
             SMCReadKey2((char*)[sensor UTF8String], &val,conn);

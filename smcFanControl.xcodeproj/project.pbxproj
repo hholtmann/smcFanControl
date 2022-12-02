@@ -32,6 +32,7 @@
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		B5A4D43B293A62F90084C50B /* IOKitSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = B5A4D43A293A62F90084C50B /* IOKitSensor.m */; };
 		B5F20EE127FBCC78002EFD11 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 895BDA390B8F8F42003CD894 /* Sparkle.framework */; };
 		B5F20EE227FBCC78002EFD11 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 895BDA390B8F8F42003CD894 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -121,6 +122,8 @@
 		89FE24280B7F4CE900D2713C /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* smcFanControl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = smcFanControl.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5A4D43A293A62F90084C50B /* IOKitSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IOKitSensor.m; sourceTree = "<group>"; };
+		B5E84C88293A65840067AEC2 /* IOKitSensor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IOKitSensor.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +168,8 @@
 				892A7F440B10B7700041B493 /* MachineDefaults.m */,
 				8932CF2213D0850F008BC447 /* SystemVersion.h */,
 				8932CF2313D08551008BC447 /* SystemVersion.m */,
+				B5E84C88293A65840067AEC2 /* IOKitSensor.h */,
+				B5A4D43A293A62F90084C50B /* IOKitSensor.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -383,6 +388,7 @@
 				892A7F450B10B7700041B493 /* MachineDefaults.m in Sources */,
 				8932CF2413D08551008BC447 /* SystemVersion.m in Sources */,
 				89148EA315E2543D00A073EE /* NSFileManager+DirectoryLocations.m in Sources */,
+				B5A4D43B293A62F90084C50B /* IOKitSensor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
