@@ -49,7 +49,7 @@ void IOHIDEventSystemClientSetMatching(IOHIDEventSystemClientRef, CFDictionaryRe
 IOHIDEventRef IOHIDServiceClientCopyEvent(IOHIDServiceClientRef, int64_t, int32_t, int64_t);
 IOHIDFloat IOHIDEventGetFloatValue(IOHIDEventRef event, uint32_t field);
 
-@interface IOKitSensor : NSObject {
+@interface IOHIDSensor : NSObject {
 }
 
 + (float) getSOCTemperature;

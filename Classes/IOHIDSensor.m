@@ -20,13 +20,12 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#import "IOKitSensor.h"
+#import "IOHIDSensor.h"
 
-@implementation IOKitSensor
+@implementation IOHIDSensor
 
 static BOOL isSOCSensor(CFStringRef sensorName) {
-    return CFStringHasPrefix(sensorName, CFSTR("PMU")) &&
-    !CFStringHasSuffix(sensorName, CFSTR("tcal")); // Ignore "PMU tcal" as it seems static
+    return CFStringFind(sensorName, CFSTR("SOC"), kCFCompareCaseInsensitive).location != kCFNotFound;
 }
 
 static float toOneDecimalPlace(float value) {
@@ -34,7 +33,6 @@ static float toOneDecimalPlace(float value) {
 }
 
 + (float) getSOCTemperature {
-    
     IOHIDEventSystemClientRef eventSystemClient = IOHIDEventSystemClientCreate(kCFAllocatorDefault);
     CFArrayRef services = IOHIDEventSystemClientCopyServices(eventSystemClient);
     if (services) {
@@ -62,7 +60,7 @@ static float toOneDecimalPlace(float value) {
         CFRelease(services);
         CFRelease(eventSystemClient);
         
-        float avgSOCTemp = socSensorCount > 0 ? socSensorSum / socSensorCount: 0.0f;
+        float avgSOCTemp = socSensorCount > 0 ? socSensorSum / socSensorCount : 0.0f;
         return toOneDecimalPlace(avgSOCTemp);
     }
     

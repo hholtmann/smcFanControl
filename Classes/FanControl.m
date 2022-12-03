@@ -151,7 +151,7 @@ NSUserDefaults *defaults;
 			@0, PREF_CHARGING_SELECTION,
 			@0, PREF_MENU_DISPLAYMODE,
 #if TARGET_CPU_ARM64
-            @"",PREF_TEMPERATURE_SENSOR,
+            @"Tp0D",PREF_TEMPERATURE_SENSOR,
 #else
             @"TC0D",PREF_TEMPERATURE_SENSOR,
 #endif
@@ -338,6 +338,13 @@ NSUserDefaults *defaults;
 }
 
 
+- (BOOL)usesIOHIDForTemperature {
+#if TARGET_CPU_ARM64
+    return [[MachineDefaults computerModel] rangeOfString:@"MacBookPro17"].length > 0;
+#else
+    return false;
+#endif
+}
 
 // Called via a timer mechanism. This is where all the temp / RPM reading is done.
 //reads fan data and updates the gui
@@ -403,11 +410,11 @@ NSUserDefaults *defaults;
     
     if (bNeedTemp == true) {
         // Read current temperature and format text for the menubar.
-#if TARGET_CPU_ARM64
-        c_temp = [IOKitSensor getSOCTemperature];
-#else
-        c_temp = [smcWrapper get_maintemp];
-#endif
+        if ([self usesIOHIDForTemperature]) {
+            c_temp = [IOHIDSensor getSOCTemperature];
+        } else {
+            c_temp = [smcWrapper get_maintemp];
+        }
         
         if ([[defaults objectForKey:PREF_TEMP_UNIT] intValue]==0) {
             temp = [NSString stringWithFormat:@"%@%CC",@(c_temp),(unsigned short)0xb0];
@@ -543,13 +550,13 @@ NSUserDefaults *defaults;
 }
 
 -(void)setFansToAuto:(bool)is_auto {
-	for (int fan_index=0;fan_index<[[FavoritesController arrangedObjects][0][PREF_FAN_ARRAY] count];fan_index++) {
-		[self setFanToAuto:fan_index is_auto:is_auto];
-	}
+    for (int fan_index=0;fan_index<[[FavoritesController arrangedObjects][0][PREF_FAN_ARRAY] count];fan_index++) {
+        [self setFanToAuto:fan_index is_auto:is_auto];
+    }
 }
 
 -(void)setFanToAuto:(int)fan_index is_auto:(bool)is_auto {
-	[smcWrapper setKey_external:[NSString stringWithFormat:@"F%dMd",fan_index] value:is_auto ? @"00" : @"01"];
+    [smcWrapper setKey_external:[NSString stringWithFormat:@"F%dMd",fan_index] value:is_auto ? @"00" : @"01"];
 }
 
 //set the new fan settings
@@ -750,8 +757,8 @@ NSUserDefaults *defaults;
 
 - (void)systemWillSleep:(id)sender{
 #if TARGET_CPU_ARM64
-	[FanControl setRights];
-	[self setFansToAuto:true];
+    [FanControl setRights];
+    [self setFansToAuto:true];
 #endif
 }
 

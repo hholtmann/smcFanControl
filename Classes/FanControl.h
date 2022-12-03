@@ -25,7 +25,7 @@
 #import "NSFileManager+DirectoryLocations.h"
 #import "smc.h"
 #import "smcWrapper.h"
-#import "IOKitSensor.h"
+#import "IOHIDSensor.h"
 #import "MachineDefaults.h"
 
 #import "Power.h"
