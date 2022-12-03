@@ -101,6 +101,7 @@ static void powerSourceChanged(void * refCon)
 	switch (messageType)
 	{
 		case kIOMessageSystemWillSleep:
+			[_delegate systemWillSleep:self];
 			IOAllowPowerChange(root_port, (long)messageArgument);
 		break;
 		case kIOMessageCanSystemSleep:

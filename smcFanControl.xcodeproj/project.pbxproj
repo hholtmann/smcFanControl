@@ -18,7 +18,6 @@
 		892A7F450B10B7700041B493 /* MachineDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 892A7F440B10B7700041B493 /* MachineDefaults.m */; };
 		8932CF2413D08551008BC447 /* SystemVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 8932CF2313D08551008BC447 /* SystemVersion.m */; };
 		893355FF1CA02F1A00388D5D /* smc.c in Sources */ = {isa = PBXBuildFile; fileRef = 89C053BC0ADAB7630037CA16 /* smc.c */; };
-		893356001CA0328900388D5D /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 895BDA390B8F8F42003CD894 /* Sparkle.framework */; };
 		893506180B440255001BFBA5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 893506170B440255001BFBA5 /* Localizable.strings */; };
 		894A46610ADBD6CF008785F3 /* FanControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 894A46600ADBD6CF008785F3 /* FanControl.m */; };
 		894A494B0ADBEEF4008785F3 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 894A494A0ADBEEF4008785F3 /* IOKit.framework */; };
@@ -27,13 +26,15 @@
 		8987FBD20B878B3900A5ED8E /* smc.png in Resources */ = {isa = PBXBuildFile; fileRef = 8987FBD00B878B3900A5ED8E /* smc.png */; };
 		89949E8D0AEEA37700077E93 /* Power.m in Sources */ = {isa = PBXBuildFile; fileRef = 89949E8C0AEEA37700077E93 /* Power.m */; };
 		899D59DC15E1CF60003E322D /* smc in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8924ECEE15AC96E70031730C /* smc */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		899D59DD15E1CFFF003E322D /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 895BDA390B8F8F42003CD894 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		89B243200B7E351000CAD103 /* smcfancontrol_v2.icns in Resources */ = {isa = PBXBuildFile; fileRef = 89B2431F0B7E351000CAD103 /* smcfancontrol_v2.icns */; };
 		89E7D3650ADE819B000F67AB /* Machines.plist in Resources */ = {isa = PBXBuildFile; fileRef = 89E7D3640ADE819B000F67AB /* Machines.plist */; };
 		89FE24230B7F4CD300D2713C /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 89FE24210B7F4CD300D2713C /* MainMenu.nib */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		B5A4D43B293A62F90084C50B /* IOHIDSensor.m in Sources */ = {isa = PBXBuildFile; fileRef = B5A4D43A293A62F90084C50B /* IOHIDSensor.m */; };
+		B5F20EE127FBCC78002EFD11 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 895BDA390B8F8F42003CD894 /* Sparkle.framework */; };
+		B5F20EE227FBCC78002EFD11 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 895BDA390B8F8F42003CD894 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -56,13 +57,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		89B156840BA411BF002A258A /* CopyFiles */ = {
+		B5F20EE327FBCC78002EFD11 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				899D59DD15E1CFFF003E322D /* Sparkle.framework in CopyFiles */,
+				B5F20EE227FBCC78002EFD11 /* Sparkle.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,6 +122,8 @@
 		89FE24280B7F4CE900D2713C /* German */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = German; path = German.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* smcFanControl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = smcFanControl.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5A4D43A293A62F90084C50B /* IOHIDSensor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IOHIDSensor.m; sourceTree = "<group>"; };
+		B5E84C88293A65840067AEC2 /* IOHIDSensor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IOHIDSensor.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,7 +139,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				893356001CA0328900388D5D /* Sparkle.framework in Frameworks */,
+				B5F20EE127FBCC78002EFD11 /* Sparkle.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				894A494B0ADBEEF4008785F3 /* IOKit.framework in Frameworks */,
 				8985F1590ADD0B5500F9EC46 /* Security.framework in Frameworks */,
@@ -165,6 +168,8 @@
 				892A7F440B10B7700041B493 /* MachineDefaults.m */,
 				8932CF2213D0850F008BC447 /* SystemVersion.h */,
 				8932CF2313D08551008BC447 /* SystemVersion.m */,
+				B5E84C88293A65840067AEC2 /* IOHIDSensor.h */,
+				B5A4D43A293A62F90084C50B /* IOHIDSensor.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -287,7 +292,7 @@
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
 				895BDA550B8F90D3003CD894 /* CopyFiles */,
-				89B156840BA411BF002A258A /* CopyFiles */,
+				B5F20EE327FBCC78002EFD11 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -383,6 +388,7 @@
 				892A7F450B10B7700041B493 /* MachineDefaults.m in Sources */,
 				8932CF2413D08551008BC447 /* SystemVersion.m in Sources */,
 				89148EA315E2543D00A073EE /* NSFileManager+DirectoryLocations.m in Sources */,
+				B5A4D43B293A62F90084C50B /* IOHIDSensor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -566,7 +572,7 @@
 				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 				SYMROOT = "$(HOME)/builds";
-				VALID_ARCHS = "i386 x86_64";
+				VALID_ARCHS = "arm64e arm64 i386 x86_64";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -585,7 +591,7 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				SDKROOT = macosx;
-				VALID_ARCHS = "i386 x86_64";
+				VALID_ARCHS = "arm64e arm64 i386 x86_64";
 			};
 			name = Debug;
 		};
@@ -603,7 +609,7 @@
 				OTHER_LDFLAGS = "";
 				SDKROOT = macosx;
 				SYMROOT = "~/builds";
-				VALID_ARCHS = "i386 x86_64";
+				VALID_ARCHS = "arm64e arm64 i386 x86_64";
 			};
 			name = Release;
 		};

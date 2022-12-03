@@ -150,7 +150,11 @@ NSUserDefaults *defaults;
 			@0, PREF_AC_SELECTION,
 			@0, PREF_CHARGING_SELECTION,
 			@0, PREF_MENU_DISPLAYMODE,
+#if TARGET_CPU_ARM64
+            @"Tp0D",PREF_TEMPERATURE_SENSOR,
+#else
             @"TC0D",PREF_TEMPERATURE_SENSOR,
+#endif
             @0, PREF_NUMBEROF_LAUNCHES,
             @NO,PREF_DONATIONMESSAGE_DISPLAY,
 			[NSArchiver archivedDataWithRootObject:[NSColor blackColor]],PREF_MENU_TEXTCOLOR,
@@ -334,6 +338,13 @@ NSUserDefaults *defaults;
 }
 
 
+- (BOOL)usesIOHIDForTemperature {
+#if TARGET_CPU_ARM64
+    return [[MachineDefaults computerModel] rangeOfString:@"MacBookPro17"].length > 0;
+#else
+    return false;
+#endif
+}
 
 // Called via a timer mechanism. This is where all the temp / RPM reading is done.
 //reads fan data and updates the gui
@@ -399,7 +410,11 @@ NSUserDefaults *defaults;
     
     if (bNeedTemp == true) {
         // Read current temperature and format text for the menubar.
-        c_temp = [smcWrapper get_maintemp];
+        if ([self usesIOHIDForTemperature]) {
+            c_temp = [IOHIDSensor getSOCTemperature];
+        } else {
+            c_temp = [smcWrapper get_maintemp];
+        }
         
         if ([[defaults objectForKey:PREF_TEMP_UNIT] intValue]==0) {
             temp = [NSString stringWithFormat:@"%@%CC",@(c_temp),(unsigned short)0xb0];
@@ -534,6 +549,15 @@ NSUserDefaults *defaults;
 	[DefaultsController revert:sender];
 }
 
+-(void)setFansToAuto:(bool)is_auto {
+    for (int fan_index=0;fan_index<[[FavoritesController arrangedObjects][0][PREF_FAN_ARRAY] count];fan_index++) {
+        [self setFanToAuto:fan_index is_auto:is_auto];
+    }
+}
+
+-(void)setFanToAuto:(int)fan_index is_auto:(bool)is_auto {
+    [smcWrapper setKey_external:[NSString stringWithFormat:@"F%dMd",fan_index] value:is_auto ? @"00" : @"01"];
+}
 
 //set the new fan settings
 
@@ -549,7 +573,7 @@ NSUserDefaults *defaults;
             [smcWrapper setKey_external:[NSString stringWithFormat:@"F%dMn",i] value:[[FanController arrangedObjects][i][PREF_FAN_SELSPEED] tohex]];
         } else {
             bool is_auto = [[FanController arrangedObjects][i][PREF_FAN_AUTO] boolValue];
-            [smcWrapper setKey_external:[NSString stringWithFormat:@"F%dMd",i] value:is_auto ? @"00" : @"01"];
+            [self setFanToAuto:i is_auto:is_auto];
             float f_val = [[FanController arrangedObjects][i][PREF_FAN_SELSPEED] floatValue];
             uint8 *vals = (uint8*)&f_val;
             //NSString str_val = ;
@@ -676,9 +700,7 @@ NSUserDefaults *defaults;
     }
     error = nil;
     if ([[MachineDefaults computerModel] rangeOfString:@"MacBookPro15"].location != NSNotFound) {
-        for (int i=0;i<[[FavoritesController arrangedObjects][0][PREF_FAN_ARRAY] count];i++) {
-            [smcWrapper setKey_external:[NSString stringWithFormat:@"F%dMd",i] value:@"00"];
-        }
+        [self setFansToAuto:true];
     }
 
     NSString *domainName = [[NSBundle mainBundle] bundleIdentifier];
@@ -732,6 +754,13 @@ NSUserDefaults *defaults;
 
 
 #pragma mark **Power Watchdog-Methods**
+
+- (void)systemWillSleep:(id)sender{
+#if TARGET_CPU_ARM64
+    [FanControl setRights];
+    [self setFansToAuto:true];
+#endif
+}
 
 - (void)systemDidWakeFromSleep:(id)sender{
 	[self apply_settings:nil controllerindex:[[defaults objectForKey:PREF_SELECTION_DEFAULT] intValue]];
