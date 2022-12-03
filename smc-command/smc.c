@@ -648,6 +648,7 @@ void usage(char* prog)
     printf("    -k <key>   : key to manipulate\n");
     printf("    -l         : list all keys and values\n");
     printf("    -r         : read the value of a key\n");
+    printf("    -p <value> : write the specified integer value to a floating point key\n");
     printf("    -w <value> : write the specified value to a key\n");
     printf("    -v         : version\n");
     printf("\n");
@@ -684,7 +685,7 @@ int main(int argc, char *argv[])
     UInt32Char_t  key = { 0 };
     SMCVal_t      val;
     
-    while ((c = getopt(argc, argv, "fthk:lrw:v")) != -1)
+    while ((c = getopt(argc, argv, "fthk:lp:rw:v")) != -1)
     {
         switch(c)
         {
@@ -707,6 +708,17 @@ int main(int argc, char *argv[])
             case 'v':
                 printf("%s\n", VERSION);
                 return 0;
+                break;
+            case 'p':
+                op = OP_WRITE;
+                {
+                  float fval;
+                  fval = strtof(optarg, NULL);
+
+                  val.dataSize = 4;
+                  memcpy(val.bytes, &fval, sizeof(fval));
+                  memcpy(val.dataType, DATATYPE_FLT, sizeof(val.dataType));
+                }
                 break;
             case 'w':
                 op = OP_WRITE;
