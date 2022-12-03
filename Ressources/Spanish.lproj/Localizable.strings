@@ -1,6 +1,6 @@
-"Do you really want to delete the favorite %@?" = "¿Seguro qu desea eliminar el favorito: %@?";
+"Do you really want to delete the favorite %@?" = "¿Seguro que desea eliminar el favorito: %@?";
 
-"Yes" = "Si";
+"Yes" = "Sí";
 
 "No" = "No";
 
@@ -12,7 +12,7 @@
 
 "Right Fan" = "Ventilador derecho";
 
-"smcFanControl has not been tested on this machine yet, but it should run if you follow the instructions. \n\nIf you choose to continue, please make sure you have no other FanControl-software running. Otherwise please quit, deinstall the other software, restart your machine and rerun smcFanControl!" = "smcFanControl no ha sido probado en esta máquina, pero debería de funcionar si sigue esta insrucciones. \n\nSi decide continuar aseguresé de que no hay otro programa de control de ventiladores; si no salga, desinstale los otros programas, reinicie y lance otra vez smcFanControl";
+"smcFanControl has not been tested on this machine yet, but it should run if you follow the instructions. \n\nIf you choose to continue, please make sure you have no other FanControl-software running. Otherwise please quit, deinstall the other software, restart your machine and rerun smcFanControl!" = "smcFanControl no ha sido probado en esta máquina, pero debería de funcionar si sigue esta insrucciones. \n\nSi decide continuar asegúrese de que no hay otro programa de control de ventiladores; si es así salga, desinstale los otros programas, reinicie y lance otra vez smcFanControl";
 
 "Continue" = "Continuar";
 
@@ -22,20 +22,20 @@
 
 "Active Setting" = "Configuración activa";
 
-"Remind me later" = "Remind me later";
+"Remind me later" = "Recuérdame luego";
 
-"Consider a donation" = "Consider a donation";
+"Consider a donation" = "Considera una donación";
 
-"Never ask me again" = "Never ask me again";
+"Never ask me again" = "No volver a preguntar";
 
-"Donate over Paypal" = "Donate over Paypal";
+"Donate over Paypal" = "Dona mediante Paypal";
 
-"smcFanControl keeps your Mac cool since 2006.\n\nIf smcFanControl is helfpul for you and you want to support further development, a small donation over Paypal is much appreciated." = "smcFanControl keeps your Mac cool since 2006.\n\nIf smcFanControl is helfpul for you and you want to support further development, a small donation over Paypal is much appreciated.";
+"smcFanControl keeps your Mac cool since 2006.\n\nIf smcFanControl is helfpul for you and you want to support further development, a small donation over Paypal is much appreciated." = "smcFanControl mantiene tu Mac fresco desde 2006.\nSi smcFanControl es útil para ti y quieres apoyar su desarrollo, apreciamos que nos aportes una pequeña donación a través de Paypal.";
 
-"Do you want to reset smcFanControl to default settings? Favorites will be deleted and fans will return to default speed." = "Do you want to reset smcFanControl to default settings?\nFavorites will be deleted and fans will return to default speed.";
+"Do you want to reset smcFanControl to default settings? Favorites will be deleted and fans will return to default speed." = "¿Desea restablecer la configuración predeterminada de smcFanControl?\n- Los favoritos se eliminarán y los ventiladores volverán a la velocidad predeterminada.";
 
-"Please shutdown your computer now to return to default fan settings." = "Please shutdown your computer now to return to default fan settings.";
+"Please shutdown your computer now to return to default fan settings." = "Por favor, apaga el ordenador ahora  para restaurar la configuración de los ventiladores";
 
-"Reset Settings" = "Reset Settings";
+"Reset Settings" = "Ajustes de fábrica";
 
-"Shutdown required" = "Shutdown required";
+"Shutdown required" = "Se necesita apagar";
