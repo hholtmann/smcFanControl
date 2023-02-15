@@ -608,7 +608,7 @@
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				SDKROOT = macosx;
-				SYMROOT = "~/builds";
+				SYMROOT = "$(HOME)/builds";
 				VALID_ARCHS = "arm64e arm64 i386 x86_64";
 			};
 			name = Release;
