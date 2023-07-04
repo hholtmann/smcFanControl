@@ -18,11 +18,20 @@ $ brew install --cask smcfancontrol
 After that you'll be able to use Spotlight to launch smcFanControl normally. :-)
 
 
-Requirements: Apple Silicon or Intel Mac / OS X 10.7 or higher 
+Requirements: Intel Mac with macOS 10.7 or higher
 
 
 Compiled version: https://www.eidac.de/smcfancontrol/smcfancontrol_2_6.zip
 
 FAQ / More info: Found in project under "Ressources/*.lproj/F.A.Q.rtf" or included in above .zip
 
+## Nightly Builds (Supports Apple Silicon & Intel)
+[smcFanControl.zip](https://nightly.link/hholtmann/smcFanControl/workflows/objective-c-xcode/master/smcFanControl.zip)
+
+Nightly builds are not signed and require running
+```
+sudo xattr -cr /Applications/smcFanControl.app
+```
+
+---
 License: GPL 2

@@ -1,0 +1,48 @@
+name: Xcode - Build, Analyze and Upload
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
+
+jobs:
+  build:
+    name: Build and analyse default scheme using xcodebuild command. The Artifact is uploaded if successful.
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set Default Scheme
+        run: |
+          scheme_list=$(xcodebuild -list -json | tr -d "\n")
+          default=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]")
+          echo $default | cat >default
+          echo Using default scheme: $default
+      - name: Build
+        env:
+          scheme: ${{ 'default' }}
+        run: |
+          if [ $scheme = default ]; then scheme=$(cat default); fi
+          if [ "`ls -A | grep -i \\.xcworkspace\$`" ]; then filetype_parameter="workspace" && file_to_build="`ls -A | grep -i \\.xcworkspace\$`"; else filetype_parameter="project" && file_to_build="`ls -A | grep -i \\.xcodeproj\$`"; fi
+          file_to_build=`echo $file_to_build | awk '{$1=$1;print}'`
+          xcodebuild clean build analyze -configuration Release -scheme "$scheme" -destination "generic/platform=macOS,name=Any Mac" -"$filetype_parameter" "$file_to_build" CODE_SIGN_IDENTITY=”” CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO | xcpretty && exit ${PIPESTATUS[0]}
+      - name: Create smc.tar.gz
+        run: |
+          cd ./build/Release/
+          tar -czvf smc.tar.gz smc
+      - name: Upload smc.tar.gz
+        uses: actions/upload-artifact@v3
+        with:
+          name: smc
+          path: ./build/Release/smc.tar.gz
+      - name: Create smcFanControl.tar.gz
+        run: |
+          cd ./build/Release/
+          tar -czvf smcFanControl.tar.gz smcFanControl.app
+      - name: Upload smcFanControl.tar.gz
+        uses: actions/upload-artifact@v3
+        with:
+          name: smcFanControl
+          path: ./build/Release/smcFanControl.tar.gz
