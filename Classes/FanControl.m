@@ -52,16 +52,27 @@ NSUserDefaults *defaults;
 	//avoid Zombies when starting external app
 	signal(SIGCHLD, SIG_IGN);
     
-    [FanControl copyMachinesIfNecessary];
 	//check owner and suid rights
 	[FanControl setRights];
 
 	//talk to smc
 	[smcWrapper init];
 	
+	[FanControl terminateIfNoFans];
+
+	[FanControl copyMachinesIfNecessary];
+
 	//app in foreground for update notifications
 	[[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
 
+}
+
++(void) terminateIfNoFans {
+    int fan_num = [smcWrapper get_fan_num];
+    if (fan_num <= 0) {
+        NSLog(@"Exiting as %d fans were detected for Model Identifier: %@", fan_num, [MachineDefaults computerModel]);
+        [[NSApplication sharedApplication] terminate:self];
+    }
 }
 
 +(void)copyMachinesIfNecessary
