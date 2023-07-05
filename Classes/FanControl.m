@@ -58,6 +58,8 @@ NSUserDefaults *defaults;
 
 	//talk to smc
 	[smcWrapper init];
+
+	[FanControl terminateIfNoFans];
 	
 	//app in foreground for update notifications
 	[[NSApplication sharedApplication] activateIgnoringOtherApps:YES];
@@ -932,6 +934,24 @@ NSUserDefaults *defaults;
 	status=AuthorizationExecuteWithPrivileges(authorizationRef,[tool UTF8String],0,args,&commPipe);
 
     [self checkRightStatus:status];
+}
+
++(void) terminateIfNoFans {
+	if ([smcWrapper get_fan_num] == 0) {
+		NSAlert *alert = [NSAlert alertWithError:nil];
+		NSString * _Nonnull messageText = NSLocalizedString(@"No Fans", nil);
+		messageText = [messageText stringByAppendingString:@"\nhttps://github.com/hholtmann/smcFanControl/issues"];
+		[alert setMessageText:messageText];
+		NSString *modelIdentifier = NSLocalizedString(@"Model Identifier", nil);
+		modelIdentifier = [modelIdentifier stringByAppendingString:@": "];
+		modelIdentifier = [modelIdentifier stringByAppendingString:[MachineDefaults computerModel]];
+		[alert setInformativeText: modelIdentifier];
+		[alert addButtonWithTitle:@"Quit"];
+		NSModalResponse code=[alert runModal];
+		if (code == NSAlertDefaultReturn) {
+			[[NSApplication sharedApplication] terminate:self];
+		}
+	}
 }
 
 

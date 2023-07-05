@@ -39,3 +39,7 @@
 "Reset Settings" = "Einstellungen zurücksetzen";
 
 "Shutdown required" = "Ausschalten erforderlich";
+
+"No Fans" = "Ihr Mac wird nicht unterstützt, da er keine Lüfter hat. Wenn Sie der Meinung sind, dass es sich hierbei um einen Fehler handelt, melden Sie bitte ein Problem über";
+
+"Model Identification" = "Modellkennung";
