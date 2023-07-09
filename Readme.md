@@ -5,14 +5,14 @@ smcFanControl lets the user set a minimum speed for built-in fans. It allows you
 ![My image](https://www.eidac.de/smc_screenshot.png)
 
 
-## Installing it using Homebrew & Cask
+## Installing it using Homebrew Cask
 
-Make sure you have both [Homebrew](http://brew.sh/) and [Cask](https://caskroom.github.io/) installed. You'll find intructions to install both tools on their respective websites.
+Make sure you have [Homebrew](https://brew.sh/) installed.
 
-After installing Homebrew and Cask, run:
+After installing Homebrew, run:
 
 ```
-$ brew install --cask smcfancontrol
+brew install --cask smcfancontrol
 ```
 
 After that you'll be able to use Spotlight to launch smcFanControl normally. :-)
